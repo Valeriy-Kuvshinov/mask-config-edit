@@ -1,5 +1,8 @@
-# cfg files
+# CFG files
 *.cfg
+
+# PROPERTIES files
+*.properties
 
 # Visual Studio Code
 /.vscode/*
