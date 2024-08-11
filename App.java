@@ -1,10 +1,12 @@
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 
-public class App extends JFrame {
+import introduction.PinPanel;
+import introduction.WelcomeProcess;
+
+public class App extends JFrame implements WelcomeProcess {
     private PinPanel pinPanel;
+
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
         SwingUtilities.invokeLater(() -> {
@@ -23,12 +25,12 @@ public class App extends JFrame {
         setLayout(new BorderLayout());
 
         pinPanel = new PinPanel(this);
+
         add(pinPanel, BorderLayout.CENTER);
     }
-    
+
+    @Override
     public void onPinVerified() {
-        // This method will be called when the PIN is verified
-        // You can use it to switch to the main content of your app
         System.out.println("PIN verified. Switching to main content...");
         // TODO: Add code to switch to main content
     }
