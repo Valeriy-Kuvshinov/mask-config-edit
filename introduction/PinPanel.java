@@ -5,93 +5,93 @@ import java.awt.*;
 import java.io.*;
 import java.util.Properties;
 
-import utilities.RoundedComponent;
+import utilities.CustomLabel;
+import utilities.CustomComponent;
 
 public class PinPanel extends JPanel {
     private WelcomeProcess welcomeProcess;
-    private RoundedComponent[] pinDigits;
+    private CustomComponent[] pinDigits;
     private JPanel buttonsPanel;
-    private JLabel messageLabel;
+    private CustomLabel messageLabel;
     private StringBuilder currentPin = new StringBuilder();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
-    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public PinPanel(WelcomeProcess process) {
         this.welcomeProcess = process;
-        setLayout(new BorderLayout(20, 20));
-        setBorder(BorderFactory.createEmptyBorder(60, 120, 60, 120));
+        setLayout(new BorderLayout());
+        setBackground(DARK_COLOR);
+
+        // Create a main panel to hold all components
+        var mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(DARK_COLOR);
+        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+
+        // Create a wrapper panel to center the main panel
+        var wrapperPanel = new JPanel(new GridBagLayout());
+        wrapperPanel.setBackground(DARK_COLOR);
+        wrapperPanel.add(mainPanel);
 
         // Check if PIN exists and set appropriate message
         var initialMessage = getStoredPin() == null ? "Create your PIN" : "Enter your PIN";
 
-        // Create a panel for labels
-        var labelsPanel = new JPanel(new GridLayout(2, 1, 0, 20));
+        // Create labels
+        var welcomeLabel = new CustomLabel("Welcome to User Configuration!");
+        messageLabel = new CustomLabel(initialMessage);
 
-        var welcomeLabel = new JLabel("Welcome to User Configuration!", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Roboto", Font.BOLD, 24));
-
-        messageLabel = new JLabel(initialMessage, SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Roboto", Font.BOLD, 24));
-
-        labelsPanel.add(welcomeLabel);
-        labelsPanel.add(messageLabel);
-
-        // Create a panel for PIN Display
+        // Create PIN Display
         var pinDisplayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        pinDigits = new RoundedComponent[6];
+        pinDisplayPanel.setBackground(DARK_COLOR);
+        pinDisplayPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pinDigits = new CustomComponent[6];
         for (int i = 0; i < 6; i++) {
-            pinDigits[i] = new RoundedComponent(" ");
-            pinDigits[i].setFont(new Font("Roboto", Font.BOLD, 32));
-            pinDigits[i].setPreferredSize(new Dimension(50, 50));
+            pinDigits[i] = new CustomComponent(" ");
+            pinDigits[i].setSize(50, 50);
             pinDisplayPanel.add(pinDigits[i]);
         }
 
-        // Create a panel for the PIN buttons
-        buttonsPanel = new JPanel(new GridLayout(4, 3, 10, 10));
-        for (int i = 1; i <= 9; i++) {
-            addPinButton(String.valueOf(i));
-        }
-        addPinButton("0");
-        addPinButton("-");
-        addPinButton("X");
+        createPinButtons(); // Create PIN Buttons
 
-        var buttonsContainerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonsContainerPanel.add(buttonsPanel);
+        // Add components to main panel
+        mainPanel.add(Box.createVerticalGlue());
+        mainPanel.add(welcomeLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(messageLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        mainPanel.add(pinDisplayPanel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        mainPanel.add(buttonsPanel);
+        mainPanel.add(Box.createVerticalGlue());
 
-        add(labelsPanel, BorderLayout.NORTH);
-        add(pinDisplayPanel, BorderLayout.CENTER);
-        add(buttonsContainerPanel, BorderLayout.SOUTH);
-
-        setBackground(DARK_COLOR);
-        labelsPanel.setBackground(DARK_COLOR);
-        messageLabel.setForeground(LIGHT_COLOR);
-        welcomeLabel.setForeground(LIGHT_COLOR);
-        pinDisplayPanel.setBackground(DARK_COLOR);
-        buttonsPanel.setBackground(DARK_COLOR);
-        buttonsContainerPanel.setBackground(DARK_COLOR);
-
+        add(wrapperPanel, BorderLayout.CENTER);
     }
 
-    private void addPinButton(String label) {
-        var button = new RoundedComponent(label);
-        button.setFont(new Font("Roboto", Font.BOLD, 24));
-        button.setPreferredSize(new Dimension(60, 60));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                handleButtonClick(label);
-            }
+    private void createPinButtons() {
+        buttonsPanel = new JPanel(new GridBagLayout());
+        buttonsPanel.setBackground(DARK_COLOR);
+        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackgroundColor(Color.LIGHT_GRAY);
-                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackgroundColor(Color.WHITE);
-                button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-        buttonsPanel.add(button);
+        String[] buttonLabels = {
+                "1", "2", "3",
+                "4", "5", "6",
+                "7", "8", "9",
+                "0", "-", "X"
+        };
+        for (int i = 0; i < buttonLabels.length; i++) {
+            gbc.gridx = i % 3;
+            gbc.gridy = i / 3;
+            addPinButton(buttonLabels[i], gbc);
+        }
+    }
+
+    private void addPinButton(String label, GridBagConstraints gbc) {
+        var button = new CustomComponent(label);
+        button.setSize(60, 60);
+        button.addButtonBehavior(() -> handleButtonClick(label));
+        buttonsPanel.add(button, gbc);
     }
 
     private void handleButtonClick(String command) {
