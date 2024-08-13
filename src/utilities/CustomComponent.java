@@ -1,4 +1,4 @@
-package utilities;
+package src.utilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,18 +6,39 @@ import java.awt.geom.*;
 
 public class CustomComponent extends JComponent {
     private String text;
-    private int arcWidth = 15;
-    private int arcHeight = 15;
-    private Color backgroundColor = new Color(220, 220, 220); // Light gray
-    private Color borderColor = new Color(30, 30, 30); // Dark gray
-    private Color textColor = new Color(30, 30, 30); // Dark gray
+    private int cornerRadius = 15;
+    private Color backgroundColor;
+    private Color borderColor;
+    private Color textColor;
     private Dimension size;
-    protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
+    private float alignmentX;
 
-    public CustomComponent(String text) {
+    // Default values
+    protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
+    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
+    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final int DEFAULT_WIDTH = 50;
+    private static final int DEFAULT_HEIGHT = 50;
+    private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
+
+    public CustomComponent(Integer width, Integer height, Color backgroundColor) {
+        this("", backgroundColor, DEFAULT_TEXT_COLOR, width, height, DEFAULT_ALIGNMENT);
+    }
+
+    public CustomComponent(String text, Color backgroundColor, Color textColor,
+            Integer width, Integer height, Float alignmentX) {
         this.text = text;
+        this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
+        this.borderColor = DEFAULT_BORDER_COLOR;
+        this.textColor = textColor != null ? textColor : DEFAULT_TEXT_COLOR;
+        this.size = new Dimension(
+                width != null ? width : DEFAULT_WIDTH,
+                height != null ? height : DEFAULT_HEIGHT);
+        this.alignmentX = alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT;
+
         setOpaque(false);
-        setForeground(textColor);
+        setForeground(this.textColor);
         setFont(DEFAULT_FONT);
         initializeComponent();
     }
@@ -25,6 +46,10 @@ public class CustomComponent extends JComponent {
     private void initializeComponent() {
         setBackground(backgroundColor);
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        setPreferredSize(size);
+        setMinimumSize(size);
+        setMaximumSize(size);
+        setAlignmentX(alignmentX);
     }
 
     public void setText(String text) {
@@ -42,17 +67,6 @@ public class CustomComponent extends JComponent {
         repaint();
     }
 
-    public void setBorderColor(Color color) {
-        this.borderColor = color;
-        repaint();
-    }
-
-    public void setTextColor(Color color) {
-        this.textColor = color;
-        setForeground(color);
-        repaint();
-    }
-
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
@@ -66,21 +80,6 @@ public class CustomComponent extends JComponent {
     }
 
     @Override
-    public void setSize(Dimension d) {
-        setSize(d.width, d.height);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        if (size != null)
-            return size;
-        FontMetrics fm = getFontMetrics(getFont());
-        int width = fm.stringWidth(text) + 20;
-        int height = fm.getHeight() + 10;
-        return new Dimension(width, height);
-    }
-
-    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
@@ -88,11 +87,11 @@ public class CustomComponent extends JComponent {
 
         // Paint background
         g2d.setColor(backgroundColor);
-        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight));
+        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
 
         // Paint border
         g2d.setColor(borderColor);
-        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight));
+        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
 
         // Paint text
         if (!text.trim().isEmpty()) {

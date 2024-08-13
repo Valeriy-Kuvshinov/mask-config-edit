@@ -1,52 +1,50 @@
-package introduction;
+package src.introduction;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Properties;
 
-import utilities.CustomLabel;
-import utilities.CustomComponent;
+import src.utilities.CustomComponent;
+import src.utilities.CustomLabel;
+import src.utilities.CustomPanel;
 
 public class PinPanel extends JPanel {
-    private WelcomeProcess welcomeProcess;
     private CustomComponent[] pinDigits;
-    private JPanel buttonsPanel;
+    private CustomPanel buttonsPanel;
     private CustomLabel messageLabel;
+    private Runnable onPinVerifiedCallback;
     private StringBuilder currentPin = new StringBuilder();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
-    public PinPanel(WelcomeProcess process) {
-        this.welcomeProcess = process;
+    public PinPanel(Runnable onPinVerifiedCallback) {
+        this.onPinVerifiedCallback = onPinVerifiedCallback;
+
         setLayout(new BorderLayout());
         setBackground(DARK_COLOR);
 
         // Create a main panel to hold all components
-        var mainPanel = new JPanel();
+        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(DARK_COLOR);
         mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new JPanel(new GridBagLayout());
-        wrapperPanel.setBackground(DARK_COLOR);
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
         wrapperPanel.add(mainPanel);
 
         // Check if PIN exists and set appropriate message
         var initialMessage = getStoredPin() == null ? "Create your PIN" : "Enter your PIN";
 
         // Create labels
-        var welcomeLabel = new CustomLabel("Welcome to User Configuration!");
-        messageLabel = new CustomLabel(initialMessage);
+        var welcomeLabel = new CustomLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
+        messageLabel = new CustomLabel(initialMessage, null, null, Component.CENTER_ALIGNMENT);
 
         // Create PIN Display
-        var pinDisplayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        pinDisplayPanel.setBackground(DARK_COLOR);
-        pinDisplayPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        var pinDisplayPanel = new CustomPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), DARK_COLOR, null,
+                Component.CENTER_ALIGNMENT);
         pinDigits = new CustomComponent[6];
         for (int i = 0; i < 6; i++) {
-            pinDigits[i] = new CustomComponent(" ");
-            pinDigits[i].setSize(50, 50);
+            pinDigits[i] = new CustomComponent(" ", null, null, 50, 50, null);
             pinDisplayPanel.add(pinDigits[i]);
         }
 
@@ -67,9 +65,7 @@ public class PinPanel extends JPanel {
     }
 
     private void createPinButtons() {
-        buttonsPanel = new JPanel(new GridBagLayout());
-        buttonsPanel.setBackground(DARK_COLOR);
-        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -88,8 +84,7 @@ public class PinPanel extends JPanel {
     }
 
     private void addPinButton(String label, GridBagConstraints gbc) {
-        var button = new CustomComponent(label);
-        button.setSize(60, 60);
+        var button = new CustomComponent(label, null, null, 60, 60, null);
         button.addButtonBehavior(() -> handleButtonClick(label));
         buttonsPanel.add(button, gbc);
     }
@@ -130,13 +125,12 @@ public class PinPanel extends JPanel {
         if (storedPin == null) {
             setStoredPin(enteredPin);
             messageLabel.setText("New PIN created successfully!");
-            if (welcomeProcess != null)
-                welcomeProcess.onPinVerified();
-
+            if (onPinVerifiedCallback != null)
+                onPinVerifiedCallback.run();
         } else if (enteredPin.equals(storedPin)) {
             messageLabel.setText("Access granted!");
-            if (welcomeProcess != null)
-                welcomeProcess.onPinVerified();
+            if (onPinVerifiedCallback != null)
+                onPinVerifiedCallback.run();
         } else
             messageLabel.setText("PIN is incorrect. Try again.");
 

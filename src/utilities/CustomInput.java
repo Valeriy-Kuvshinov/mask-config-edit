@@ -1,4 +1,4 @@
-package utilities;
+package src.utilities;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -8,35 +8,58 @@ import java.awt.geom.*;
 
 public class CustomInput extends JComponent {
     private JTextField textField;
-    private int arcWidth = 15;
-    private int arcHeight = 15;
-    private Color backgroundColor = new Color(220, 220, 220); // Light gray
-    private Color borderColor = new Color(30, 30, 30); // Dark gray
-    private Color textColor = new Color(30, 30, 30); // Dark gray
+    private int cornerRadius = 15;
+    private Color backgroundColor;
+    private Color borderColor;
+    private Color textColor;
     private Dimension size;
     private int maxChars;
     private String placeholder;
-    private static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 32);
 
-    public CustomInput(String text, int width, int height, int maxChars, String placeholder) {
+    // Default values
+    protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 32);
+    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
+    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 50;
+    private static final int DEFAULT_MAX_CHARS = 20;
+    private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
+
+    public CustomInput(Integer maxChars, String placeholder) {
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT, maxChars, placeholder, DEFAULT_ALIGNMENT);
+    }
+
+    public CustomInput(Integer width, Integer height, Integer maxChars,
+            String placeholder, Float alignmentX) {
         setLayout(new BorderLayout());
         setOpaque(false);
 
-        textField = new JTextField(text);
+        this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
+        this.borderColor = DEFAULT_BORDER_COLOR;
+        this.textColor = DEFAULT_TEXT_COLOR;
+        this.size = new Dimension(
+                width != null ? width : DEFAULT_WIDTH,
+                height != null ? height : DEFAULT_HEIGHT);
+        this.maxChars = maxChars != null ? maxChars : DEFAULT_MAX_CHARS;
+        this.placeholder = placeholder != null ? placeholder : "Insert something";
+
+        textField = new JTextField("");
         textField.setOpaque(false);
         textField.setBorder(null);
         textField.setForeground(textColor);
         textField.setFont(DEFAULT_FONT);
 
-        this.maxChars = maxChars;
         setMaxCharLimit();
         add(textField, BorderLayout.CENTER);
 
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        setSize(width, height);
+        setPreferredSize(size);
+        setMinimumSize(size);
+        setMaximumSize(size);
 
-        this.placeholder = placeholder;
         setupPlaceholder();
+        setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }
 
     // Limit character amount in a field
@@ -83,37 +106,9 @@ public class CustomInput extends JComponent {
         textField.setText(placeholder);
     }
 
-    public void setText(String text) {
-        textField.setText(text);
-    }
-
     public String getText() {
         String currentText = textField.getText();
         return currentText.equals(placeholder) ? "" : currentText;
-    }
-
-    public void setBackgroundColor(Color color) {
-        this.backgroundColor = color;
-        repaint();
-    }
-
-    public void setBorderColor(Color color) {
-        this.borderColor = color;
-        repaint();
-    }
-
-    public void setTextColor(Color color) {
-        this.textColor = color;
-        textField.setForeground(color);
-    }
-
-    @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height);
-        size = new Dimension(width, height);
-        setPreferredSize(size);
-        setMinimumSize(size);
-        setMaximumSize(size);
     }
 
     @Override
@@ -123,19 +118,14 @@ public class CustomInput extends JComponent {
 
         // Paint background
         g2d.setColor(backgroundColor);
-        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight));
+        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
 
         // Paint border
         g2d.setColor(borderColor);
-        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight));
+        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
 
         g2d.dispose();
         super.paintComponent(g);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return size != null ? size : super.getPreferredSize();
     }
 
     public void addActionListener(java.awt.event.ActionListener listener) {

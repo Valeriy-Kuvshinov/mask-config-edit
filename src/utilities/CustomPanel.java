@@ -1,17 +1,29 @@
-package utilities;
+package src.utilities;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.*;
 
 public class CustomPanel extends JPanel {
     private int cornerRadius = 15;
-    private Color backgroundColor = new Color(220, 220, 220); // Light gray
-    private Color borderColor = new Color(30, 30, 30); // Dark gray
+    private Color backgroundColor;
+    private Color borderColor;
+
+    // Default values
+    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
+    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustomPanel(LayoutManager layout) {
+        this(layout, DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_ALIGNMENT);
+    }
+
+    public CustomPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX) {
         super(layout != null ? layout : new FlowLayout());
         setOpaque(false);
+        this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
+        this.borderColor = borderColor != null ? borderColor : DEFAULT_BORDER_COLOR;
+        setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }
 
     public void setBackgroundColor(Color color) {
@@ -21,11 +33,6 @@ public class CustomPanel extends JPanel {
 
     public void setBorderColor(Color color) {
         this.borderColor = color;
-        repaint();
-    }
-
-    public void setCornerRadius(int radius) {
-        this.cornerRadius = radius;
         repaint();
     }
 

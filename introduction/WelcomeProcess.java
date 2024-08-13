@@ -1,6 +1,0 @@
-package introduction;
-
-public interface WelcomeProcess {
-    void onPinVerified();
-    void onFlashDriveConnected();
-}
