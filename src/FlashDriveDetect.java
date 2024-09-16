@@ -44,7 +44,7 @@ public class FlashDriveDetect {
                         notifyListener(false);
                     }
                 }
-                Thread.sleep(15000); // Check every 15 seconds to reduce spam
+                Thread.sleep(10000); // Check every 10 seconds to reduce spam
             }
         } catch (Exception ex) {
             ex.printStackTrace();

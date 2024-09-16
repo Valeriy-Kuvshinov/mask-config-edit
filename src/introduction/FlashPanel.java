@@ -14,6 +14,7 @@ public class FlashPanel extends JPanel {
     private CustomPanel optionsPanel;
     private CustomInput createMaskField;
     private CustomInput editMaskField;
+    private CustomLabel connectLabel;
     private Consumer<String> createMaskHandler;
     private Consumer<String> editMaskHandler;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
@@ -38,6 +39,10 @@ public class FlashPanel extends JPanel {
         var welcomeLabel = new CustomLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
         messageLabel = new CustomLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
 
+        ImageIcon connectIcon = new ImageIcon("resources/images/connect-flash.png");
+        connectLabel = new CustomLabel(connectIcon, Component.CENTER_ALIGNMENT);
+        connectLabel.setLabelSize(180, 180);
+
         optionsPanel = createOptionsPanel();
         optionsPanel.setVisible(false);
 
@@ -45,7 +50,8 @@ public class FlashPanel extends JPanel {
         mainPanel.add(welcomeLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(messageLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
+        mainPanel.add(connectLabel);
         mainPanel.add(optionsPanel);
         mainPanel.add(Box.createVerticalGlue());
 
@@ -64,7 +70,7 @@ public class FlashPanel extends JPanel {
         var createLabelTwo = new CustomLabel("Create new configuration file with default settings", DARK_COLOR, 16,
                 Component.CENTER_ALIGNMENT);
 
-        ImageIcon createIcon = new ImageIcon("resources/new-flash.png");
+        ImageIcon createIcon = new ImageIcon("resources/images/new-flash.png");
         CustomLabel createImageLabel = new CustomLabel(createIcon, Component.CENTER_ALIGNMENT);
         createImageLabel.setLabelSize(100, 100);
 
@@ -91,7 +97,7 @@ public class FlashPanel extends JPanel {
         var editLabelTwo = new CustomLabel("Edit a configuration file on the connected USB drive", DARK_COLOR, 16,
                 Component.CENTER_ALIGNMENT);
 
-        ImageIcon editIcon = new ImageIcon("resources/old-flash.png");
+        ImageIcon editIcon = new ImageIcon("resources/images/old-flash.png");
         CustomLabel editImageLabel = new CustomLabel(editIcon, Component.CENTER_ALIGNMENT);
         editImageLabel.setLabelSize(100, 100);
 
@@ -120,6 +126,7 @@ public class FlashPanel extends JPanel {
 
     public void onFlashDriveConnected() {
         messageLabel.setText("Flash drive connected. Choose an option:");
+        connectLabel.setVisible(false);
         optionsPanel.setVisible(true);
         revalidate();
         repaint();
@@ -127,6 +134,7 @@ public class FlashPanel extends JPanel {
 
     public void onFlashDriveDisconnected() {
         messageLabel.setText("Please connect a flash drive...");
+        connectLabel.setVisible(true);
         optionsPanel.setVisible(false);
         revalidate();
         repaint();
