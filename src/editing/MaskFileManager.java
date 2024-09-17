@@ -7,126 +7,189 @@ public class MaskFileManager {
     public static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
 
     static {
+        // General System settings. 1 - enabled. 0 - disabled
+        Map<String, Object> generalSystemSettings = new HashMap<>();
         // Input settings
-        Map<String, Object> inputSettings = new HashMap<>();
-        inputSettings.put("Input_computer", 1);
-        inputSettings.put("Input_cellular", 1);
-        inputSettings.put("Input_secureIphone", 1);
-        DEFAULT_SETTINGS.put("Input", inputSettings);
-
-        // Input Interface settings
-        Map<String, Object> inputInterfaceSettings = new HashMap<>();
-        inputInterfaceSettings.put("ethernet", 1);
-        inputInterfaceSettings.put("wifi", 1);
-        inputInterfaceSettings.put("usb", 1);
-        DEFAULT_SETTINGS.put("InputInterface", inputInterfaceSettings);
-
-        // Output Interface settings
-        Map<String, Object> outputInterfaceSettings = new HashMap<>();
-        outputInterfaceSettings.put("ethernet", 1);
-        outputInterfaceSettings.put("wifi", 1);
-        outputInterfaceSettings.put("cellularModem", 1);
-        DEFAULT_SETTINGS.put("OutputInterface", outputInterfaceSettings);
-
+        generalSystemSettings.put("Input_computer", 1);
+        generalSystemSettings.put("Input_cellular", 1);
+        generalSystemSettings.put("Input_secureIphone", 1);
+        generalSystemSettings.put("InputInterface_ethernet", 1);
+        generalSystemSettings.put("InputInterface_wifi", 1);
+        generalSystemSettings.put("InputInterface_usb", 1);
+        // Enforce the specific device
+        generalSystemSettings.put("interfaceNames_input_usb", "227c369a1f027ece");
         // Output settings
-        Map<String, Object> outputSettings = new HashMap<>();
-        outputSettings.put("tor", 1);
-        outputSettings.put("proxy", 1);
-        outputSettings.put("vpn", 1);
-        outputSettings.put("vps", 1);
-        outputSettings.put("force_tor", 0);
-        DEFAULT_SETTINGS.put("Output", outputSettings);
+        generalSystemSettings.put("OutputInterface_ethernet", 1);
+        generalSystemSettings.put("OutputInterface_wifi", 1);
+        generalSystemSettings.put("OutputInterface_cellularModem", 1);
+        generalSystemSettings.put("Output_tor", 1);
+        generalSystemSettings.put("Output_proxy", 1);
+        generalSystemSettings.put("Output_vpn", 1);
+        generalSystemSettings.put("Output_vps", 1);
+        generalSystemSettings.put("Output_force_tor", 0);
 
-        // Proxy settings
-        Map<String, Object> proxySettings = new HashMap<>();
-        proxySettings.put("ip", "45.9.190.11");
-        proxySettings.put("port", 8888);
-        proxySettings.put("username", "user");
-        proxySettings.put("password", "password");
-        proxySettings.put("default_service", "HighProxy1");
-        proxySettings.put("default_country", "es");
-        proxySettings.put("default_server", "172.102.143.32");
-        proxySettings.put("list_services", Arrays.asList("HighProxy1", "HighProxy2"));
-        proxySettings.put("list_countryCodes", Arrays.asList("es", "gb", "fr"));
-        proxySettings.put("list_ips", Arrays.asList("206.232.14.155", "195.206.109.58", "333.333.333.333"));
-        proxySettings.put("list_ports", Arrays.asList(21272, 22222, 33333));
-        proxySettings.put("list_usernames", Arrays.asList("nirsabb36427", "nirsabb36427", "user3"));
-        proxySettings.put("list_passwords", Arrays.asList("r5du8mpvep", "r5du8mpvep", "password3"));
-        DEFAULT_SETTINGS.put("Proxy", proxySettings);
+        DEFAULT_SETTINGS.put("System", generalSystemSettings);
 
+        // Subsystem: Anonymizers
         // Tor settings
         Map<String, Object> torSettings = new HashMap<>();
-        torSettings.put("list_countryCodes", Arrays.asList("at", "ch", "de", "fr", "nl", "no", "ro", "se"));
-        torSettings.put("list_exit_nodes", new ArrayList<>());
-        torSettings.put("default_country", 99);
+        torSettings.put("output_tor_list_countryCodes",
+                new String[] { "at", "ch", "de", "fr", "nl", "no", "ro", "se" });
+        torSettings.put("output_tor_list_exit_nodes", new String[] {});
+        torSettings.put("output_tor_default_country", 99);
+
         DEFAULT_SETTINGS.put("Tor", torSettings);
 
-        // VPN settings
+        // VPN general settings
+        Map<String, List<String>> fullVpnServersList = readVpnServersJson("/resources/json/vpn_servers_list.json");
         Map<String, Object> vpnSettings = new HashMap<>();
-        vpnSettings.put("default_service", "any");
-        vpnSettings.put("default_country", "any");
-        vpnSettings.put("default_server", "any");
-        vpnSettings.put("service_list", Arrays.asList("nordvpn", "protonvpn", "expressvpn"));
-        DEFAULT_SETTINGS.put("VPN", vpnSettings);
+        vpnSettings.put("output_vpn_service_list", new String[] { "nordvpn", "protonvpn", "expressvpn" });
+        vpnSettings.put("output_vpn_default_service", "nordvpn");
+        vpnSettings.put("output_vpn_default_country", "any");
+        vpnSettings.put("output_vpn_default_server", "any");
 
         // VPN 1 settings
         Map<String, Object> vpnServiceOneSettings = new HashMap<>();
-        vpnServiceOneSettings.put("service", "nordvpn");
-        vpnServiceOneSettings.put("expiration_date", "01/01/2025");
-        vpnServiceOneSettings.put("list_countryCodes",
-                Arrays.asList("at", "ch", "cz", "de", "es", "fr", "it", "nl", "pl", "ro", "uk", "se"));
-        vpnServiceOneSettings.put("username", "eEX9A2ZxKd3kZcGYeepccFEg");
-        vpnServiceOneSettings.put("password", "emJTGgyviYQduLUwvSZD6xk1");
-        vpnServiceOneSettings.put("list_servers", readFromJson("resources/json/vpn_servers_one.json"));
-        DEFAULT_SETTINGS.put("VPNServiceOne", vpnServiceOneSettings);
+        vpnServiceOneSettings.put("output_vpn_service_1", "nordvpn");
+        vpnServiceOneSettings.put("service_expiration_date_vpn_1", "01/01/2025");
+        vpnServiceOneSettings.put("output_vpn_service_1_list_countryCodes",
+                new String[] { "at", "ch", "cz", "de", "es", "fr", "it", "nl", "pl", "ro", "uk", "se" });
+        vpnServiceOneSettings.put("output_vpn_service_1_username", "eEX9A2ZxKd3kZcGYeepccFEg");
+        vpnServiceOneSettings.put("output_vpn_service_1_password", "emJTGgyviYQduLUwvSZD6xk1");
+        vpnServiceOneSettings.put("output_vpn_service_1_list_servers", fullVpnServersList.get("nordvpn"));
 
         // VPN 2 settings
         Map<String, Object> vpnServiceTwoSettings = new HashMap<>();
-        vpnServiceTwoSettings.put("service", "protonvpn");
-        vpnServiceTwoSettings.put("expiration_date", "02/02/2024");
-        vpnServiceTwoSettings.put("list_countryCodes",
-                Arrays.asList("at", "ch", "cz", "de", "es", "fr", "it", "nl", "pl", "ro", "se"));
-        vpnServiceTwoSettings.put("username", "3gMlEux4oskmvYFX");
-        vpnServiceTwoSettings.put("password", "n5oBE6FcFn12NlLoi9d7Ep9Vb0R10PJN");
-        vpnServiceTwoSettings.put("list_servers", readFromJson("resources/json/vpn_servers_two.json"));
-        DEFAULT_SETTINGS.put("VPNServiceTwo", vpnServiceTwoSettings);
+        vpnServiceTwoSettings.put("output_vpn_service_2", "protonvpn");
+        vpnServiceTwoSettings.put("service_expiration_date_vpn_2", "02/02/2024");
+        vpnServiceTwoSettings.put("output_vpn_service_2_list_countryCodes",
+                new String[] { "at", "ch", "cz", "de", "es", "fr", "it", "nl", "pl", "ro", "se" });
+        vpnServiceTwoSettings.put("output_vpn_service_2_username", "3gMlEux4oskmvYFX");
+        vpnServiceTwoSettings.put("output_vpn_service_2_password", "n5oBE6FcFn12NlLoi9d7Ep9Vb0R10PJN");
+        vpnServiceTwoSettings.put("output_vpn_service_2_list_servers", fullVpnServersList.get("protonvpn"));
 
-        // VPN 2 settings
+        // VPN 3 settings
         Map<String, Object> vpnServiceThreeSettings = new HashMap<>();
-        vpnServiceThreeSettings.put("service", "expressvpn");
-        vpnServiceThreeSettings.put("expiration_date", "03/03/2025");
-        vpnServiceThreeSettings.put("list_countryCodes",
-                Arrays.asList("at", "ch", "cz", "de", "es", "fr", "hu", "it", "nl", "pt", "se"));
-        vpnServiceThreeSettings.put("username", "tk5zulngd3ylvuyczvykl1bh");
-        vpnServiceThreeSettings.put("password", "javcbkhkijp46wdkn7xapmqv");
-        vpnServiceThreeSettings.put("list_servers", readFromJson("resources/json/vpn_servers_three.json"));
-        DEFAULT_SETTINGS.put("VPNServiceThree", vpnServiceThreeSettings);
+        vpnServiceThreeSettings.put("output_vpn_service_3", "expressvpn");
+        vpnServiceThreeSettings.put("service_expiration_date_vpn_3", "03/03/2025");
+        vpnServiceThreeSettings.put("output_vpn_service_3_list_countryCodes",
+                new String[] { "at", "ch", "cz", "de", "es", "fr", "hu", "it", "nl", "pt", "se" });
+        vpnServiceThreeSettings.put("output_vpn_service_3_username", "tk5zulngd3ylvuyczvykl1bh");
+        vpnServiceThreeSettings.put("output_vpn_service_3_password", "javcbkhkijp46wdkn7xapmqv");
+        vpnServiceThreeSettings.put("output_vpn_service_3_list_servers", fullVpnServersList.get("expressvpn"));
+
+        // Add VPN services settings to the main VPN settings
+        vpnSettings.put("VPNServiceOne", vpnServiceOneSettings);
+        vpnSettings.put("VPNServiceTwo", vpnServiceTwoSettings);
+        vpnSettings.put("VPNServiceThree", vpnServiceThreeSettings);
+
+        DEFAULT_SETTINGS.put("VPN", vpnSettings);
+
+        // VPS settings
+        Map<String, Object> vpsSettings = new HashMap<>();
+        vpsSettings.put("output_vps_service", "awsmicrovps");
+        vpsSettings.put("service_expiration_date_vps", "01/01/2024");
+        vpsSettings.put("output_vps_service_countryCode", "fr");
+        vpsSettings.put("output_vps_service_country", "France");
+        vpsSettings.put("output_vps_service_server", "fr15.188.51.172");
+        // TCP or UDP
+        vpsSettings.put("output_vps_service_preferred_transport", "tcp");
+        vpsSettings.put("output_vps_service_username", "user");
+        vpsSettings.put("output_vps_service_password", "password");
+
+        DEFAULT_SETTINGS.put("VPS", vpsSettings);
+
+        // Proxy settings
+        Map<String, Object> proxySettings = new HashMap<>();
+        proxySettings.put("output_proxy_list_service", new String[] { "HighProxy1", "HighProxy2" });
+        proxySettings.put("output_proxy_default_service", "HighProxy1");
+        proxySettings.put("output_proxy_default_country", "es");
+        proxySettings.put("output_proxy_default_server", "172.102.143.32");
+
+        // Proxy 1 settings
+        Map<String, Object> proxyServiceOneSettings = new HashMap<>();
+        proxyServiceOneSettings.put("output_proxy_service_1", "HighProxy1");
+        proxyServiceOneSettings.put("service_expiration_date_proxy_1", "01/01/2025");
+        proxyServiceOneSettings.put("output_proxy_list_countryCodes_1", new String[] { "es" });
+        proxyServiceOneSettings.put("output_proxy_list_ips_1", new String[] { "206.232.14.155,195" });
+        proxyServiceOneSettings.put("output_proxy_list_ports_1", new String[] { "21272" });
+        proxyServiceOneSettings.put("output_proxy_service_1_username", "nirsabb36427");
+        proxyServiceOneSettings.put("output_proxy_service_1_password", "r5du8mpvep");
+
+        // Proxy 2 settings
+        Map<String, Object> proxyServiceTwoSettings = new HashMap<>();
+        proxyServiceTwoSettings.put("output_proxy_service_2", "HighProxy2");
+        proxyServiceTwoSettings.put("service_expiration_date_proxy_2", "02/02/2025");
+        proxyServiceTwoSettings.put("output_proxy_list_countryCodes_2", new String[] { "gb" });
+        proxyServiceTwoSettings.put("output_proxy_list_ips_2", new String[] { "195.206.109.58" });
+        proxyServiceTwoSettings.put("output_proxy_list_ports_2", new String[] { "22222" });
+        proxyServiceTwoSettings.put("output_proxy_service_2_username", "nirsabb36427");
+        proxyServiceTwoSettings.put("output_proxy_service_2_password", "r5du8mpvep");
+
+        // Proxy 3 settings
+        Map<String, Object> proxyServiceThreeSettings = new HashMap<>();
+        proxyServiceThreeSettings.put("output_proxy_service_3", "HighProxy3");
+        proxyServiceThreeSettings.put("service_expiration_date_proxy_3", "03/03/2025");
+        proxyServiceThreeSettings.put("output_proxy_list_countryCodes_3", new String[] { "fr" });
+        proxyServiceThreeSettings.put("output_proxy_list_ips_3", new String[] { "333.333.333.333" });
+        proxyServiceThreeSettings.put("output_proxy_list_ports_3", new String[] { "33333" });
+        proxyServiceThreeSettings.put("output_proxy_service_3_username", "user3");
+        proxyServiceThreeSettings.put("output_proxy_service_3_password", "password3");
+
+        // Add Proxy service settings to the main Proxy settings
+        proxySettings.put("ProxyServiceOne", proxyServiceOneSettings);
+        proxySettings.put("ProxyServiceTwo", proxyServiceTwoSettings);
+        proxySettings.put("ProxyServiceThree", proxyServiceThreeSettings);
+
+        DEFAULT_SETTINGS.put("Proxy", proxySettings);
+
+        // Hotspot settings
+        Map<String, Object> hotspotSettings = new HashMap<>();
+        // 1 for hidden, 0 for not hidden
+        hotspotSettings.put("inputInterface_hotspot_hidden", 0);
+        // ssid name. if it is "" or '' a random ssid will be generated according to
+        // length and policy
+        hotspotSettings.put("inputInterface_hotspot_ssid", "AnonMask-Dev-V11");
+        // Number of characters. Must be >= 1
+        hotspotSettings.put("inputInterface_hotspot_ssid_length", 8);
+        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" .
+        // always case sensitive and always mixed cases.
+        hotspotSettings.put("inputInterface_hotspot_ssid_policy", "alphanum");
+        // Provisioned password. Must be at least 8 characters long. if it is "" or '' a
+        // random password will be generated according to length and policy
+        hotspotSettings.put("inputInterface_hotspot_password", "@anonmask");
+        // Number of characters. Must be >= 8
+        hotspotSettings.put("inputInterface_hotspot_password_length", 9);
+        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" .
+        // always case sensitive and always mixed cases.
+        hotspotSettings.put("inputInterface_hotspot_password_policy", "alphanum");
+
+        DEFAULT_SETTINGS.put("Hotspot", hotspotSettings);
     }
 
-    private static List<String> readFromJson(String resourcePath) {
-        List<String> servers = new ArrayList<>();
-        try (InputStream inputStream = MaskFileManager.class.getResourceAsStream(resourcePath);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-
-            StringBuilder jsonContent = new StringBuilder();
+    // VPN servers stored in JSON due to the amount of them, here is how we can read
+    // the json file that contain the vpn servers list (for each of the 3 vpns)
+    private static Map<String, List<String>> readVpnServersJson(String resourcePath) {
+        Map<String, List<String>> vpnServers = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(MaskFileManager.class.getResourceAsStream(resourcePath)))) {
             String line;
+            String currentVpn = null;
             while ((line = reader.readLine()) != null) {
-                jsonContent.append(line);
+                line = line.trim();
+                if (line.endsWith(": [")) {
+                    currentVpn = line.substring(1, line.indexOf("\"", 1));
+                    vpnServers.put(currentVpn, new ArrayList<>());
+                } else if (line.startsWith("\"") && line.endsWith("\",")) {
+                    vpnServers.get(currentVpn).add(line.substring(1, line.length() - 2));
+                } else if (line.startsWith("\"") && line.endsWith("\"")) {
+                    vpnServers.get(currentVpn).add(line.substring(1, line.length() - 1));
+                }
             }
-
-            String json = jsonContent.toString();
-            int start = json.indexOf("[") + 1;
-            int end = json.lastIndexOf("]");
-            String serversString = json.substring(start, end);
-
-            String[] serverArray = serversString.split(",");
-            for (String server : serverArray) {
-                servers.add(server.trim().replace("\"", ""));
-            }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return servers;
+        return vpnServers;
     }
 
     // Method to get a specific setting
