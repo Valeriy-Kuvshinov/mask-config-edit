@@ -1,10 +1,17 @@
-package src.editing;
+package src.configuration;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import java.awt.*;
 
-public class MaskFileManager {
-    public static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
+import src.utilities.*;
+
+public class MaskEditingManager extends JPanel {
+    private static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
+    private static final Color DARK_COLOR = new Color(30, 30, 30);
+    private String maskName;
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -172,7 +179,7 @@ public class MaskFileManager {
     private static Map<String, List<String>> readVpnServersJson(String resourcePath) {
         Map<String, List<String>> vpnServers = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(MaskFileManager.class.getResourceAsStream(resourcePath)))) {
+                new InputStreamReader(MaskEditingManager.class.getResourceAsStream(resourcePath)))) {
             String line;
             String currentVpn = null;
             while ((line = reader.readLine()) != null) {
@@ -190,6 +197,31 @@ public class MaskFileManager {
             e.printStackTrace();
         }
         return vpnServers;
+    }
+
+    public MaskEditingManager(String maskName) {
+        this.maskName = maskName;
+        initializeUI();
+    }
+
+    private void initializeUI() {
+        setLayout(new BorderLayout());
+        setBackground(DARK_COLOR);
+
+        // Create a main panel to hold all components
+        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+
+        // Create a wrapper panel to center the main panel
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
+        wrapperPanel.add(mainPanel);
+
+        // Add components to mainPanel
+        var titleLabel = new CustomLabel("Editing Mask: " + maskName, null, null, Component.CENTER_ALIGNMENT);
+        mainPanel.add(titleLabel);
+
+        add(wrapperPanel, BorderLayout.CENTER);
     }
 
     // Method to get a specific setting

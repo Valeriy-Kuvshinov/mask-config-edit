@@ -3,11 +3,9 @@ package src.introduction;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.Properties;
+import java.util.*;
 
-import src.utilities.CustomComponent;
-import src.utilities.CustomLabel;
-import src.utilities.CustomPanel;
+import src.utilities.*;
 
 public class PinPanel extends JPanel {
     private CustomComponent[] pinDigits;
@@ -19,7 +17,10 @@ public class PinPanel extends JPanel {
 
     public PinPanel(Runnable onPinVerifiedCallback) {
         this.onPinVerifiedCallback = onPinVerifiedCallback;
+        initializeUI();
+    }
 
+    private void initializeUI() {
         setLayout(new BorderLayout());
         setBackground(DARK_COLOR);
 
@@ -48,7 +49,7 @@ public class PinPanel extends JPanel {
             pinDisplayPanel.add(pinDigits[i]);
         }
 
-        createPinButtons(); // Create PIN Buttons
+        createPinButtons();
 
         // Add components to main panel
         mainPanel.add(Box.createVerticalGlue());
@@ -64,6 +65,7 @@ public class PinPanel extends JPanel {
         add(wrapperPanel, BorderLayout.CENTER);
     }
 
+    // Create PIN Buttons
     private void createPinButtons() {
         buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT);
 

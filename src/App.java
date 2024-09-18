@@ -3,14 +3,17 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 
-import src.introduction.FlashPanel;
-import src.introduction.PinPanel;
+import src.introduction.*;
+import src.configuration.*;
 
 public class App extends JFrame {
     private PinPanel pinPanel;
     private FlashPanel flashPanel;
+    private MaskEditingManager maskEditingManager;
+    private MaskChoicePanel maskChoicePanel;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
+    private boolean pinVerified = false;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -31,10 +34,12 @@ public class App extends JFrame {
         setLayout(new BorderLayout());
 
         pinPanel = new PinPanel(this::onPinVerified);
-        flashPanel = new FlashPanel(this::createMask, this::editMask);
+        flashPanel = new FlashPanel();
+        maskChoicePanel = new MaskChoicePanel(this::createMask, this::editMask);
 
         add(pinPanel, BorderLayout.CENTER);
 
+        // Start the detection of an USB
         flashDriveDetect = new FlashDriveDetect(this::handleFlashDriveConnection);
         flashDriveDetect.startDetection();
     }
@@ -42,28 +47,52 @@ public class App extends JFrame {
     private void handleFlashDriveConnection(boolean isConnected) {
         if (isConnected && !flashDriveConnected) {
             flashDriveConnected = true;
-            SwingUtilities.invokeLater(this::onFlashDriveConnected);
+            if (pinVerified) {
+                SwingUtilities.invokeLater(this::onFlashDriveConnected);
+            }
         } else if (!isConnected && flashDriveConnected) {
             flashDriveConnected = false;
-            SwingUtilities.invokeLater(this::onFlashDriveDisconnected);
+            if (pinVerified) {
+                SwingUtilities.invokeLater(this::onFlashDriveDisconnected);
+            }
         }
     }
 
     private void onPinVerified() {
-        System.out.println("PIN verified. Switching to flash drive panel...");
+        pinVerified = true;
+
         SwingUtilities.invokeLater(() -> {
             remove(pinPanel);
-            add(flashPanel, BorderLayout.CENTER);
+            add(flashDriveConnected ? maskChoicePanel : flashPanel, BorderLayout.CENTER);
             revalidate();
             repaint();
         });
     }
 
+    private void createMask(String maskName) {
+        System.out.println("Creating mask: " + maskName);
+        maskEditingManager = new MaskEditingManager(maskName);
+        remove(maskChoicePanel);
+        add(maskEditingManager, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
+    private void editMask(String maskName) {
+        System.out.println("Editing mask: " + maskName);
+        maskEditingManager = new MaskEditingManager(maskName);
+        remove(maskChoicePanel);
+        add(maskEditingManager, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
     private void onFlashDriveConnected() {
         System.out.println("Flash drive connected. Switching to main content...");
         SwingUtilities.invokeLater(() -> {
-            if (flashPanel != null) {
-                flashPanel.onFlashDriveConnected();
+            if (pinVerified) {
+                remove(flashPanel);
+                add(maskChoicePanel, BorderLayout.CENTER);
                 revalidate();
                 repaint();
             }
@@ -73,22 +102,13 @@ public class App extends JFrame {
     private void onFlashDriveDisconnected() {
         System.out.println("Flash drive disconnected.");
         SwingUtilities.invokeLater(() -> {
-            if (flashPanel != null) {
-                flashPanel.onFlashDriveDisconnected();
+            if (pinVerified) {
+                getContentPane().removeAll();
+                add(flashPanel, BorderLayout.CENTER);
                 revalidate();
                 repaint();
             }
         });
-    }
-
-    private void createMask(String maskName) {
-        System.out.println("Creating mask: " + maskName);
-        // TODO: Implement actual mask creation logic
-    }
-
-    private void editMask(String maskName) {
-        System.out.println("Editing mask: " + maskName);
-        // TODO: Implement actual mask editing logic
     }
 
     public void shutdown() {
