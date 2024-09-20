@@ -69,7 +69,7 @@ public class MaskChoicePanel extends JPanel {
 
         createMaskField = new CustomInput(250, 40, 12, "Insert name", Component.CENTER_ALIGNMENT);
 
-        var createButton = new CustomComponent("Create", null, null, 100, 50, Component.CENTER_ALIGNMENT);
+        var createButton = new CustomComponent("Create", 100, 50, null, null, Component.CENTER_ALIGNMENT, null, null);
 
         createPanel.add(createLabelOne);
         createPanel.add(Box.createVerticalStrut(10));
@@ -96,7 +96,7 @@ public class MaskChoicePanel extends JPanel {
 
         editMaskField = new CustomInput(250, 40, 12, "Insert name", Component.CENTER_ALIGNMENT);
 
-        var editButton = new CustomComponent("Edit", null, null, 100, 50, Component.CENTER_ALIGNMENT);
+        var editButton = new CustomComponent("Edit", 100, 50, null, null, Component.CENTER_ALIGNMENT, null, null);
 
         editPanel.add(editLabelOne);
         editPanel.add(Box.createVerticalStrut(10));

@@ -45,7 +45,7 @@ public class PinPanel extends JPanel {
                 Component.CENTER_ALIGNMENT);
         pinDigits = new CustomComponent[6];
         for (int i = 0; i < 6; i++) {
-            pinDigits[i] = new CustomComponent(" ", null, null, 50, 50, null);
+            pinDigits[i] = new CustomComponent(" ", 55, 55, null, null, null, null, null);
             pinDisplayPanel.add(pinDigits[i]);
         }
 
@@ -86,7 +86,7 @@ public class PinPanel extends JPanel {
     }
 
     private void addPinButton(String label, GridBagConstraints gbc) {
-        var button = new CustomComponent(label, null, null, 60, 60, null);
+        var button = new CustomComponent(label, 65, 65, null, null, null, null, null);
         button.addButtonBehavior(() -> handleButtonClick(label));
         buttonsPanel.add(button, gbc);
     }

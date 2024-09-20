@@ -208,18 +208,33 @@ public class MaskEditingManager extends JPanel {
         setLayout(new BorderLayout());
         setBackground(DARK_COLOR);
 
+        // Create a panel to hold the topbar and separator
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(DARK_COLOR);
+
+        // Add the MaskEditingTopbar
+        topPanel.add(new MaskEditingTopbar(maskName), BorderLayout.CENTER);
+
+        // Create and add a thin separator
+        CustomSeparator separator = new CustomSeparator(new Color(100, 0, 150), 1);
+        topPanel.add(separator, BorderLayout.SOUTH);
+
+        // Add the top panel to the main layout
+        add(topPanel, BorderLayout.NORTH);
+
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        var mainPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null);
         mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+
+        // Create a content panel to hold switchable panels
+        var contentPanel = new CustomPanel(null, DARK_COLOR, null, null);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         // Create a wrapper panel to center the main panel
         var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
         wrapperPanel.add(mainPanel);
-
-        // Add components to mainPanel
-        var titleLabel = new CustomLabel("Editing Mask: " + maskName, null, null, Component.CENTER_ALIGNMENT);
-        mainPanel.add(titleLabel);
 
         add(wrapperPanel, BorderLayout.CENTER);
     }
