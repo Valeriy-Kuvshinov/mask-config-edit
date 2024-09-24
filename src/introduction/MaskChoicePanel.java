@@ -6,7 +6,7 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class MaskChoicePanel extends JPanel {
+public class MaskChoicePanel extends CustomPanel {
     private Consumer<String> createMaskHandler;
     private Consumer<String> editMaskHandler;
     private CustomPanel optionsPanel;
@@ -16,22 +16,18 @@ public class MaskChoicePanel extends JPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
     public MaskChoicePanel(Consumer<String> createMaskHandler, Consumer<String> editMaskHandler) {
+        super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.createMaskHandler = createMaskHandler;
         this.editMaskHandler = editMaskHandler;
         initializeUI();
     }
 
     private void initializeUI() {
-        setLayout(new BorderLayout());
-        setBackground(DARK_COLOR);
-
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+        var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Create labels
@@ -52,24 +48,24 @@ public class MaskChoicePanel extends JPanel {
     }
 
     private CustomPanel createOptionsPanel() {
-        var optionsPanel = new CustomPanel(new GridLayout(1, 2, 20, 0), DARK_COLOR, null, Component.CENTER_ALIGNMENT);
+        var optionsPanel = new CustomPanel(new GridLayout(1, 2, 20, 0), DARK_COLOR, null, Component.CENTER_ALIGNMENT,
+                0, 0, 0);
 
         // Create Mask option
-        var createPanel = new CustomPanel(null, Color.LIGHT_GRAY, null, null);
-        createPanel.setLayout(new BoxLayout(createPanel, BoxLayout.Y_AXIS));
-        createPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        var createPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), Color.LIGHT_GRAY, null, null, 15, 15,
+                15);
 
         var createLabelOne = new CustomLabel("Create Mask", DARK_COLOR, 20, Component.CENTER_ALIGNMENT);
         var createLabelTwo = new CustomLabel("Create new configuration file with default settings", DARK_COLOR, 16,
                 Component.CENTER_ALIGNMENT);
 
-        ImageIcon createIcon = new ImageIcon("resources/images/new-flash.png");
-        CustomLabel createImageLabel = new CustomLabel(createIcon, Component.CENTER_ALIGNMENT);
+        var createIcon = new ImageIcon("resources/images/new-flash.png");
+        var createImageLabel = new CustomLabel(createIcon, Component.CENTER_ALIGNMENT);
         createImageLabel.setLabelSize(100, 100);
 
-        createMaskField = new CustomInput(250, 40, 12, "Insert name", Component.CENTER_ALIGNMENT);
+        createMaskField = new CustomInput(260, 50, 15, "New name", Component.CENTER_ALIGNMENT);
 
-        var createButton = new CustomComponent("Create", 100, 50, null, null, Component.CENTER_ALIGNMENT, null, null);
+        var createButton = new CustomComponent("Create", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
 
         createPanel.add(createLabelOne);
         createPanel.add(Box.createVerticalStrut(10));
@@ -82,21 +78,20 @@ public class MaskChoicePanel extends JPanel {
         createPanel.add(createButton);
 
         // Edit Mask option
-        var editPanel = new CustomPanel(null, Color.LIGHT_GRAY, null, null);
-        editPanel.setLayout(new BoxLayout(editPanel, BoxLayout.Y_AXIS));
-        editPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        var editPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), Color.LIGHT_GRAY, null, null, 15, 15,
+                15);
 
         var editLabelOne = new CustomLabel("Edit Mask", DARK_COLOR, 20, Component.CENTER_ALIGNMENT);
         var editLabelTwo = new CustomLabel("Edit a configuration file on the connected USB drive", DARK_COLOR, 16,
                 Component.CENTER_ALIGNMENT);
 
-        ImageIcon editIcon = new ImageIcon("resources/images/old-flash.png");
-        CustomLabel editImageLabel = new CustomLabel(editIcon, Component.CENTER_ALIGNMENT);
+        var editIcon = new ImageIcon("resources/images/old-flash.png");
+        var editImageLabel = new CustomLabel(editIcon, Component.CENTER_ALIGNMENT);
         editImageLabel.setLabelSize(100, 100);
 
-        editMaskField = new CustomInput(250, 40, 12, "Insert name", Component.CENTER_ALIGNMENT);
+        editMaskField = new CustomInput(260, 50, 15, "Existing name", Component.CENTER_ALIGNMENT);
 
-        var editButton = new CustomComponent("Edit", 100, 50, null, null, Component.CENTER_ALIGNMENT, null, null);
+        var editButton = new CustomComponent("Edit", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
 
         editPanel.add(editLabelOne);
         editPanel.add(Box.createVerticalStrut(10));

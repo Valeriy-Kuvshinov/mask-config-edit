@@ -8,10 +8,11 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class MaskEditingManager extends JPanel {
+public class MaskEditingManager extends CustomPanel {
     private static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
+    private String defaultTab = "System";
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -200,40 +201,43 @@ public class MaskEditingManager extends JPanel {
     }
 
     public MaskEditingManager(String maskName) {
+        super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.maskName = maskName;
         initializeUI();
     }
 
     private void initializeUI() {
-        setLayout(new BorderLayout());
-        setBackground(DARK_COLOR);
-
-        // Create a panel to hold the topbar and separator
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(DARK_COLOR);
+        // Create a panel to hold the topbar, middlebar, and separators
+        var topPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Add the MaskEditingTopbar
-        topPanel.add(new MaskEditingTopbar(maskName), BorderLayout.CENTER);
+        topPanel.add(new MaskEditingTopbar(maskName));
 
         // Create and add a thin separator
-        CustomSeparator separator = new CustomSeparator(new Color(100, 0, 150), 1);
-        topPanel.add(separator, BorderLayout.SOUTH);
+        var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
+        topPanel.add(separatorOne);
+
+        // Add the MaskEditingMiddlebar
+        topPanel.add(new MaskEditingMiddlebar());
+
+        // Create and add another thin separator
+        var separatorTwo = new CustomSeparator(new Color(100, 0, 150), 1);
+        topPanel.add(separatorTwo);
 
         // Add the top panel to the main layout
         add(topPanel, BorderLayout.NORTH);
 
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null);
-        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+        var mainPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        // mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
 
         // Create a content panel to hold switchable panels
-        var contentPanel = new CustomPanel(null, DARK_COLOR, null, null);
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        var contentPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         add(wrapperPanel, BorderLayout.CENTER);

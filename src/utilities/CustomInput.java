@@ -12,7 +12,8 @@ public class CustomInput extends JComponent {
     private Color backgroundColor;
     private Color borderColor;
     private Color textColor;
-    private Dimension size;
+    private int width;
+    private int height;
     private int maxChars;
     private String placeholder;
 
@@ -21,28 +22,25 @@ public class CustomInput extends JComponent {
     private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
-    private static final int DEFAULT_WIDTH = 100;
-    private static final int DEFAULT_HEIGHT = 50;
-    private static final int DEFAULT_MAX_CHARS = 20;
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomInput(Integer maxChars, String placeholder) {
-        this(DEFAULT_WIDTH, DEFAULT_HEIGHT, maxChars, placeholder, DEFAULT_ALIGNMENT);
-    }
+    public CustomInput(int width, int height, int maxChars, String placeholder, Float alignmentX) {
+        this.width = width;
+        this.height = height;
+        this.maxChars = maxChars;
 
-    public CustomInput(Integer width, Integer height, Integer maxChars,
-            String placeholder, Float alignmentX) {
-        setLayout(new BorderLayout());
-        setOpaque(false);
-
+        this.placeholder = placeholder != null ? placeholder : "Insert something";
         this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = DEFAULT_TEXT_COLOR;
-        this.size = new Dimension(
-                width != null ? width : DEFAULT_WIDTH,
-                height != null ? height : DEFAULT_HEIGHT);
-        this.maxChars = maxChars != null ? maxChars : DEFAULT_MAX_CHARS;
-        this.placeholder = placeholder != null ? placeholder : "Insert something";
+
+        initializeComponent(alignmentX);
+    }
+
+    private void initializeComponent(Float alignmentX) {
+        setLayout(new BorderLayout());
+        setOpaque(false);
+        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         textField = new JTextField("");
         textField.setOpaque(false);
@@ -53,10 +51,10 @@ public class CustomInput extends JComponent {
         setMaxCharLimit();
         add(textField, BorderLayout.CENTER);
 
-        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        setPreferredSize(size);
-        setMinimumSize(size);
-        setMaximumSize(size);
+        var preferredSize = new Dimension(this.width, this.height);
+        setPreferredSize(preferredSize);
+        setMinimumSize(preferredSize);
+        setMaximumSize(preferredSize);
 
         setupPlaceholder();
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);

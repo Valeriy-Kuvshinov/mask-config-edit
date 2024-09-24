@@ -5,25 +5,33 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class CustomPanel extends JPanel {
-    private int cornerRadius = 15;
+    private int borderRadius;
     private Color backgroundColor;
     private Color borderColor;
+    private int paddingX;
+    private int paddingY;
 
     // Default values
     private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomPanel(LayoutManager layout) {
-        this(layout, DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_ALIGNMENT);
-    }
-
-    public CustomPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX) {
-        super(layout != null ? layout : new FlowLayout());
+    public CustomPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX,
+            int borderRadius, int paddingX, int paddingY) {
+        super(layout instanceof BoxLayout ? null : layout);
         setOpaque(false);
         this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
         this.borderColor = borderColor != null ? borderColor : DEFAULT_BORDER_COLOR;
+        this.borderRadius = borderRadius;
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
+
+        if (layout instanceof BoxLayout) {
+            setLayout(new BoxLayout(this, ((BoxLayout) layout).getAxis()));
+        }
+
+        setBorder(BorderFactory.createEmptyBorder(this.paddingY, this.paddingX, this.paddingY, this.paddingX));
     }
 
     public void setBackgroundColor(Color color) {
@@ -36,6 +44,14 @@ public class CustomPanel extends JPanel {
         repaint();
     }
 
+    public void setPadding(Integer paddingX, Integer paddingY) {
+        this.paddingX = paddingX != null ? paddingX : this.paddingX;
+        this.paddingY = paddingY != null ? paddingY : this.paddingY;
+        setBorder(BorderFactory.createEmptyBorder(this.paddingY, this.paddingX, this.paddingY, this.paddingX));
+        revalidate();
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -44,11 +60,11 @@ public class CustomPanel extends JPanel {
 
         // Paint background
         g2d.setColor(backgroundColor);
-        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
+        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, borderRadius, borderRadius));
 
         // Paint border
         g2d.setColor(borderColor);
-        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
+        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, borderRadius, borderRadius));
 
         g2d.dispose();
     }

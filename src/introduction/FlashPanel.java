@@ -5,33 +5,29 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class FlashPanel extends JPanel {
+public class FlashPanel extends CustomPanel {
     private CustomLabel messageLabel;
     private CustomLabel connectLabel;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
     public FlashPanel() {
+        super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         initializeUI();
     }
 
     private void initializeUI() {
-        setLayout(new BorderLayout());
-        setBackground(DARK_COLOR);
-
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+        var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Create labels
         var welcomeLabel = new CustomLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
         messageLabel = new CustomLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
 
-        ImageIcon connectIcon = new ImageIcon("resources/images/connect-flash.png");
+        var connectIcon = new ImageIcon("resources/images/connect-flash.png");
         connectLabel = new CustomLabel(connectIcon, Component.CENTER_ALIGNMENT);
         connectLabel.setLabelSize(180, 180);
 

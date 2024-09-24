@@ -13,8 +13,8 @@ public class CustomComponent extends JComponent {
     private float alignmentX;
     private Integer width;
     private Integer height;
-    private Integer paddingX;
-    private Integer paddingY;
+    private int paddingX;
+    private int paddingY;
 
     // Default values
     protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
@@ -22,43 +22,41 @@ public class CustomComponent extends JComponent {
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
-    private static final int DEFAULT_PADDING_X = 20;
-    private static final int DEFAULT_PADDING_Y = 10;
 
-    public CustomComponent(String text, Integer width, Integer height, Integer paddingX, Integer paddingY,
+    public CustomComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
             Float alignmentX, Color backgroundColor, Color textColor) {
         this.text = text;
         this.width = width;
         this.height = height;
-        this.paddingX = paddingX != null ? paddingX : DEFAULT_PADDING_X;
-        this.paddingY = paddingY != null ? paddingY : DEFAULT_PADDING_Y;
+        this.paddingX = paddingX;
+        this.paddingY = paddingY;
 
         this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = textColor != null ? textColor : DEFAULT_TEXT_COLOR;
         this.alignmentX = alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT;
 
+        initializeComponent();
+    }
+
+    private void initializeComponent() {
         setOpaque(false);
         setForeground(this.textColor);
         setFont(DEFAULT_FONT);
-        initializeComponent(height);
-    }
-
-    private void initializeComponent(Integer height) {
         setBackground(backgroundColor);
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         // Calculate the preferred size based on the text content or use specific width
-        FontMetrics fm = getFontMetrics(getFont());
-        int textWidth = fm.stringWidth(text);
-        int textHeight = fm.getHeight();
+        var fm = getFontMetrics(getFont());
+        var textWidth = fm.stringWidth(text);
+        var textHeight = fm.getHeight();
 
         // assign values based on padding and text, if width / height are not specified
-        int finalWidth = (this.width != null) ? this.width : textWidth + this.paddingX;
-        int finalHeight = (this.height != null) ? this.height : textHeight + this.paddingY;
+        var finalWidth = (this.width != null) ? this.width : textWidth + this.paddingX;
+        var finalHeight = (this.height != null) ? this.height : textHeight + this.paddingY;
 
         // Set the preferred size,
-        Dimension preferredSize = new Dimension(finalWidth, finalHeight);
+        var preferredSize = new Dimension(finalWidth, finalHeight);
         setPreferredSize(preferredSize);
         setMinimumSize(preferredSize);
         setMaximumSize(preferredSize);
@@ -81,13 +79,19 @@ public class CustomComponent extends JComponent {
         repaint();
     }
 
+    public void setColor(Color color) {
+        this.textColor = color;
+        setForeground(color);
+        repaint();
+    }
+
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
         this.width = width;
         this.height = height;
 
-        Dimension newSize = new Dimension(width, height);
+        var newSize = new Dimension(width, height);
         setPreferredSize(newSize);
         setMinimumSize(newSize);
         setMaximumSize(newSize);
@@ -98,7 +102,7 @@ public class CustomComponent extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
+        var g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint background
@@ -113,11 +117,11 @@ public class CustomComponent extends JComponent {
         if (!text.trim().isEmpty()) {
             g2d.setColor(textColor);
             g2d.setFont(getFont());
-            FontMetrics fm = g2d.getFontMetrics();
-            int textWidth = fm.stringWidth(text);
-            int textHeight = fm.getHeight();
-            int x = (getWidth() - textWidth) / 2;
-            int y = (getHeight() - textHeight) / 2 + fm.getAscent();
+            var fm = g2d.getFontMetrics();
+            var textWidth = fm.stringWidth(text);
+            var textHeight = fm.getHeight();
+            var x = (getWidth() - textWidth) / 2;
+            var y = (getHeight() - textHeight) / 2 + fm.getAscent();
             g2d.drawString(text, x, y);
         }
         g2d.dispose();
@@ -130,12 +134,14 @@ public class CustomComponent extends JComponent {
             }
 
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                setBackgroundColor(Color.LIGHT_GRAY);
+                setBackgroundColor(Color.DARK_GRAY);
+                setColor(DEFAULT_BACKGROUND_COLOR);
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                setBackgroundColor(Color.WHITE);
+                setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+                setColor(DEFAULT_TEXT_COLOR);
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });

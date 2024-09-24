@@ -7,7 +7,7 @@ import java.util.*;
 
 import src.utilities.*;
 
-public class PinPanel extends JPanel {
+public class PinPanel extends CustomPanel {
     private CustomComponent[] pinDigits;
     private CustomPanel buttonsPanel;
     private CustomLabel messageLabel;
@@ -16,21 +16,17 @@ public class PinPanel extends JPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
     public PinPanel(Runnable onPinVerifiedCallback) {
+        super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.onPinVerifiedCallback = onPinVerifiedCallback;
         initializeUI();
     }
 
     private void initializeUI() {
-        setLayout(new BorderLayout());
-        setBackground(DARK_COLOR);
-
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(null, DARK_COLOR, null, null);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+        var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null);
+        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Check if PIN exists and set appropriate message
@@ -42,10 +38,10 @@ public class PinPanel extends JPanel {
 
         // Create PIN Display
         var pinDisplayPanel = new CustomPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), DARK_COLOR, null,
-                Component.CENTER_ALIGNMENT);
+                Component.CENTER_ALIGNMENT, 0, 0, 0);
         pinDigits = new CustomComponent[6];
         for (int i = 0; i < 6; i++) {
-            pinDigits[i] = new CustomComponent(" ", 55, 55, null, null, null, null, null);
+            pinDigits[i] = new CustomComponent(" ", 55, 55, 20, 10, null, null, null);
             pinDisplayPanel.add(pinDigits[i]);
         }
 
@@ -67,7 +63,7 @@ public class PinPanel extends JPanel {
 
     // Create PIN Buttons
     private void createPinButtons() {
-        buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT);
+        buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT, 0, 0, 0);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -86,7 +82,7 @@ public class PinPanel extends JPanel {
     }
 
     private void addPinButton(String label, GridBagConstraints gbc) {
-        var button = new CustomComponent(label, 65, 65, null, null, null, null, null);
+        var button = new CustomComponent(label, 65, 65, 20, 10, null, null, DARK_COLOR);
         button.addButtonBehavior(() -> handleButtonClick(label));
         buttonsPanel.add(button, gbc);
     }
