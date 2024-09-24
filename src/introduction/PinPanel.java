@@ -126,7 +126,7 @@ public class PinPanel extends CustomPanel {
             if (onPinVerifiedCallback != null)
                 onPinVerifiedCallback.run();
         } else if (enteredPin.equals(storedPin)) {
-            messageLabel.setText("Access granted!");
+            System.out.println("Pin Panel: Access granted!");
             if (onPinVerifiedCallback != null)
                 onPinVerifiedCallback.run();
         } else

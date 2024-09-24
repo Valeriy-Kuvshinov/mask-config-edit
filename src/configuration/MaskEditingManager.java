@@ -12,6 +12,7 @@ public class MaskEditingManager extends CustomPanel {
     private static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
+    private Runnable onBackAction;
     private String defaultTab = "System";
 
     static {
@@ -200,47 +201,46 @@ public class MaskEditingManager extends CustomPanel {
         return vpnServers;
     }
 
-    public MaskEditingManager(String maskName) {
+    public MaskEditingManager(String maskName, Runnable onBackAction) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.maskName = maskName;
+        this.onBackAction = onBackAction;
         initializeUI();
     }
 
     private void initializeUI() {
         // Create a panel to hold the topbar, middlebar, and separators
-        var topPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        var topSection = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
-        // Add the MaskEditingTopbar
-        topPanel.add(new MaskEditingTopbar(maskName));
+        topSection.add(new MaskEditingTopbar(maskName));
 
-        // Create and add a thin separator
         var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
-        topPanel.add(separatorOne);
+        topSection.add(separatorOne);
 
-        // Add the MaskEditingMiddlebar
-        topPanel.add(new MaskEditingMiddlebar());
+        topSection.add(new MaskEditingMiddlebar());
 
-        // Create and add another thin separator
         var separatorTwo = new CustomSeparator(new Color(100, 0, 150), 1);
-        topPanel.add(separatorTwo);
+        topSection.add(separatorTwo);
 
-        // Add the top panel to the main layout
-        add(topPanel, BorderLayout.NORTH);
-
-        // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        // mainPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+        add(topSection, BorderLayout.NORTH);
 
         // Create a content panel to hold switchable panels
-        var contentPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        var contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
 
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        // Add your content here
+        // For example: contentPanel.add(new YourContentPanel(), BorderLayout.CENTER);
 
-        // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        wrapperPanel.add(mainPanel);
+        add(contentPanel, BorderLayout.CENTER);
 
-        add(wrapperPanel, BorderLayout.CENTER);
+        // Create a bottom section panel
+        var bottomSection = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
+
+        var separatorThree = new CustomSeparator(new Color(100, 0, 150), 1);
+        bottomSection.add(separatorThree, BorderLayout.NORTH);
+
+        bottomSection.add(new MaskEditingBottombar(onBackAction), BorderLayout.CENTER);
+
+        add(bottomSection, BorderLayout.SOUTH);
     }
 
     // Method to get a specific setting

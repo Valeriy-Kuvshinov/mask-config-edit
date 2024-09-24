@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CustomLabel extends JLabel {
+    // Customizable label
     private static final String FONT_NAME = "Roboto";
     private static final int DEFAULT_FONT_SIZE = 24;
     private static final Color DEFAULT_COLOR = new Color(220, 220, 220); // Light color
@@ -51,7 +52,6 @@ public class CustomLabel extends JLabel {
         }
     }
 
-    // Override paintComponent to scale the image
     @Override
     protected void paintComponent(Graphics g) {
         if (getIcon() instanceof ImageIcon) {

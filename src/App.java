@@ -34,8 +34,8 @@ public class App extends JFrame {
         setLayout(new BorderLayout());
 
         pinPanel = new PinPanel(this::onPinVerified);
-        flashPanel = new FlashPanel();
-        maskChoicePanel = new MaskChoicePanel(this::createMask, this::editMask);
+        flashPanel = new FlashPanel(this::navigateBackToPinPanel);
+        maskChoicePanel = new MaskChoicePanel(this::createMask, this::editMask, this::navigateBackToPinPanel);
 
         add(pinPanel, BorderLayout.CENTER);
 
@@ -71,7 +71,7 @@ public class App extends JFrame {
 
     private void createMask(String maskName) {
         System.out.println("Creating mask: " + maskName);
-        maskEditingManager = new MaskEditingManager(maskName);
+        maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
         revalidate();
@@ -80,11 +80,31 @@ public class App extends JFrame {
 
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
-        maskEditingManager = new MaskEditingManager(maskName);
+        maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
         revalidate();
         repaint();
+    }
+
+    private void navigateBackToPinPanel() {
+        pinVerified = false;
+
+        SwingUtilities.invokeLater(() -> {
+            getContentPane().removeAll();
+            add(pinPanel, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        });
+    }
+
+    private void navigateBackToMaskChoice() {
+        SwingUtilities.invokeLater(() -> {
+            getContentPane().removeAll();
+            add(maskChoicePanel, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        });
     }
 
     private void onFlashDriveConnected() {

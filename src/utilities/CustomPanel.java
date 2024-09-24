@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class CustomPanel extends JPanel {
+    // Used as a customized panel for holding various GUI stuff
     private int borderRadius;
     private Color backgroundColor;
     private Color borderColor;

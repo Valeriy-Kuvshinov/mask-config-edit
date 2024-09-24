@@ -13,16 +13,17 @@ public class MaskChoicePanel extends CustomPanel {
     private CustomLabel messageLabel;
     private CustomInput createMaskField;
     private CustomInput editMaskField;
+    private CustomComponent backButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
-    public MaskChoicePanel(Consumer<String> createMaskHandler, Consumer<String> editMaskHandler) {
+    public MaskChoicePanel(Consumer<String> createMaskHandler, Consumer<String> editMaskHandler, Runnable onBackClick) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.createMaskHandler = createMaskHandler;
         this.editMaskHandler = editMaskHandler;
-        initializeUI();
+        initializeUI(onBackClick);
     }
 
-    private void initializeUI() {
+    private void initializeUI(Runnable onBackClick) {
         // Create a main panel to hold all components
         var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
@@ -35,6 +36,10 @@ public class MaskChoicePanel extends CustomPanel {
         messageLabel = new CustomLabel("Flash drive connected. Choose an option:", null, null,
                 Component.CENTER_ALIGNMENT);
 
+        // Create back button
+        backButton = new CustomComponent("Back", 100, 60, 20, 10, Component.CENTER_ALIGNMENT, null, null);
+        backButton.addButtonBehavior(onBackClick);
+
         optionsPanel = createOptionsPanel();
         mainPanel.add(Box.createVerticalGlue());
         mainPanel.add(welcomeLabel);
@@ -42,6 +47,8 @@ public class MaskChoicePanel extends CustomPanel {
         mainPanel.add(messageLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
         mainPanel.add(optionsPanel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
+        mainPanel.add(backButton);
         mainPanel.add(Box.createVerticalGlue());
 
         add(wrapperPanel, BorderLayout.CENTER);
@@ -64,6 +71,7 @@ public class MaskChoicePanel extends CustomPanel {
         createImageLabel.setLabelSize(100, 100);
 
         createMaskField = new CustomInput(260, 50, 15, "New name", Component.CENTER_ALIGNMENT);
+        createMaskField.setText("Mask-08");
 
         var createButton = new CustomComponent("Create", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
 
@@ -90,6 +98,7 @@ public class MaskChoicePanel extends CustomPanel {
         editImageLabel.setLabelSize(100, 100);
 
         editMaskField = new CustomInput(260, 50, 15, "Existing name", Component.CENTER_ALIGNMENT);
+        editMaskField.setText("Mask-08");
 
         var editButton = new CustomComponent("Edit", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
 

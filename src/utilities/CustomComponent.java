@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class CustomComponent extends JComponent {
+    // Used for creating customized bland or button components
     private String text;
     private int cornerRadius = 15;
     private Color backgroundColor;

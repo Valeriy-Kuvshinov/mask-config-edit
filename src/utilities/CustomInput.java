@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 
 public class CustomInput extends JComponent {
+    // Used as a customized input for forms in the app
     private JTextField textField;
     private int cornerRadius = 15;
     private Color backgroundColor;
@@ -107,6 +108,11 @@ public class CustomInput extends JComponent {
     public String getText() {
         String currentText = textField.getText();
         return currentText.equals(placeholder) ? "" : currentText;
+    }
+
+    public void setText(String text) {
+        textField.setText(text);
+        textField.setForeground(textColor);
     }
 
     @Override

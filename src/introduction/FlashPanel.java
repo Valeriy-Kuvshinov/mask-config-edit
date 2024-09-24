@@ -8,14 +8,15 @@ import src.utilities.*;
 public class FlashPanel extends CustomPanel {
     private CustomLabel messageLabel;
     private CustomLabel connectLabel;
+    private CustomComponent backButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
 
-    public FlashPanel() {
+    public FlashPanel(Runnable onBackClick) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        initializeUI();
+        initializeUI(onBackClick);
     }
 
-    private void initializeUI() {
+    private void initializeUI(Runnable onBackClick) {
         // Create a main panel to hold all components
         var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
@@ -31,12 +32,18 @@ public class FlashPanel extends CustomPanel {
         connectLabel = new CustomLabel(connectIcon, Component.CENTER_ALIGNMENT);
         connectLabel.setLabelSize(180, 180);
 
+        // Create back button
+        backButton = new CustomComponent("Back", 100, 60, 20, 10, Component.CENTER_ALIGNMENT, null, null);
+        backButton.addButtonBehavior(onBackClick);
+
         mainPanel.add(Box.createVerticalGlue());
         mainPanel.add(welcomeLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(messageLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
         mainPanel.add(connectLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
+        mainPanel.add(backButton);
         mainPanel.add(Box.createVerticalGlue());
 
         add(wrapperPanel, BorderLayout.CENTER);
