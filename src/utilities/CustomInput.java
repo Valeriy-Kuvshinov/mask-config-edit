@@ -74,8 +74,8 @@ public class CustomInput extends JComponent {
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
                     throws BadLocationException {
-                int currentLength = fb.getDocument().getLength();
-                int overLimit = (currentLength + text.length()) - maxChars - length;
+                var currentLength = fb.getDocument().getLength();
+                var overLimit = (currentLength + text.length()) - maxChars - length;
                 if (overLimit <= 0)
                     super.replace(fb, offset, length, text, attrs);
             }
@@ -117,7 +117,7 @@ public class CustomInput extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
+        var g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Paint background

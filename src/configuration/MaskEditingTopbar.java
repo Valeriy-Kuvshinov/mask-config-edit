@@ -19,7 +19,7 @@ public class MaskEditingTopbar extends CustomPanel {
     }
 
     private void initializeUI() {
-        GridBagConstraints gbc = new GridBagConstraints();
+        var gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -46,31 +46,28 @@ public class MaskEditingTopbar extends CustomPanel {
     }
 
     private JPanel createNameSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
-        // panel.add(new CustomLabel("Name: ", LIGHT_COLOR, 24,
-        // Component.LEFT_ALIGNMENT));
-        panel.add(new CustomComponent(maskName, null, 42, 20, 10,
-                Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
+
+        panel.add(new CustomComponent(maskName, null, 42, 20, 10, Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
         return panel;
     }
 
     private JPanel createUserConfigSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
+
         panel.add(new CustomLabel("User-01 Configuration", LIGHT_COLOR, 32, Component.CENTER_ALIGNMENT));
         return panel;
     }
 
     private JPanel createDateSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
-        // panel.add(new CustomLabel("Date: ", LIGHT_COLOR, 24,
-        // Component.RIGHT_ALIGNMENT));
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
 
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        String formattedDate = currentDate.format(formatter);
+        var currentDate = LocalDate.now();
+        var formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+        var formattedDate = currentDate.format(formatter);
 
-        CustomComponent dateComponent = new CustomComponent(formattedDate, null, 42, 20, 10,
-                Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
+        var dateComponent = new CustomComponent(formattedDate, null, 42, 20, 10, Component.RIGHT_ALIGNMENT, LIGHT_COLOR,
+                DARK_COLOR);
         panel.add(dateComponent);
         return panel;
     }

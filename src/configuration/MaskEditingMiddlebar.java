@@ -21,8 +21,7 @@ public class MaskEditingMiddlebar extends CustomPanel {
     }
 
     private JComponent createButton(String label) {
-        CustomComponent button = new CustomComponent(label, 120, 42, 20, 10,
-                Component.CENTER_ALIGNMENT, null, DARK_COLOR);
+        var button = new CustomComponent(label, 120, 42, 20, 10, Component.CENTER_ALIGNMENT, null, DARK_COLOR);
         button.addButtonBehavior(() -> System.out.println(label + " clicked"));
         return button;
     }

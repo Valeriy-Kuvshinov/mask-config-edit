@@ -65,7 +65,7 @@ public class PinPanel extends CustomPanel {
     private void createPinButtons() {
         buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT, 0, 0, 0);
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        var gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
         String[] buttonLabels = {

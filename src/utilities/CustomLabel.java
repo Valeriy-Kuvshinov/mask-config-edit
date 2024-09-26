@@ -40,12 +40,12 @@ public class CustomLabel extends JLabel {
     // New method to set label size while preserving aspect ratio
     public void setLabelSize(int maxWidth, int maxHeight) {
         if (getIcon() instanceof ImageIcon) {
-            ImageIcon icon = (ImageIcon) getIcon();
-            int imgWidth = icon.getIconWidth();
-            int imgHeight = icon.getIconHeight();
-            double scale = Math.min((double) maxWidth / imgWidth, (double) maxHeight / imgHeight);
-            int width = (int) (imgWidth * scale);
-            int height = (int) (imgHeight * scale);
+            var icon = (ImageIcon) getIcon();
+            var imgWidth = icon.getIconWidth();
+            var imgHeight = icon.getIconHeight();
+            var scale = Math.min((double) maxWidth / imgWidth, (double) maxHeight / imgHeight);
+            var width = (int) (imgWidth * scale);
+            var height = (int) (imgHeight * scale);
             setPreferredSize(new Dimension(width, height));
             setMaximumSize(new Dimension(width, height));
             setMinimumSize(new Dimension(width, height));
@@ -55,7 +55,7 @@ public class CustomLabel extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         if (getIcon() instanceof ImageIcon) {
-            Image img = ((ImageIcon) getIcon()).getImage();
+            var img = ((ImageIcon) getIcon()).getImage();
             g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
         } else {
             super.paintComponent(g);

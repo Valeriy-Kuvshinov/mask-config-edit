@@ -17,7 +17,7 @@ public class App extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            App app = new App();
+            var app = new App();
             app.init();
             app.setVisible(true);
 
@@ -72,6 +72,7 @@ public class App extends JFrame {
     private void createMask(String maskName) {
         System.out.println("Creating mask: " + maskName);
         maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
+
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
         revalidate();
@@ -81,6 +82,7 @@ public class App extends JFrame {
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
         maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
+        
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
         revalidate();

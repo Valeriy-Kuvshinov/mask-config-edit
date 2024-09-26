@@ -23,17 +23,18 @@ public class FlashDriveDetect {
 
     private void detectFlashDrive() {
         try {
-            WatchService watchService = FileSystems.getDefault().newWatchService();
-            Path rootPath = Paths.get("/");
+            var watchService = FileSystems.getDefault().newWatchService();
+            var rootPath = Paths.get("/");
             rootPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE);
 
             while (isRunning) {
-                WatchKey key = watchService.poll(1, TimeUnit.SECONDS);
+                var key = watchService.poll(1, TimeUnit.SECONDS);
+
                 if (key != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
-                        WatchEvent.Kind<?> kind = event.kind();
-                        Path eventPath = (Path) event.context();
-                        Path fullPath = rootPath.resolve(eventPath);
+                        var kind = event.kind();
+                        var eventPath = (Path) event.context();
+                        var fullPath = rootPath.resolve(eventPath);
 
                         if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
                             if (isRemovableDrive(fullPath)) {
@@ -50,8 +51,7 @@ public class FlashDriveDetect {
                     }
                     key.reset();
                 }
-                // Periodically check for any missed events
-                checkForMissedEvents();
+                checkForMissedEvents(); // Periodically check for any missed events
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class FlashDriveDetect {
     private boolean isRemovableDrive(Path path) {
         if (Files.isDirectory(path)) {
             try {
-                FileStore store = Files.getFileStore(path);
+                var store = Files.getFileStore(path);
                 return store.type().toLowerCase().contains("removable") ||
                         store.name().toLowerCase().contains("usb");
             } catch (IOException e) {
@@ -72,7 +72,7 @@ public class FlashDriveDetect {
     }
 
     private void checkForMissedEvents() {
-        Set<Path> currentDrives = getRemovableDrives();
+        var currentDrives = getRemovableDrives();
 
         // Check for new drives
         for (Path drive : currentDrives) {
@@ -84,9 +84,11 @@ public class FlashDriveDetect {
         }
 
         // Check for removed drives
-        Iterator<Path> iterator = connectedDrives.iterator();
+        var iterator = connectedDrives.iterator();
+
         while (iterator.hasNext()) {
-            Path drive = iterator.next();
+            var drive = iterator.next();
+
             if (!currentDrives.contains(drive)) {
                 System.out.println("Flash drive removed: " + drive);
                 iterator.remove();
@@ -97,7 +99,8 @@ public class FlashDriveDetect {
 
     private Set<Path> getRemovableDrives() {
         Set<Path> removableDrives = new HashSet<>();
-        FileSystem fs = FileSystems.getDefault();
+        var fs = FileSystems.getDefault();
+
         for (Path root : fs.getRootDirectories()) {
             if (isRemovableDrive(root)) {
                 removableDrives.add(root);

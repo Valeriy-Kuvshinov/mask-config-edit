@@ -20,7 +20,7 @@ public class MaskEditingBottombar extends CustomPanel {
     }
 
     private void initializeUI() {
-        GridBagConstraints gbc = new GridBagConstraints();
+        var gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -47,15 +47,17 @@ public class MaskEditingBottombar extends CustomPanel {
     }
 
     private JPanel createLeftButtonSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
-        leftButton = new CustomComponent("Back", 100, 40, 20, 10, Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
+
+        leftButton = new CustomComponent("Back", 100, 42, 20, 10, Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         leftButton.addButtonBehavior(onBackAction);
         panel.add(leftButton);
         return panel;
     }
 
     private JPanel createCenterTextSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
+
         centerText = new CustomComponent("Current Status: Editing", null, 42, 20, 10, Component.CENTER_ALIGNMENT,
                 LIGHT_COLOR, DARK_COLOR);
         panel.add(centerText);
@@ -63,8 +65,9 @@ public class MaskEditingBottombar extends CustomPanel {
     }
 
     private JPanel createRightButtonSection() {
-        CustomPanel panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
-        rightButton = new CustomComponent("Save", 100, 40, 20, 10, Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
+        var panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
+
+        rightButton = new CustomComponent("Save", 100, 42, 20, 10, Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         rightButton.addButtonBehavior(() -> System.out.println("Save button clicked"));
         panel.add(rightButton);
         return panel;

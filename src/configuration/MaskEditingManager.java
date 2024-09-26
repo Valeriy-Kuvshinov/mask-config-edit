@@ -245,7 +245,8 @@ public class MaskEditingManager extends CustomPanel {
 
     // Method to get a specific setting
     public static Object getSetting(String category, String key) {
-        Map<String, Object> categorySettings = DEFAULT_SETTINGS.get(category);
+        var categorySettings = DEFAULT_SETTINGS.get(category);
+
         if (categorySettings != null) {
             return categorySettings.get(key);
         }
