@@ -1,4 +1,4 @@
-package src.configuration;
+package src.configuration.bars;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package src.configuration;
+package src.configuration.bars;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +58,7 @@ public class MaskEditingBottombar extends CustomPanel {
     private JPanel createCenterTextSection() {
         var panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
 
-        centerText = new CustomComponent("Current Status: Editing", null, 42, 20, 10, Component.CENTER_ALIGNMENT,
+        centerText = new CustomComponent("Random switchable text", null, 42, 20, 10, Component.CENTER_ALIGNMENT,
                 LIGHT_COLOR, DARK_COLOR);
         panel.add(centerText);
         return panel;

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 
+import src.configuration.bars.*;
+import src.configuration.inputs.*;
 import src.utilities.*;
 
 public class MaskEditingManager extends CustomPanel {
@@ -13,7 +15,6 @@ public class MaskEditingManager extends CustomPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
     private Runnable onBackAction;
-    private String defaultTab = "System";
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -25,8 +26,6 @@ public class MaskEditingManager extends CustomPanel {
         generalSystemSettings.put("InputInterface_ethernet", 1);
         generalSystemSettings.put("InputInterface_wifi", 1);
         generalSystemSettings.put("InputInterface_usb", 1);
-        // Enforce the specific device
-        generalSystemSettings.put("interfaceNames_input_usb", "227c369a1f027ece");
         // Output settings
         generalSystemSettings.put("OutputInterface_ethernet", 1);
         generalSystemSettings.put("OutputInterface_wifi", 1);
@@ -36,6 +35,8 @@ public class MaskEditingManager extends CustomPanel {
         generalSystemSettings.put("Output_vpn", 1);
         generalSystemSettings.put("Output_vps", 1);
         generalSystemSettings.put("Output_force_tor", 0);
+        // Enforce the specific device
+        generalSystemSettings.put("interfaceNames_input_usb", "227c369a1f027ece");
 
         DEFAULT_SETTINGS.put("System", generalSystemSettings);
 
@@ -50,12 +51,12 @@ public class MaskEditingManager extends CustomPanel {
         DEFAULT_SETTINGS.put("Tor", torSettings);
 
         // VPN general settings
-        Map<String, List<String>> fullVpnServersList = readVpnServersJson("/resources/json/vpn_servers_list.json");
         Map<String, Object> vpnSettings = new HashMap<>();
         vpnSettings.put("output_vpn_service_list", new String[] { "nordvpn", "protonvpn", "expressvpn" });
         vpnSettings.put("output_vpn_default_service", "nordvpn");
         vpnSettings.put("output_vpn_default_country", "any");
         vpnSettings.put("output_vpn_default_server", "any");
+        Map<String, List<String>> fullVpnServersList = readVpnServersJson("/resources/json/vpn_servers_list.json");
 
         // VPN 1 settings
         Map<String, Object> vpnServiceOneSettings = new HashMap<>();
@@ -211,12 +212,10 @@ public class MaskEditingManager extends CustomPanel {
     private void initializeUI() {
         // Create a panel to hold the topbar, middlebar, and separators
         var topSection = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
-
         topSection.add(new MaskEditingTopbar(maskName));
 
         var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
         topSection.add(separatorOne);
-
         topSection.add(new MaskEditingMiddlebar());
 
         var separatorTwo = new CustomSeparator(new Color(100, 0, 150), 1);
@@ -226,9 +225,7 @@ public class MaskEditingManager extends CustomPanel {
 
         // Create a content panel to hold switchable panels
         var contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-
-        // Add your content here
-        // For example: contentPanel.add(new YourContentPanel(), BorderLayout.CENTER);
+        contentPanel.add(new SystemSettingsInputs(), BorderLayout.CENTER);
 
         add(contentPanel, BorderLayout.CENTER);
 
@@ -237,24 +234,13 @@ public class MaskEditingManager extends CustomPanel {
 
         var separatorThree = new CustomSeparator(new Color(100, 0, 150), 1);
         bottomSection.add(separatorThree, BorderLayout.NORTH);
-
         bottomSection.add(new MaskEditingBottombar(onBackAction), BorderLayout.CENTER);
 
         add(bottomSection, BorderLayout.SOUTH);
     }
 
     // Method to get a specific setting
-    public static Object getSetting(String category, String key) {
-        var categorySettings = DEFAULT_SETTINGS.get(category);
-
-        if (categorySettings != null) {
-            return categorySettings.get(key);
-        }
-        return null;
-    }
-
-    // Method to set a specific setting
-    public static void setSetting(String category, String key, Object value) {
-        DEFAULT_SETTINGS.computeIfAbsent(category, k -> new HashMap<>()).put(key, value);
+    public static Map<String, Object> getSettingsForCategory(String category) {
+        return DEFAULT_SETTINGS.get(category);
     }
 }
