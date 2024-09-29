@@ -45,7 +45,7 @@ public class MaskEditingManager extends CustomPanel {
         Map<String, Object> torSettings = new HashMap<>();
         torSettings.put("output_tor_list_countryCodes",
                 new String[] { "at", "ch", "de", "fr", "nl", "no", "ro", "se" });
-        torSettings.put("output_tor_list_exit_nodes", new String[] {});
+        torSettings.put("output_tor_list_exit_nodes", new String[] {""});
         torSettings.put("output_tor_default_country", 99);
 
         DEFAULT_SETTINGS.put("Tor", torSettings);
@@ -225,7 +225,7 @@ public class MaskEditingManager extends CustomPanel {
 
         // Create a content panel to hold switchable panels
         var contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        contentPanel.add(new SystemSettingsInputs(), BorderLayout.CENTER);
+        contentPanel.add(new TorSettingsInputs(), BorderLayout.CENTER);
 
         add(contentPanel, BorderLayout.CENTER);
 

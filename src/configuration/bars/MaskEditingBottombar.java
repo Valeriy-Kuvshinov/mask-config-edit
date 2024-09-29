@@ -1,6 +1,5 @@
 package src.configuration.bars;
 
-import javax.swing.*;
 import java.awt.*;
 
 import src.utilities.*;
@@ -14,62 +13,53 @@ public class MaskEditingBottombar extends CustomPanel {
     private CustomComponent rightButton;
 
     public MaskEditingBottombar(Runnable onBackAction) {
-        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         initializeUI();
     }
 
     private void initializeUI() {
-        var gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 15, 10, 15);
+        gbc.insets = new Insets(0, 5, 0, 5);
 
-        // Left button section (1/4)
+        // Left button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0.25;
-        add(createLeftButtonSection(), gbc);
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(createLeftButton(), gbc);
 
-        // Center text section (2/4)
+        // Center text
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0.5;
-        add(createCenterTextSection(), gbc);
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(createCenterText(), gbc);
 
-        // Right button section (1/4)
+        // Right button
         gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0.25;
-        add(createRightButtonSection(), gbc);
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.EAST;
+        add(createRightButton(), gbc);
     }
 
-    private JPanel createLeftButtonSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
-
+    private CustomComponent createLeftButton() {
         leftButton = new CustomComponent("Back", 100, 42, 20, 10, Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         leftButton.addButtonBehavior(onBackAction);
-        panel.add(leftButton);
-        return panel;
+        return leftButton;
     }
 
-    private JPanel createCenterTextSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
-
-        centerText = new CustomComponent("Random switchable text", null, 42, 20, 10, Component.CENTER_ALIGNMENT,
+    private CustomComponent createCenterText() {
+        centerText = new CustomComponent("Enjoy editing!", null, 42, 20, 10, Component.CENTER_ALIGNMENT,
                 LIGHT_COLOR, DARK_COLOR);
-        panel.add(centerText);
-        return panel;
+        return centerText;
     }
 
-    private JPanel createRightButtonSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
-
+    private CustomComponent createRightButton() {
         rightButton = new CustomComponent("Save", 100, 42, 20, 10, Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         rightButton.addButtonBehavior(() -> System.out.println("Save button clicked"));
-        panel.add(rightButton);
-        return panel;
+        return rightButton;
     }
 }

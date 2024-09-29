@@ -13,7 +13,7 @@ public class MaskEditingTopbar extends CustomPanel {
     private String maskName;
 
     public MaskEditingTopbar(String maskName) {
-        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 10);
         this.maskName = maskName;
         initializeUI();
     }
@@ -21,7 +21,7 @@ public class MaskEditingTopbar extends CustomPanel {
     private void initializeUI() {
         var gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 15, 10, 15);
+        gbc.insets = new Insets(0, 0, 0, 0);
 
         // Name section (1/4)
         gbc.gridx = 0;

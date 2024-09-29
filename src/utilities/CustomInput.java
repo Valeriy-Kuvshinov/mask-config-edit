@@ -17,12 +17,14 @@ public class CustomInput extends JComponent {
     private int height;
     private int maxChars;
     private String placeholder;
+    private boolean isFocused = false;
 
     // Default values
     protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 32);
     private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final Color FOCUS_BORDER_COLOR = new Color(0, 120, 215); // Blue-ish color for focus
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustomInput(int width, int height, int maxChars, String placeholder, Float alignmentX) {
@@ -41,13 +43,34 @@ public class CustomInput extends JComponent {
     private void initializeComponent(Float alignmentX) {
         setLayout(new BorderLayout());
         setOpaque(false);
-        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         textField = new JTextField("");
         textField.setOpaque(false);
-        textField.setBorder(null);
+        textField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         textField.setForeground(textColor);
         textField.setFont(DEFAULT_FONT);
+
+        textField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                isFocused = true;
+                repaint();
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                isFocused = false;
+                repaint();
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
+            }
+        });
 
         setMaxCharLimit();
         add(textField, BorderLayout.CENTER);
@@ -83,23 +106,6 @@ public class CustomInput extends JComponent {
     }
 
     private void setupPlaceholder() {
-        textField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(textColor);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textField.getText().isEmpty()) {
-                    textField.setForeground(Color.GRAY);
-                    textField.setText(placeholder);
-                }
-            }
-        });
         // Initialize with placeholder
         textField.setForeground(Color.GRAY);
         textField.setText(placeholder);
@@ -122,11 +128,12 @@ public class CustomInput extends JComponent {
 
         // Paint background
         g2d.setColor(backgroundColor);
-        g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
+        g2d.fill(new RoundRectangle2D.Float(1, 1, getWidth() - 3, getHeight() - 3, cornerRadius, cornerRadius));
 
         // Paint border
-        g2d.setColor(borderColor);
-        g2d.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius));
+        g2d.setColor(isFocused ? FOCUS_BORDER_COLOR : borderColor);
+        g2d.setStroke(new BasicStroke(2)); // Set border thickness
+        g2d.draw(new RoundRectangle2D.Float(1, 1, getWidth() - 3, getHeight() - 3, cornerRadius, cornerRadius));
 
         g2d.dispose();
         super.paintComponent(g);
