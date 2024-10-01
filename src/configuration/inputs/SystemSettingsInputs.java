@@ -50,7 +50,7 @@ public class SystemSettingsInputs extends CustomPanel {
             gbc.weightx = 0;
             gbc.fill = GridBagConstraints.NONE;
             gbc.anchor = GridBagConstraints.EAST;
-            var input = new CustomInput(40, 42, 1, "2", Component.LEFT_ALIGNMENT);
+            var input = new CustomInput(46, 54, 1, "2", Component.LEFT_ALIGNMENT);
             input.setText(entry.getValue().toString());
             panel.add(input, gbc);
 
@@ -78,7 +78,7 @@ public class SystemSettingsInputs extends CustomPanel {
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
-        var usbInput = new CustomInput(330, 42, 16, "xxxxxxxxxxxxxxxx", Component.LEFT_ALIGNMENT);
+        var usbInput = new CustomInput(330, 54, 16, "xxxxxxxxxxxxxxxx", Component.LEFT_ALIGNMENT);
         usbInput.setText(systemSettings.get("interfaceNames_input_usb").toString());
         panel.add(usbInput, gbc);
 

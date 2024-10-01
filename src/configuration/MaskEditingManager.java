@@ -225,7 +225,7 @@ public class MaskEditingManager extends CustomPanel {
 
         // Create a content panel to hold switchable panels
         var contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        contentPanel.add(new TorSettingsInputs(), BorderLayout.CENTER);
+        contentPanel.add(new SystemSettingsInputs(), BorderLayout.CENTER);
 
         add(contentPanel, BorderLayout.CENTER);
 

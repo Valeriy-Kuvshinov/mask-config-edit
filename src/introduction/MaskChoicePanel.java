@@ -70,7 +70,7 @@ public class MaskChoicePanel extends CustomPanel {
         var createImageLabel = new CustomLabel(createIcon, Component.CENTER_ALIGNMENT);
         createImageLabel.setLabelSize(100, 100);
 
-        createMaskField = new CustomInput(260, 50, 15, "New name", Component.CENTER_ALIGNMENT);
+        createMaskField = new CustomInput(260, 54, 15, "New name", Component.CENTER_ALIGNMENT);
         createMaskField.setText("Mask-08");
 
         var createButton = new CustomComponent("Create", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
@@ -97,7 +97,7 @@ public class MaskChoicePanel extends CustomPanel {
         var editImageLabel = new CustomLabel(editIcon, Component.CENTER_ALIGNMENT);
         editImageLabel.setLabelSize(100, 100);
 
-        editMaskField = new CustomInput(260, 50, 15, "Existing name", Component.CENTER_ALIGNMENT);
+        editMaskField = new CustomInput(260, 54, 15, "Existing name", Component.CENTER_ALIGNMENT);
         editMaskField.setText("Mask-08");
 
         var editButton = new CustomComponent("Edit", 100, 50, 20, 10, Component.CENTER_ALIGNMENT, null, null);
