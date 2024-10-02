@@ -30,7 +30,6 @@ public class App extends JFrame {
         setSize(1280, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         setLayout(new BorderLayout());
 
         pinPanel = new PinPanel(this::onPinVerified);
@@ -82,7 +81,7 @@ public class App extends JFrame {
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
         maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
-        
+
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
         revalidate();
@@ -111,6 +110,7 @@ public class App extends JFrame {
 
     private void onFlashDriveConnected() {
         System.out.println("Flash drive connected. Switching to main content...");
+
         SwingUtilities.invokeLater(() -> {
             if (pinVerified) {
                 remove(flashPanel);
@@ -123,6 +123,7 @@ public class App extends JFrame {
 
     private void onFlashDriveDisconnected() {
         System.out.println("Flash drive disconnected.");
+
         SwingUtilities.invokeLater(() -> {
             if (pinVerified) {
                 getContentPane().removeAll();

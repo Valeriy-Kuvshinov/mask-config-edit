@@ -40,7 +40,7 @@ public class PinPanel extends CustomPanel {
         var pinDisplayPanel = new CustomPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), DARK_COLOR, null,
                 Component.CENTER_ALIGNMENT, 0, 0, 0);
         pinDigits = new CustomComponent[6];
-        for (int i = 0; i < 6; i++) {
+        for (var i = 0; i < 6; i++) {
             pinDigits[i] = new CustomComponent(" ", 55, 55, 20, 10, null, null, null);
             pinDisplayPanel.add(pinDigits[i]);
         }
@@ -74,7 +74,7 @@ public class PinPanel extends CustomPanel {
                 "7", "8", "9",
                 "0", "-", "X"
         };
-        for (int i = 0; i < buttonLabels.length; i++) {
+        for (var i = 0; i < buttonLabels.length; i++) {
             gbc.gridx = i % 3;
             gbc.gridy = i / 3;
             addPinButton(buttonLabels[i], gbc);
@@ -111,7 +111,7 @@ public class PinPanel extends CustomPanel {
     }
 
     private void updatePinDisplay() {
-        for (int i = 0; i < 6; i++) {
+        for (var i = 0; i < 6; i++) {
             pinDigits[i].setText(i < currentPin.length() ? "*" : " ");
         }
     }

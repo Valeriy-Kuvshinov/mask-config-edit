@@ -8,14 +8,11 @@ import java.awt.geom.*;
 
 public class CustomInput extends JComponent {
     // Used as a customized input for forms in the app
-    private JTextField textField;
+    private JTextField textField = new JTextField("");
     private int cornerRadius = 15;
     private Color backgroundColor;
     private Color borderColor;
     private Color textColor;
-    private int width;
-    private int height;
-    private int maxChars;
     private String placeholder;
     private boolean isFocused = false;
 
@@ -28,27 +25,34 @@ public class CustomInput extends JComponent {
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustomInput(int width, int height, int maxChars, String placeholder, Float alignmentX) {
-        this.width = width;
-        this.height = height;
-        this.maxChars = maxChars;
-
         this.placeholder = placeholder != null ? placeholder : "Insert something";
+
         this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = DEFAULT_TEXT_COLOR;
 
-        initializeComponent(alignmentX);
+        initializeComponent(width, height, maxChars, alignmentX);
     }
 
-    private void initializeComponent(Float alignmentX) {
+    private void initializeComponent(int width, int height, int maxChars, Float alignmentX) {
         setLayout(new BorderLayout());
         setOpaque(false);
 
-        textField = new JTextField("");
         textField.setOpaque(false);
         textField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         textField.setForeground(textColor);
         textField.setFont(DEFAULT_FONT);
+
+        setMaxCharLimit(maxChars);
+        add(textField, BorderLayout.CENTER);
+
+        var preferredSize = new Dimension(width, height);
+        setPreferredSize(preferredSize);
+        setMinimumSize(preferredSize);
+        setMaximumSize(preferredSize);
+
+        setupPlaceholder();
+        setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
 
         textField.addFocusListener(new FocusAdapter() {
             @Override
@@ -71,21 +75,10 @@ public class CustomInput extends JComponent {
                 }
             }
         });
-
-        setMaxCharLimit();
-        add(textField, BorderLayout.CENTER);
-
-        var preferredSize = new Dimension(this.width, this.height);
-        setPreferredSize(preferredSize);
-        setMinimumSize(preferredSize);
-        setMaximumSize(preferredSize);
-
-        setupPlaceholder();
-        setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }
 
     // Limit character amount in a field
-    private void setMaxCharLimit() {
+    private void setMaxCharLimit(int maxChars) {
         ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
@@ -105,8 +98,8 @@ public class CustomInput extends JComponent {
         });
     }
 
+    // Initialize with placeholder
     private void setupPlaceholder() {
-        // Initialize with placeholder
         textField.setForeground(Color.GRAY);
         textField.setText(placeholder);
     }

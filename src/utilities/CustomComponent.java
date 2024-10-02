@@ -11,11 +11,6 @@ public class CustomComponent extends JComponent {
     private Color backgroundColor;
     private Color borderColor;
     private Color textColor;
-    private float alignmentX;
-    private Integer width;
-    private Integer height;
-    private int paddingX;
-    private int paddingY;
 
     // Default values
     protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
@@ -27,20 +22,15 @@ public class CustomComponent extends JComponent {
     public CustomComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
             Float alignmentX, Color backgroundColor, Color textColor) {
         this.text = text;
-        this.width = width;
-        this.height = height;
-        this.paddingX = paddingX;
-        this.paddingY = paddingY;
 
         this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = textColor != null ? textColor : DEFAULT_TEXT_COLOR;
-        this.alignmentX = alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT;
 
-        initializeComponent();
+        initializeComponent(width, height, paddingX, paddingY, alignmentX);
     }
 
-    private void initializeComponent() {
+    private void initializeComponent(Integer width, Integer height, int paddingX, int paddingY, Float alignmentX) {
         setOpaque(false);
         setForeground(this.textColor);
         setFont(DEFAULT_FONT);
@@ -53,8 +43,8 @@ public class CustomComponent extends JComponent {
         var textHeight = fm.getHeight();
 
         // assign values based on padding and text, if width / height are not specified
-        var finalWidth = (this.width != null) ? this.width : textWidth + this.paddingX;
-        var finalHeight = (this.height != null) ? this.height : textHeight + this.paddingY;
+        var finalWidth = (width != null) ? width : textWidth + paddingX;
+        var finalHeight = (height != null) ? height : textHeight + paddingY;
 
         // Set the preferred size,
         var preferredSize = new Dimension(finalWidth, finalHeight);
@@ -62,7 +52,7 @@ public class CustomComponent extends JComponent {
         setMinimumSize(preferredSize);
         setMaximumSize(preferredSize);
 
-        setAlignmentX(alignmentX);
+        setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }
 
     public void setText(String text) {
@@ -83,20 +73,6 @@ public class CustomComponent extends JComponent {
     public void setColor(Color color) {
         this.textColor = color;
         setForeground(color);
-        repaint();
-    }
-
-    @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height);
-        this.width = width;
-        this.height = height;
-
-        var newSize = new Dimension(width, height);
-        setPreferredSize(newSize);
-        setMinimumSize(newSize);
-        setMaximumSize(newSize);
-        revalidate();
         repaint();
     }
 
@@ -130,16 +106,19 @@ public class CustomComponent extends JComponent {
 
     public void addButtonBehavior(Runnable clickAction) {
         addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 clickAction.run();
             }
 
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 setBackgroundColor(Color.DARK_GRAY);
                 setColor(DEFAULT_BACKGROUND_COLOR);
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
                 setColor(DEFAULT_TEXT_COLOR);

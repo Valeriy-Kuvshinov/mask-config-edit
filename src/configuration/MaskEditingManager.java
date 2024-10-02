@@ -15,6 +15,8 @@ public class MaskEditingManager extends CustomPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
     private Runnable onBackAction;
+    private CardLayout cardLayout;
+    private CustomPanel contentPanel;
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -45,7 +47,7 @@ public class MaskEditingManager extends CustomPanel {
         Map<String, Object> torSettings = new HashMap<>();
         torSettings.put("output_tor_list_countryCodes",
                 new String[] { "at", "ch", "de", "fr", "nl", "no", "ro", "se" });
-        torSettings.put("output_tor_list_exit_nodes", new String[] {""});
+        torSettings.put("output_tor_list_exit_nodes", new String[] { "" });
         torSettings.put("output_tor_default_country", 99);
 
         DEFAULT_SETTINGS.put("Tor", torSettings);
@@ -157,20 +159,20 @@ public class MaskEditingManager extends CustomPanel {
         Map<String, Object> hotspotSettings = new HashMap<>();
         // 1 for hidden, 0 for not hidden
         hotspotSettings.put("inputInterface_hotspot_hidden", 0);
-        // ssid name. if it is "" or '' a random ssid will be generated according to
-        // length and policy
+        // ssid name. if empty a random ssid will be generated according to length
+        // and policy
         hotspotSettings.put("inputInterface_hotspot_ssid", "AnonMask-Dev-V11");
         // Number of characters. Must be >= 1
         hotspotSettings.put("inputInterface_hotspot_ssid_length", 8);
-        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" .
+        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols".
         // always case sensitive and always mixed cases.
         hotspotSettings.put("inputInterface_hotspot_ssid_policy", "alphanum");
-        // Provisioned password. Must be at least 8 characters long. if it is "" or '' a
+        // Provisioned password. Must be at least 8 characters long. if empty a
         // random password will be generated according to length and policy
         hotspotSettings.put("inputInterface_hotspot_password", "@anonmask");
         // Number of characters. Must be >= 8
         hotspotSettings.put("inputInterface_hotspot_password_length", 9);
-        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" .
+        // policy can be "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols".
         // always case sensitive and always mixed cases.
         hotspotSettings.put("inputInterface_hotspot_password_policy", "alphanum");
 
@@ -216,16 +218,24 @@ public class MaskEditingManager extends CustomPanel {
 
         var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
         topSection.add(separatorOne);
-        topSection.add(new MaskEditingMiddlebar());
+        topSection.add(new MaskEditingMiddlebar(this));
 
         var separatorTwo = new CustomSeparator(new Color(100, 0, 150), 1);
         topSection.add(separatorTwo);
 
         add(topSection, BorderLayout.NORTH);
 
-        // Create a content panel to hold switchable panels
-        var contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        contentPanel.add(new SystemSettingsInputs(), BorderLayout.CENTER);
+        // Create a content panel with CardLayout to hold switchable panels
+        cardLayout = new CardLayout();
+        contentPanel = new CustomPanel(cardLayout, DARK_COLOR, null, null, 0, 0, 0);
+
+        // Add all settings panels
+        contentPanel.add(new SystemSettingsInputs(), "System");
+        contentPanel.add(new TorSettingsInputs(), "TOR");
+        contentPanel.add(new VpsSettingsInputs(), "VPS");
+        contentPanel.add(new VpnSettingsInputs(), "VPN");
+        contentPanel.add(new ProxySettingsInputs(), "Proxy");
+        contentPanel.add(new HotspotSettingsInputs(), "Hotspot");
 
         add(contentPanel, BorderLayout.CENTER);
 
@@ -242,5 +252,10 @@ public class MaskEditingManager extends CustomPanel {
     // Method to get a specific setting
     public static Map<String, Object> getSettingsForCategory(String category) {
         return DEFAULT_SETTINGS.get(category);
+    }
+
+    // Method to switch between panels
+    public void showPanel(String panelName) {
+        cardLayout.show(contentPanel, panelName);
     }
 }
