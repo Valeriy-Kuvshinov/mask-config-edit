@@ -59,7 +59,6 @@ public class HotspotSettingsInputs extends CustomPanel {
 
         private void addInputRow(CustomPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int inputWidth, int maxChars, String placeholder) {
-                // Reset insets for each new row
                 gbc.insets = new Insets(10, 15, 10, 15);
 
                 // Label
@@ -86,7 +85,6 @@ public class HotspotSettingsInputs extends CustomPanel {
 
         private void addSelectRow(CustomPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int selectWidth, String[] options) {
-                // Reset insets for each new row
                 gbc.insets = new Insets(10, 15, 10, 15);
 
                 // Label
@@ -143,7 +141,6 @@ public class HotspotSettingsInputs extends CustomPanel {
         // private void addInputRow(CustomPanel panel, GridBagConstraints gbc, int row,
         // int col, String key, Object value,
         // int inputWidth, int maxChars, String placeholder) {
-        // // Reset insets for each new row
         // gbc.insets = new Insets(10, 15, 10, 15);
 
         // // Label
@@ -172,7 +169,6 @@ public class HotspotSettingsInputs extends CustomPanel {
         // private void addSelectRow(CustomPanel panel, GridBagConstraints gbc, int row,
         // int col, String key, Object value,
         // int selectWidth, String[] options) {
-        // // Reset insets for each new row
         // gbc.insets = new Insets(10, 15, 10, 15);
 
         // // Label

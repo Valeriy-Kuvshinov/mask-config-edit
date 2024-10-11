@@ -57,6 +57,7 @@ public class App extends JFrame {
         }
     }
 
+    // Continue to mask choice menu / USB plugging screen
     private void onPinVerified() {
         pinVerified = true;
 
@@ -68,6 +69,7 @@ public class App extends JFrame {
         });
     }
 
+    // Create a new mask with default settings
     private void createMask(String maskName) {
         System.out.println("Creating mask: " + maskName);
         maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
@@ -78,6 +80,7 @@ public class App extends JFrame {
         repaint();
     }
 
+    // Load up a selected mask with its existing settings
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
         maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
@@ -108,9 +111,8 @@ public class App extends JFrame {
         });
     }
 
+    // Continue / return to mask choice menu
     private void onFlashDriveConnected() {
-        System.out.println("Flash drive connected. Switching to main content...");
-
         SwingUtilities.invokeLater(() -> {
             if (pinVerified) {
                 remove(flashPanel);
@@ -121,9 +123,8 @@ public class App extends JFrame {
         });
     }
 
+    // revert back to USB plugging screen
     private void onFlashDriveDisconnected() {
-        System.out.println("Flash drive disconnected.");
-
         SwingUtilities.invokeLater(() -> {
             if (pinVerified) {
                 getContentPane().removeAll();

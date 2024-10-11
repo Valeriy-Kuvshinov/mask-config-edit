@@ -41,7 +41,8 @@ public class TorSettingsInputs extends CustomPanel {
                 "at, ch, de, fr...");
         addRow(panel, gbc, 1, "output_tor_list_exit_nodes", torSettings.get("output_tor_list_exit_nodes"), 420, 20,
                 "0.0.0");
-        addRow(panel, gbc, 2, "output_tor_default_country", torSettings.get("output_tor_default_country"), 120, 4, "00");
+        addRow(panel, gbc, 2, "output_tor_default_country", torSettings.get("output_tor_default_country"), 120, 4,
+                "00");
 
         return panel;
     }

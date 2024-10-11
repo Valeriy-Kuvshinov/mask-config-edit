@@ -8,6 +8,7 @@ import src.utilities.*;
 
 public class MaskEditingMiddlebar extends CustomPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
+    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
     private static final String[] BUTTON_LABELS = { "System", "TOR", "VPS", "VPN", "Proxy", "Hotspot" };
     private MaskEditingManager manager;
 
@@ -24,10 +25,10 @@ public class MaskEditingMiddlebar extends CustomPanel {
     }
 
     private JComponent createButton(String label) {
-        var button = new CustomComponent(label, 120, 42, 20, 10, Component.CENTER_ALIGNMENT, null, DARK_COLOR);
+        var button = new CustomComponent(label, 120, 42, 20, 10, Component.CENTER_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         button.addButtonBehavior(() -> {
             manager.showPanel(label);
-            System.out.println(label + " clicked");
+            System.out.println(label + " settings selected");
         });
         return button;
     }

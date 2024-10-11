@@ -15,8 +15,11 @@ public class MaskEditingManager extends CustomPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
     private Runnable onBackAction;
-    private CardLayout cardLayout;
+    private CustomPanel topSection;
+    private CustomPanel bottomSection;
     private CustomPanel contentPanel;
+    private CustomScroll scrollPane;
+    private Map<String, JPanel> switchPanels = new HashMap<>();
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -213,7 +216,7 @@ public class MaskEditingManager extends CustomPanel {
 
     private void initializeUI() {
         // Create a panel to hold the topbar, middlebar, and separators
-        var topSection = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        topSection = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
         topSection.add(new MaskEditingTopbar(maskName));
 
         var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
@@ -225,22 +228,28 @@ public class MaskEditingManager extends CustomPanel {
 
         add(topSection, BorderLayout.NORTH);
 
-        // Create a content panel with CardLayout to hold switchable panels
-        cardLayout = new CardLayout();
-        contentPanel = new CustomPanel(cardLayout, DARK_COLOR, null, null, 0, 0, 0);
+        // Create a content panel to hold switchable panels
+        contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
 
-        // Add all settings panels
-        contentPanel.add(new SystemSettingsInputs(), "System");
-        contentPanel.add(new TorSettingsInputs(), "TOR");
-        contentPanel.add(new VpsSettingsInputs(), "VPS");
-        contentPanel.add(new VpnSettingsInputs(), "VPN");
-        contentPanel.add(new ProxySettingsInputs(), "Proxy");
-        contentPanel.add(new HotspotSettingsInputs(), "Hotspot");
+        // Create all settings panels
+        switchPanels.put("System", new SystemSettingsInputs());
+        switchPanels.put("TOR", new TorSettingsInputs());
+        switchPanels.put("VPS", new VpsSettingsInputs());
+        switchPanels.put("VPN", new VpnSettingsInputs());
+        switchPanels.put("Proxy", new ProxySettingsInputs());
+        switchPanels.put("Hotspot", new HotspotSettingsInputs());
 
-        add(contentPanel, BorderLayout.CENTER);
+        // Add the first panel (System) to the content panel
+        contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER);
+
+        // Create a CustomScroll and add the contentPanel to it
+        scrollPane = new CustomScroll(contentPanel);
+        scrollPane.getViewport().setBackground(DARK_COLOR);
+
+        add(scrollPane, BorderLayout.CENTER);
 
         // Create a bottom section panel
-        var bottomSection = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        bottomSection = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
 
         var separatorThree = new CustomSeparator(new Color(100, 0, 150), 1);
         bottomSection.add(separatorThree, BorderLayout.NORTH);
@@ -254,8 +263,18 @@ public class MaskEditingManager extends CustomPanel {
         return DEFAULT_SETTINGS.get(category);
     }
 
-    // Method to switch between panels
+    // Swtich between panels, and render the new selected panel
     public void showPanel(String panelName) {
-        cardLayout.show(contentPanel, panelName);
+        contentPanel.removeAll();
+        var selectedPanel = switchPanels.get(panelName);
+        if (selectedPanel != null) {
+            contentPanel.add(selectedPanel, BorderLayout.CENTER);
+        }
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        scrollPane.scrollToTop();
+        SwingUtilities.invokeLater(() -> {
+            scrollPane.updateScrollBars();
+        });
     }
 }
