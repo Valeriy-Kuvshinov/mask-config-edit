@@ -7,10 +7,10 @@ import java.util.*;
 
 import src.utilities.*;
 
-public class PinPanel extends CustomPanel {
-    private CustomComponent[] pinDigits;
-    private CustomPanel buttonsPanel;
-    private CustomLabel messageLabel;
+public class PinPanel extends CustPanel {
+    private CustComponent[] pinDigits;
+    private CustPanel buttonsPanel;
+    private CustLabel messageLabel;
     private Runnable onPinVerifiedCallback;
     private StringBuilder currentPin = new StringBuilder();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
@@ -25,25 +25,25 @@ public class PinPanel extends CustomPanel {
 
     private void initializeUI() {
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        var wrapperPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Check if PIN exists and set appropriate message
         var initialMessage = getStoredPin() == null ? "Create your PIN" : "Enter your PIN";
 
         // Create labels
-        var welcomeLabel = new CustomLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
-        messageLabel = new CustomLabel(initialMessage, null, null, Component.CENTER_ALIGNMENT);
+        var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
+        messageLabel = new CustLabel(initialMessage, null, null, Component.CENTER_ALIGNMENT);
 
         // Create PIN Display
-        var pinDisplayPanel = new CustomPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), DARK_COLOR, null,
+        var pinDisplayPanel = new CustPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), DARK_COLOR, null,
                 Component.CENTER_ALIGNMENT, 0, 0, 0);
-        pinDigits = new CustomComponent[6];
+        pinDigits = new CustComponent[6];
         for (var i = 0; i < 6; i++) {
-            pinDigits[i] = new CustomComponent(" ", 55, 55, 20, 10,
+            pinDigits[i] = new CustComponent(" ", 55, 55, 20, 10,
                     null, LIGHT_COLOR, DARK_COLOR);
             pinDisplayPanel.add(pinDigits[i]);
         }
@@ -66,7 +66,7 @@ public class PinPanel extends CustomPanel {
 
     // Create PIN Buttons
     private void createPinButtons() {
-        buttonsPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT, 0, 0, 0);
+        buttonsPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, Component.CENTER_ALIGNMENT, 0, 0, 0);
 
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -85,7 +85,7 @@ public class PinPanel extends CustomPanel {
     }
 
     private void addPinButton(String label, GridBagConstraints gbc) {
-        var button = new CustomComponent(label, 65, 65, 20, 10,
+        var button = new CustComponent(label, 65, 65, 20, 10,
                 null, LIGHT_COLOR, GRAY_COLOR);
         button.addButtonBehavior(() -> handleButtonClick(label));
         buttonsPanel.add(button, gbc);

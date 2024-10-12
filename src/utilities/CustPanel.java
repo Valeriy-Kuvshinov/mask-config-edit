@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class CustomPanel extends JPanel {
+public class CustPanel extends JPanel {
     // Used as a customized panel for holding various GUI stuff
     private int borderRadius;
     private Color backgroundColor;
@@ -17,7 +17,7 @@ public class CustomPanel extends JPanel {
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX,
+    public CustPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX,
             int borderRadius, int paddingX, int paddingY) {
         super(layout instanceof BoxLayout ? null : layout);
         setOpaque(false);

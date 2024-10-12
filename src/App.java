@@ -9,7 +9,7 @@ import src.configuration.*;
 public class App extends JFrame {
     private PinPanel pinPanel;
     private FlashPanel flashPanel;
-    private MaskEditingManager maskEditingManager;
+    private MaskEditManager maskEditingManager;
     private MaskChoicePanel maskChoicePanel;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
@@ -72,7 +72,7 @@ public class App extends JFrame {
     // Create a new mask with default settings
     private void createMask(String maskName) {
         System.out.println("Creating mask: " + maskName);
-        maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackToMaskChoice);
 
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);
@@ -83,7 +83,7 @@ public class App extends JFrame {
     // Load up a selected mask with its existing settings
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
-        maskEditingManager = new MaskEditingManager(maskName, this::navigateBackToMaskChoice);
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackToMaskChoice);
 
         remove(maskChoicePanel);
         add(maskEditingManager, BorderLayout.CENTER);

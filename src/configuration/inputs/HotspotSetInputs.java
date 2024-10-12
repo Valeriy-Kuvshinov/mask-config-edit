@@ -7,21 +7,21 @@ import javax.swing.*;
 import src.configuration.*;
 import src.utilities.*;
 
-public class HotspotSettingsInputs extends CustomPanel {
+public class HotspotSetInputs extends CustPanel {
         private static final Color DARK_COLOR = new Color(30, 30, 30);
         private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-        public HotspotSettingsInputs() {
+        public HotspotSetInputs() {
                 super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
                 initializeUI();
         }
 
         private void initializeUI() {
-                Map<String, Object> hotspotSettings = MaskEditingManager.getSettingsForCategory("Hotspot");
+                Map<String, Object> hotspotSettings = MaskEditManager.getSettingsForCategory("Hotspot");
                 var combinedPanel = createInputsPanel(hotspotSettings);
 
                 // Create a new panel to center the combinedPanel horizontally
-                var centerPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+                var centerPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
                 var centerGbc = new GridBagConstraints();
                 centerGbc.gridx = 0;
                 centerGbc.gridy = 0;
@@ -32,8 +32,8 @@ public class HotspotSettingsInputs extends CustomPanel {
                 add(Box.createVerticalGlue(), BorderLayout.CENTER);
         }
 
-        private CustomPanel createInputsPanel(Map<String, Object> hotspotSettings) {
-                var panel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        private CustPanel createInputsPanel(Map<String, Object> hotspotSettings) {
+                var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
                 var gbc = new GridBagConstraints();
                 gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -57,7 +57,7 @@ public class HotspotSettingsInputs extends CustomPanel {
                 return panel;
         }
 
-        private void addInputRow(CustomPanel panel, GridBagConstraints gbc, int row, String key, Object value,
+        private void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int inputWidth, int maxChars, String placeholder) {
                 gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -68,7 +68,7 @@ public class HotspotSettingsInputs extends CustomPanel {
                 gbc.anchor = GridBagConstraints.EAST;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
 
-                var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
+                var label = new CustLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
                 panel.add(label, gbc);
 
                 // Input
@@ -78,12 +78,12 @@ public class HotspotSettingsInputs extends CustomPanel {
                 gbc.fill = GridBagConstraints.NONE;
                 gbc.insets = new Insets(10, 20, 10, 15);
 
-                var input = new CustomInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
+                var input = new CustInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
                 input.setText(value != null ? value.toString() : "");
                 panel.add(input, gbc);
         }
 
-        private void addSelectRow(CustomPanel panel, GridBagConstraints gbc, int row, String key, Object value,
+        private void addSelectRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int selectWidth, String[] options) {
                 gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -94,7 +94,7 @@ public class HotspotSettingsInputs extends CustomPanel {
                 gbc.anchor = GridBagConstraints.EAST;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
 
-                var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
+                var label = new CustLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
                 panel.add(label, gbc);
 
                 // Select
@@ -104,7 +104,7 @@ public class HotspotSettingsInputs extends CustomPanel {
                 gbc.fill = GridBagConstraints.NONE;
                 gbc.insets = new Insets(10, 20, 10, 15);
 
-                var select = new CustomSelect(selectWidth, 54, options, value != null ? value.toString() : options[0],
+                var select = new CustSelect(selectWidth, 54, options, value != null ? value.toString() : options[0],
                                 Component.LEFT_ALIGNMENT);
                 panel.add(select, gbc);
         }

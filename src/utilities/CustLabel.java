@@ -3,7 +3,7 @@ package src.utilities;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomLabel extends JLabel {
+public class CustLabel extends JLabel {
     // Customizable label
     private static final String FONT_NAME = "Roboto";
     private static final int DEFAULT_FONT_SIZE = 24;
@@ -11,14 +11,14 @@ public class CustomLabel extends JLabel {
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     // For text
-    public CustomLabel(String text, Color textColor, Integer fontSize, Float alignmentX) {
+    public CustLabel(String text, Color textColor, Integer fontSize, Float alignmentX) {
         super(text, SwingConstants.LEFT);
         initializeLabel(textColor, fontSize, alignmentX);
         repaint();
     }
 
     // For images
-    public CustomLabel(ImageIcon icon, Float alignmentX) {
+    public CustLabel(ImageIcon icon, Float alignmentX) {
         super(icon);
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }

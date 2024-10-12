@@ -7,21 +7,21 @@ import javax.swing.*;
 import src.configuration.*;
 import src.utilities.*;
 
-public class TorSettingsInputs extends CustomPanel {
+public class TorSetInputs extends CustPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public TorSettingsInputs() {
+    public TorSetInputs() {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
         initializeUI();
     }
 
     private void initializeUI() {
-        Map<String, Object> torSettings = MaskEditingManager.getSettingsForCategory("Tor");
+        Map<String, Object> torSettings = MaskEditManager.getSettingsForCategory("Tor");
         var combinedPanel = createInputsPanel(torSettings);
 
         // Create a new panel to center the combinedPanel horizontally
-        var centerPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        var centerPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         var centerGbc = new GridBagConstraints();
         centerGbc.gridx = 0;
         centerGbc.gridy = 0;
@@ -32,8 +32,8 @@ public class TorSettingsInputs extends CustomPanel {
         add(Box.createVerticalGlue(), BorderLayout.CENTER);
     }
 
-    private CustomPanel createInputsPanel(Map<String, Object> torSettings) {
-        var panel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+    private CustPanel createInputsPanel(Map<String, Object> torSettings) {
+        var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -47,7 +47,7 @@ public class TorSettingsInputs extends CustomPanel {
         return panel;
     }
 
-    private void addRow(CustomPanel panel, GridBagConstraints gbc, int row, String key, Object value, int inputWidth,
+    private void addRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value, int inputWidth,
             int maxChars, String placeholder) {
         // Reset insets for each new row
         gbc.insets = new Insets(10, 15, 10, 15);
@@ -59,7 +59,7 @@ public class TorSettingsInputs extends CustomPanel {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
+        var label = new CustLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
         panel.add(label, gbc);
 
         // Input
@@ -69,7 +69,7 @@ public class TorSettingsInputs extends CustomPanel {
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(10, 20, 10, 15);
 
-        var input = new CustomInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
+        var input = new CustInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
         input.setText(value instanceof String[] ? String.join(", ", (String[]) value) : value.toString());
         panel.add(input, gbc);
     }

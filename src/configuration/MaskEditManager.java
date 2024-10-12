@@ -10,16 +10,16 @@ import src.configuration.bars.*;
 import src.configuration.inputs.*;
 import src.utilities.*;
 
-public class MaskEditingManager extends CustomPanel {
-    private static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
-    private static final Color DARK_COLOR = new Color(30, 30, 30);
+public class MaskEditManager extends CustPanel {
     private String maskName;
     private Runnable onBackAction;
-    private CustomPanel topSection;
-    private CustomPanel bottomSection;
-    private CustomPanel contentPanel;
-    private CustomScroll scrollPane;
+    private CustPanel topSection;
+    private CustPanel bottomSection;
+    private CustPanel contentPanel;
+    private CustScroll scrollPane;
     private Map<String, JPanel> switchPanels = new HashMap<>();
+    private static final Map<String, Map<String, Object>> DEFAULT_SETTINGS = new HashMap<>();
+    private static final Color DARK_COLOR = new Color(30, 30, 30);
 
     static {
         // General System settings. 1 - enabled. 0 - disabled
@@ -182,12 +182,12 @@ public class MaskEditingManager extends CustomPanel {
         DEFAULT_SETTINGS.put("Hotspot", hotspotSettings);
     }
 
-    // VPN servers stored in JSON due to the amount of them, here is how we can read
+    // VPN servers stored in JSON due to the absurd list length, function is to read
     // the json file that contain the vpn servers list (for each of the 3 vpns)
     private static Map<String, List<String>> readVpnServersJson(String resourcePath) {
         Map<String, List<String>> vpnServers = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(MaskEditingManager.class.getResourceAsStream(resourcePath)))) {
+                new InputStreamReader(MaskEditManager.class.getResourceAsStream(resourcePath)))) {
             String line;
             String currentVpn = null;
             while ((line = reader.readLine()) != null) {
@@ -207,7 +207,7 @@ public class MaskEditingManager extends CustomPanel {
         return vpnServers;
     }
 
-    public MaskEditingManager(String maskName, Runnable onBackAction) {
+    public MaskEditManager(String maskName, Runnable onBackAction) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.maskName = maskName;
         this.onBackAction = onBackAction;
@@ -216,44 +216,44 @@ public class MaskEditingManager extends CustomPanel {
 
     private void initializeUI() {
         // Create a panel to hold the topbar, middlebar, and separators
-        topSection = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
-        topSection.add(new MaskEditingTopbar(maskName));
+        topSection = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        topSection.add(new MaskEditTopbar(maskName));
 
-        var separatorOne = new CustomSeparator(new Color(100, 0, 150), 1);
+        var separatorOne = new CustSeparator(new Color(100, 0, 150), 1);
         topSection.add(separatorOne);
-        topSection.add(new MaskEditingMiddlebar(this));
+        topSection.add(new MaskEditMiddlebar(this));
 
-        var separatorTwo = new CustomSeparator(new Color(100, 0, 150), 1);
+        var separatorTwo = new CustSeparator(new Color(100, 0, 150), 1);
         topSection.add(separatorTwo);
 
         add(topSection, BorderLayout.NORTH);
 
         // Create a content panel to hold switchable panels
-        contentPanel = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        contentPanel = new CustPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create all settings panels
-        switchPanels.put("System", new SystemSettingsInputs());
-        switchPanels.put("TOR", new TorSettingsInputs());
-        switchPanels.put("VPS", new VpsSettingsInputs());
-        switchPanels.put("VPN", new VpnSettingsInputs());
-        switchPanels.put("Proxy", new ProxySettingsInputs());
-        switchPanels.put("Hotspot", new HotspotSettingsInputs());
+        switchPanels.put("System", new SystemSetInputs());
+        switchPanels.put("TOR", new TorSetInputs());
+        switchPanels.put("VPS", new VpsSetInputs());
+        switchPanels.put("VPN", new VpnSetInputs());
+        switchPanels.put("Proxy", new ProxySetInputs());
+        switchPanels.put("Hotspot", new HotspotSetInputs());
 
         // Add the first panel (System) to the content panel
         contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER);
 
         // Create a CustomScroll and add the contentPanel to it
-        scrollPane = new CustomScroll(contentPanel);
+        scrollPane = new CustScroll(contentPanel);
         scrollPane.getViewport().setBackground(DARK_COLOR);
 
         add(scrollPane, BorderLayout.CENTER);
 
         // Create a bottom section panel
-        bottomSection = new CustomPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        bottomSection = new CustPanel(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
 
-        var separatorThree = new CustomSeparator(new Color(100, 0, 150), 1);
+        var separatorThree = new CustSeparator(new Color(100, 0, 150), 1);
         bottomSection.add(separatorThree, BorderLayout.NORTH);
-        bottomSection.add(new MaskEditingBottombar(onBackAction), BorderLayout.CENTER);
+        bottomSection.add(new MaskEditBottombar(onBackAction), BorderLayout.CENTER);
 
         add(bottomSection, BorderLayout.SOUTH);
     }

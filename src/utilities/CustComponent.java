@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class CustomComponent extends JComponent {
+public class CustComponent extends JComponent {
     // Used for creating customized bland or button components
     private String text;
     private int cornerRadius = 15;
@@ -19,7 +19,7 @@ public class CustomComponent extends JComponent {
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
+    public CustComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
             Float alignmentX, Color backgroundColor, Color textColor) {
         this.text = text;
 

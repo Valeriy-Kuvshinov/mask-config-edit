@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CustomScroll extends JScrollPane {
+public class CustScroll extends JScrollPane {
     private boolean scrollEnabled = true;
     private MouseWheelListener wheelListener;
 
-    public CustomScroll(Component view) {
+    public CustScroll(Component view) {
         super(view);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

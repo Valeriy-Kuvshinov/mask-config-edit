@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 
-public class CustomSelect extends JComboBox<String> {
+public class CustSelect extends JComboBox<String> {
     // Used as a customized select for forms in the app
     private int cornerRadius = 15;
     private Color backgroundColor;
@@ -22,7 +22,7 @@ public class CustomSelect extends JComboBox<String> {
     private static final Color FOCUS_BORDER_COLOR = new Color(0, 120, 215); // Blue-ish color for focus
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomSelect(int width, int height, String[] options, String defaultValue, Float alignmentX) {
+    public CustSelect(int width, int height, String[] options, String defaultValue, Float alignmentX) {
         super(options);
 
         this.backgroundColor = DEFAULT_BACKGROUND_COLOR;

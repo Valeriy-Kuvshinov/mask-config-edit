@@ -3,11 +3,11 @@ package src.utilities;
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomSeparator extends JPanel {
+public class CustSeparator extends JPanel {
     private Color lineColor;
     private int thickness;
 
-    public CustomSeparator(Color lineColor, int thickness) {
+    public CustSeparator(Color lineColor, int thickness) {
         this.lineColor = lineColor;
         this.thickness = thickness;
         setOpaque(false);

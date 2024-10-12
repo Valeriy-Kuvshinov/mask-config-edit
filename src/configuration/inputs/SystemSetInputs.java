@@ -7,21 +7,21 @@ import javax.swing.*;
 import src.configuration.*;
 import src.utilities.*;
 
-public class SystemSettingsInputs extends CustomPanel {
+public class SystemSetInputs extends CustPanel {
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public SystemSettingsInputs() {
+    public SystemSetInputs() {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
         initializeUI();
     }
 
     private void initializeUI() {
-        var systemSettings = MaskEditingManager.getSettingsForCategory("System");
+        var systemSettings = MaskEditManager.getSettingsForCategory("System");
         var combinedPanel = createInputsPanel(systemSettings);
 
         // Create a new panel to center the combinedPanel horizontally
-        var centerPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        var centerPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         var centerGbc = new GridBagConstraints();
         centerGbc.gridx = 0;
         centerGbc.gridy = 0;
@@ -32,8 +32,8 @@ public class SystemSettingsInputs extends CustomPanel {
         add(Box.createVerticalGlue(), BorderLayout.CENTER);
     }
 
-    private CustomPanel createInputsPanel(Map<String, Object> systemSettings) {
-        var panel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+    private CustPanel createInputsPanel(Map<String, Object> systemSettings) {
+        var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -44,12 +44,12 @@ public class SystemSettingsInputs extends CustomPanel {
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
-        var usbLabel = new CustomLabel("interfaceNames_input_usb", LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
+        var usbLabel = new CustLabel("interfaceNames_input_usb", LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
         panel.add(usbLabel, gbc);
 
         gbc.gridx = 1;
         gbc.gridwidth = 4;
-        var usbInput = new CustomInput(330, 54, 16, "xxxxxxxxxxxxxxxx", Component.LEFT_ALIGNMENT);
+        var usbInput = new CustInput(330, 54, 16, "xxxxxxxxxxxxxxxx", Component.LEFT_ALIGNMENT);
         usbInput.setText(systemSettings.get("interfaceNames_input_usb").toString());
         panel.add(usbInput, gbc);
 
@@ -70,7 +70,7 @@ public class SystemSettingsInputs extends CustomPanel {
         return panel;
     }
 
-    private void addSettingsGroup(CustomPanel panel, GridBagConstraints gbc, Map<String, Object> systemSettings,
+    private void addSettingsGroup(CustPanel panel, GridBagConstraints gbc, Map<String, Object> systemSettings,
             String[] settingKeys, int startRow, int rows, int cols) {
         for (var i = 0; i < settingKeys.length; i++) {
             var row = startRow + (i / cols);
@@ -86,7 +86,7 @@ public class SystemSettingsInputs extends CustomPanel {
             gbc.weightx = 1.0;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.WEST;
-            var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
+            var label = new CustLabel(key, LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
             panel.add(label, gbc);
 
             // Select
@@ -96,7 +96,7 @@ public class SystemSettingsInputs extends CustomPanel {
             gbc.anchor = GridBagConstraints.EAST;
 
             String[] options = { "0", "1" };
-            var select = new CustomSelect(64, 54, options, value.toString(), Component.LEFT_ALIGNMENT);
+            var select = new CustSelect(64, 54, options, value.toString(), Component.LEFT_ALIGNMENT);
             panel.add(select, gbc);
         }
     }

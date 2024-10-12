@@ -4,16 +4,16 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class MaskEditingBottombar extends CustomPanel {
+public class MaskEditBottombar extends CustPanel {
     private Runnable onBackAction;
-    private CustomComponent leftButton;
-    private CustomComponent centerText;
-    private CustomComponent rightButton;
+    private CustComponent leftButton;
+    private CustComponent centerText;
+    private CustComponent rightButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color GRAY_COLOR = new Color(50, 50, 50);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public MaskEditingBottombar(Runnable onBackAction) {
+    public MaskEditBottombar(Runnable onBackAction) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         initializeUI();
@@ -46,21 +46,21 @@ public class MaskEditingBottombar extends CustomPanel {
         add(createRightButton(), gbc);
     }
 
-    private CustomComponent createLeftButton() {
-        leftButton = new CustomComponent("Back", 100, 42, 20, 10,
+    private CustComponent createLeftButton() {
+        leftButton = new CustComponent("Back", 100, 42, 20, 10,
                 Component.LEFT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         leftButton.addButtonBehavior(onBackAction);
         return leftButton;
     }
 
-    private CustomComponent createCenterText() {
-        centerText = new CustomComponent("Enjoy editing!", null, 42, 20, 10,
+    private CustComponent createCenterText() {
+        centerText = new CustComponent("Enjoy editing!", null, 42, 20, 10,
                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
         return centerText;
     }
 
-    private CustomComponent createRightButton() {
-        rightButton = new CustomComponent("Save", 100, 42, 20, 10,
+    private CustComponent createRightButton() {
+        rightButton = new CustComponent("Save", 100, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         rightButton.addButtonBehavior(() -> System.out.println("Save button clicked"));
         return rightButton;

@@ -7,12 +7,12 @@ import java.time.format.*;
 
 import src.utilities.*;
 
-public class MaskEditingTopbar extends CustomPanel {
+public class MaskEditTopbar extends CustPanel {
     private String maskName;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public MaskEditingTopbar(String maskName) {
+    public MaskEditTopbar(String maskName) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 10);
         this.maskName = maskName;
         initializeUI();
@@ -46,28 +46,28 @@ public class MaskEditingTopbar extends CustomPanel {
     }
 
     private JPanel createNameSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
+        var panel = new CustPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
 
-        panel.add(new CustomComponent(maskName, null, 42, 20, 10,
+        panel.add(new CustComponent(maskName, null, 42, 20, 10,
                 Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
         return panel;
     }
 
     private JPanel createUserConfigSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
+        var panel = new CustPanel(new FlowLayout(FlowLayout.CENTER), DARK_COLOR, null, null, 0, 0, 0);
 
-        panel.add(new CustomLabel("User-01 Configuration", LIGHT_COLOR, 32, Component.CENTER_ALIGNMENT));
+        panel.add(new CustLabel("User-01 Configuration", LIGHT_COLOR, 32, Component.CENTER_ALIGNMENT));
         return panel;
     }
 
     private JPanel createDateSection() {
-        var panel = new CustomPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
+        var panel = new CustPanel(new FlowLayout(FlowLayout.RIGHT), DARK_COLOR, null, null, 0, 0, 0);
 
         var currentDate = LocalDate.now();
         var formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         var formattedDate = currentDate.format(formatter);
 
-        panel.add(new CustomComponent(formattedDate, null, 42, 20, 10,
+        panel.add(new CustComponent(formattedDate, null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
 
         return panel;

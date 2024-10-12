@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 
-public class CustomInput extends JComponent {
+public class CustInput extends JComponent {
     // Used as a customized input for forms in the app
     private JTextField textField = new JTextField("");
     private int cornerRadius = 15;
@@ -24,7 +24,7 @@ public class CustomInput extends JComponent {
     private static final Color FOCUS_BORDER_COLOR = new Color(0, 120, 215); // Blue-ish color for focus
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
-    public CustomInput(int width, int height, int maxChars, String placeholder, Float alignmentX) {
+    public CustInput(int width, int height, int maxChars, String placeholder, Float alignmentX) {
         this.placeholder = placeholder != null ? placeholder : "Insert something";
 
         this.backgroundColor = DEFAULT_BACKGROUND_COLOR;

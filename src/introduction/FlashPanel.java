@@ -5,10 +5,10 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class FlashPanel extends CustomPanel {
-    private CustomLabel messageLabel;
-    private CustomLabel connectLabel;
-    private CustomComponent backButton;
+public class FlashPanel extends CustPanel {
+    private CustLabel messageLabel;
+    private CustLabel connectLabel;
+    private CustComponent backButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color GRAY_COLOR = new Color(50, 50, 50);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
@@ -20,22 +20,22 @@ public class FlashPanel extends CustomPanel {
 
     private void initializeUI(Runnable onBackClick) {
         // Create a main panel to hold all components
-        var mainPanel = new CustomPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
+        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
         // Create a wrapper panel to center the main panel
-        var wrapperPanel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+        var wrapperPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Create labels
-        var welcomeLabel = new CustomLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
-        messageLabel = new CustomLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
+        var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
+        messageLabel = new CustLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
 
         var connectIcon = new ImageIcon("resources/images/connect-flash.png");
-        connectLabel = new CustomLabel(connectIcon, Component.CENTER_ALIGNMENT);
+        connectLabel = new CustLabel(connectIcon, Component.CENTER_ALIGNMENT);
         connectLabel.setLabelSize(180, 180);
 
         // Create back button
-        backButton = new CustomComponent("Back", 100, 60, 20, 10,
+        backButton = new CustComponent("Back", 100, 60, 20, 10,
                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         backButton.addButtonBehavior(onBackClick);
 
