@@ -8,9 +8,9 @@ import java.time.format.*;
 import src.utilities.*;
 
 public class MaskEditingTopbar extends CustomPanel {
-    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
-    private static final Color DARK_COLOR = new Color(30, 30, 30);
     private String maskName;
+    private static final Color DARK_COLOR = new Color(30, 30, 30);
+    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public MaskEditingTopbar(String maskName) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 10);
@@ -48,7 +48,8 @@ public class MaskEditingTopbar extends CustomPanel {
     private JPanel createNameSection() {
         var panel = new CustomPanel(new FlowLayout(FlowLayout.LEFT), DARK_COLOR, null, null, 0, 0, 0);
 
-        panel.add(new CustomComponent(maskName, null, 42, 20, 10, Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
+        panel.add(new CustomComponent(maskName, null, 42, 20, 10,
+                Component.LEFT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
         return panel;
     }
 
@@ -66,9 +67,9 @@ public class MaskEditingTopbar extends CustomPanel {
         var formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         var formattedDate = currentDate.format(formatter);
 
-        var dateComponent = new CustomComponent(formattedDate, null, 42, 20, 10, Component.RIGHT_ALIGNMENT, LIGHT_COLOR,
-                DARK_COLOR);
-        panel.add(dateComponent);
+        panel.add(new CustomComponent(formattedDate, null, 42, 20, 10,
+                Component.RIGHT_ALIGNMENT, LIGHT_COLOR, DARK_COLOR));
+
         return panel;
     }
 }

@@ -11,21 +11,25 @@ public class CustomComponent extends JComponent {
     private Color backgroundColor;
     private Color borderColor;
     private Color textColor;
+    private Color originalBackgroundColor;
+    private Color originalTextColor;
 
     // Default values
     protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
     private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
-    private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustomComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
             Float alignmentX, Color backgroundColor, Color textColor) {
         this.text = text;
 
-        this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
+        this.backgroundColor = backgroundColor;
         this.borderColor = DEFAULT_BORDER_COLOR;
-        this.textColor = textColor != null ? textColor : DEFAULT_TEXT_COLOR;
+        this.textColor = textColor;
+
+        // Ensure button colors are not lost during hovering
+        this.originalBackgroundColor = backgroundColor;
+        this.originalTextColor = textColor;
 
         initializeComponent(width, height, paddingX, paddingY, alignmentX);
     }
@@ -113,15 +117,15 @@ public class CustomComponent extends JComponent {
 
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                setBackgroundColor(Color.DARK_GRAY);
-                setColor(DEFAULT_BACKGROUND_COLOR);
+                setBackgroundColor(originalTextColor);
+                setColor(originalBackgroundColor);
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
-                setColor(DEFAULT_TEXT_COLOR);
+                setBackgroundColor(originalBackgroundColor);
+                setColor(originalTextColor);
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });

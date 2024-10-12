@@ -14,6 +14,8 @@ public class PinPanel extends CustomPanel {
     private Runnable onPinVerifiedCallback;
     private StringBuilder currentPin = new StringBuilder();
     private static final Color DARK_COLOR = new Color(30, 30, 30);
+    private static final Color GRAY_COLOR = new Color(50, 50, 50);
+    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public PinPanel(Runnable onPinVerifiedCallback) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
@@ -41,7 +43,8 @@ public class PinPanel extends CustomPanel {
                 Component.CENTER_ALIGNMENT, 0, 0, 0);
         pinDigits = new CustomComponent[6];
         for (var i = 0; i < 6; i++) {
-            pinDigits[i] = new CustomComponent(" ", 55, 55, 20, 10, null, null, null);
+            pinDigits[i] = new CustomComponent(" ", 55, 55, 20, 10,
+                    null, LIGHT_COLOR, DARK_COLOR);
             pinDisplayPanel.add(pinDigits[i]);
         }
 
@@ -82,7 +85,8 @@ public class PinPanel extends CustomPanel {
     }
 
     private void addPinButton(String label, GridBagConstraints gbc) {
-        var button = new CustomComponent(label, 65, 65, 20, 10, null, null, DARK_COLOR);
+        var button = new CustomComponent(label, 65, 65, 20, 10,
+                null, LIGHT_COLOR, GRAY_COLOR);
         button.addButtonBehavior(() -> handleButtonClick(label));
         buttonsPanel.add(button, gbc);
     }

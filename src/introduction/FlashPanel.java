@@ -10,6 +10,8 @@ public class FlashPanel extends CustomPanel {
     private CustomLabel connectLabel;
     private CustomComponent backButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
+    private static final Color GRAY_COLOR = new Color(50, 50, 50);
+    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public FlashPanel(Runnable onBackClick) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
@@ -33,7 +35,8 @@ public class FlashPanel extends CustomPanel {
         connectLabel.setLabelSize(180, 180);
 
         // Create back button
-        backButton = new CustomComponent("Back", 100, 60, 20, 10, Component.CENTER_ALIGNMENT, null, null);
+        backButton = new CustomComponent("Back", 100, 60, 20, 10,
+                Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         backButton.addButtonBehavior(onBackClick);
 
         mainPanel.add(Box.createVerticalGlue());
