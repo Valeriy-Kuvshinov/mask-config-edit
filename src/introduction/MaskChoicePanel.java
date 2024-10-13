@@ -9,11 +9,6 @@ import src.utilities.*;
 public class MaskChoicePanel extends CustPanel {
         private Consumer<String> createMaskHandler;
         private Consumer<String> editMaskHandler;
-        private CustPanel optionsPanel;
-        private CustLabel messageLabel;
-        private CustInput createMaskField;
-        private CustInput editMaskField;
-        private CustComponent backButton;
         private static final Color DARK_COLOR = new Color(30, 30, 30);
         private static final Color GRAY_COLOR = new Color(50, 50, 50);
         private static final Color LIGHT_COLOR = new Color(220, 220, 220);
@@ -37,15 +32,15 @@ public class MaskChoicePanel extends CustPanel {
                 // Create labels
                 var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null,
                                 Component.CENTER_ALIGNMENT);
-                messageLabel = new CustLabel("Flash drive connected. Choose an option:", null, null,
+                var messageLabel = new CustLabel("Flash drive connected. Choose an option:", null, null,
                                 Component.CENTER_ALIGNMENT);
 
                 // Create back button
-                backButton = new CustComponent("Back", 100, 60, 20, 10,
+                var backButton = new CustComponent("Back", 100, 60, 20, 10,
                                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
                 backButton.addButtonBehavior(onBackClick);
 
-                optionsPanel = createOptionsPanel();
+                var optionsPanel = createOptionsPanel();
                 mainPanel.add(Box.createVerticalGlue());
                 mainPanel.add(welcomeLabel);
                 mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -75,11 +70,14 @@ public class MaskChoicePanel extends CustPanel {
                 var createImageLabel = new CustLabel(createIcon, Component.CENTER_ALIGNMENT);
                 createImageLabel.setLabelSize(100, 100);
 
-                createMaskField = new CustInput(260, 54, 15, "New name", Component.CENTER_ALIGNMENT);
-                createMaskField.setText("Mask-08");
-
                 var createButton = new CustComponent("Create", 100, 50, 20, 10,
                                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+
+                // Create mask field with relevant checks
+                var createMaskField = new CustInput(260, 54, 15, "New name", Component.CENTER_ALIGNMENT);
+                createMaskField.setText("Mask-08");
+                createMaskField.addTextChangeListener(newText -> updateButtonState(
+                                createButton, createMaskField, createMaskHandler));
 
                 createPanel.add(createLabelOne);
                 createPanel.add(Box.createVerticalStrut(10));
@@ -103,11 +101,14 @@ public class MaskChoicePanel extends CustPanel {
                 var editImageLabel = new CustLabel(editIcon, Component.CENTER_ALIGNMENT);
                 editImageLabel.setLabelSize(100, 100);
 
-                editMaskField = new CustInput(260, 54, 15, "Existing name", Component.CENTER_ALIGNMENT);
-                editMaskField.setText("Mask-08");
-
                 var editButton = new CustComponent("Edit", 100, 50, 20, 10,
                                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+
+                // Edit mask field with relevant checks
+                var editMaskField = new CustInput(260, 54, 15, "Existing name", Component.CENTER_ALIGNMENT);
+                editMaskField.setText("Mask-08");
+                editMaskField.addTextChangeListener(newText -> updateButtonState(
+                                editButton, editMaskField, editMaskHandler));
 
                 editPanel.add(editLabelOne);
                 editPanel.add(Box.createVerticalStrut(10));
@@ -122,9 +123,25 @@ public class MaskChoicePanel extends CustPanel {
                 optionsPanel.add(createPanel);
                 optionsPanel.add(editPanel);
 
-                createButton.addButtonBehavior(() -> createMaskHandler.accept(createMaskField.getText()));
-                editButton.addButtonBehavior(() -> editMaskHandler.accept(editMaskField.getText()));
+                // Initial button state update
+                updateButtonState(createButton, createMaskField, createMaskHandler);
+                updateButtonState(editButton, editMaskField, editMaskHandler);
 
                 return optionsPanel;
+        }
+
+        private void updateButtonState(CustComponent button, CustInput input, Consumer<String> handler) {
+                var isValid = input.getText().length() >= 4;
+
+                if (isValid) {
+                        button.setBackgroundColor(LIGHT_COLOR);
+                        button.setColor(GRAY_COLOR);
+                        button.removeButtonBehavior();
+                        button.addButtonBehavior(() -> handler.accept(input.getText()));
+                } else {
+                        button.setBackgroundColor(GRAY_COLOR);
+                        button.setColor(LIGHT_COLOR);
+                        button.removeButtonBehavior();
+                }
         }
 }

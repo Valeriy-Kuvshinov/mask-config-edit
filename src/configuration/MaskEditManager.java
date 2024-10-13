@@ -239,8 +239,7 @@ public class MaskEditManager extends CustPanel {
         switchPanels.put("Proxy", new ProxySetInputs());
         switchPanels.put("Hotspot", new HotspotSetInputs());
 
-        // Add the first panel (System) to the content panel
-        contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER);
+        contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER); // Default of contentPanel
 
         // Create a CustomScroll and add the contentPanel to it
         scrollPane = new CustScroll(contentPanel);
@@ -270,8 +269,6 @@ public class MaskEditManager extends CustPanel {
         if (selectedPanel != null) {
             contentPanel.add(selectedPanel, BorderLayout.CENTER);
         }
-        contentPanel.revalidate();
-        contentPanel.repaint();
         scrollPane.scrollToTop();
         SwingUtilities.invokeLater(() -> {
             scrollPane.updateScrollBars();

@@ -37,13 +37,21 @@ public class SystemSetInputs extends CustPanel {
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
 
-        // USB input
+        // Inputs Section Label
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 6;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        var inputsSectionLabel = new CustLabel("Inputs Section", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT);
+        panel.add(inputsSectionLabel, gbc);
+
+        // USB input
+        gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
         var usbLabel = new CustLabel("interfaceNames_input_usb", LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
         panel.add(usbLabel, gbc);
 
@@ -58,14 +66,24 @@ public class SystemSetInputs extends CustPanel {
                 "Input_computer", "Input_cellular", "Input_secureIphone",
                 "InputInterface_ethernet", "InputInterface_wifi", "InputInterface_usb"
         };
-        addSettingsGroup(panel, gbc, systemSettings, inputSettings, 1, 2, 3);
+        addSettingsGroup(panel, gbc, systemSettings, inputSettings, gbc.gridy + 1, 2, 3);
+
+        // Outputs Section Label
+        gbc.gridx = 0;
+        gbc.gridy += 3;
+        gbc.gridwidth = 6;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        var outputsSectionLabel = new CustLabel("Outputs Section", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT);
+        panel.add(outputsSectionLabel, gbc);
 
         // Output settings
         String[] outputSettings = {
                 "OutputInterface_ethernet", "OutputInterface_wifi", "OutputInterface_cellularModem",
                 "Output_tor", "Output_proxy", "Output_vpn", "Output_vps", "Output_force_tor"
         };
-        addSettingsGroup(panel, gbc, systemSettings, outputSettings, 3, 3, 3);
+        addSettingsGroup(panel, gbc, systemSettings, outputSettings, gbc.gridy + 1, 3, 3);
 
         return panel;
     }

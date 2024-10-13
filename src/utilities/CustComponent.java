@@ -13,6 +13,7 @@ public class CustComponent extends JComponent {
     private Color textColor;
     private Color originalBackgroundColor;
     private Color originalTextColor;
+    private java.awt.event.MouseAdapter buttonBehavior;
 
     // Default values
     protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
@@ -109,7 +110,8 @@ public class CustComponent extends JComponent {
     }
 
     public void addButtonBehavior(Runnable clickAction) {
-        addMouseListener(new java.awt.event.MouseAdapter() {
+        removeButtonBehavior(); // Remove existing behavior if any
+        buttonBehavior = new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 clickAction.run();
@@ -128,6 +130,15 @@ public class CustComponent extends JComponent {
                 setColor(originalTextColor);
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-        });
+        };
+        addMouseListener(buttonBehavior);
+    }
+
+    public void removeButtonBehavior() {
+        if (buttonBehavior != null) {
+            removeMouseListener(buttonBehavior);
+            buttonBehavior = null;
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 }

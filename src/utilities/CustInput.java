@@ -1,6 +1,7 @@
 package src.utilities;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,6 +33,10 @@ public class CustInput extends JComponent {
         this.textColor = DEFAULT_TEXT_COLOR;
 
         initializeComponent(width, height, maxChars, alignmentX);
+    }
+
+    public interface TextChangeListener {
+        void textChanged(String newText);
     }
 
     private void initializeComponent(int width, int height, int maxChars, Float alignmentX) {
@@ -112,6 +117,29 @@ public class CustInput extends JComponent {
     public void setText(String text) {
         textField.setText(text);
         textField.setForeground(textColor);
+    }
+
+    public void addTextChangeListener(TextChangeListener listener) {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            private void update() {
+                listener.textChanged(getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
+            }
+        });
     }
 
     @Override

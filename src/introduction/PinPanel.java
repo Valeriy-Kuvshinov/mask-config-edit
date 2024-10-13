@@ -146,7 +146,7 @@ public class PinPanel extends CustPanel {
 
     private String getStoredPin() {
         var prop = new Properties();
-        try (var input = new FileInputStream("config.properties")) {
+        try (var input = new FileInputStream("app.properties")) {
             prop.load(input);
             return prop.getProperty("PIN_CODE");
         } catch (IOException ex) {
@@ -156,7 +156,7 @@ public class PinPanel extends CustPanel {
 
     private void setStoredPin(String pin) {
         var prop = new Properties();
-        try (var output = new FileOutputStream("config.properties")) {
+        try (var output = new FileOutputStream("app.properties")) {
             prop.setProperty("PIN_CODE", pin);
             prop.store(output, null);
         } catch (IOException ex) {
