@@ -5,6 +5,7 @@ import java.util.*;
 import javax.swing.*;
 
 import src.configuration.*;
+import src.configuration.utilities.*;
 import src.utilities.*;
 
 public class HotspotSetInputs extends CustPanel {
@@ -59,138 +60,12 @@ public class HotspotSetInputs extends CustPanel {
 
         private void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int inputWidth, int maxChars, String placeholder) {
-                gbc.insets = new Insets(10, 15, 10, 15);
-
-                // Label
-                gbc.gridx = 0;
-                gbc.gridy = row;
-                gbc.weightx = 0;
-                gbc.anchor = GridBagConstraints.EAST;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-
-                var label = new CustLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
-                panel.add(label, gbc);
-
-                // Input
-                gbc.gridx = 1;
-                gbc.weightx = 1;
-                gbc.anchor = GridBagConstraints.WEST;
-                gbc.fill = GridBagConstraints.NONE;
-                gbc.insets = new Insets(10, 20, 10, 15);
-
-                var input = new CustInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
-                input.setText(value != null ? value.toString() : "");
-                panel.add(input, gbc);
+                InputPanelUtils.addInputRow(panel, gbc, row, key, value, inputWidth, maxChars, placeholder,
+                                LIGHT_COLOR);
         }
 
         private void addSelectRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
                         int selectWidth, String[] options) {
-                gbc.insets = new Insets(10, 15, 10, 15);
-
-                // Label
-                gbc.gridx = 0;
-                gbc.gridy = row;
-                gbc.weightx = 0;
-                gbc.anchor = GridBagConstraints.EAST;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-
-                var label = new CustLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
-                panel.add(label, gbc);
-
-                // Select
-                gbc.gridx = 1;
-                gbc.weightx = 1;
-                gbc.anchor = GridBagConstraints.WEST;
-                gbc.fill = GridBagConstraints.NONE;
-                gbc.insets = new Insets(10, 20, 10, 15);
-
-                var select = new CustSelect(selectWidth, 54, options, value != null ? value.toString() : options[0],
-                                Component.LEFT_ALIGNMENT);
-                panel.add(select, gbc);
+                InputPanelUtils.addSelectRow(panel, gbc, row, key, value, selectWidth, options, LIGHT_COLOR);
         }
-
-        // private CustomPanel createInputsPanel(Map<String, Object> hotspotSettings) {
-        // var panel = new CustomPanel(new GridBagLayout(), DARK_COLOR, null, null, 0,
-        // 0, 0);
-        // var gbc = new GridBagConstraints();
-        // gbc.insets = new Insets(10, 15, 10, 15);
-
-        // addSelectRow(panel, gbc, 0, 2, "inputInterface_hotspot_hidden",
-        // hotspotSettings.get("inputInterface_hotspot_hidden"), 64, new String[] { "0",
-        // "1" });
-        // addInputRow(panel, gbc, 0, 0, "inputInterface_hotspot_ssid",
-        // hotspotSettings.get("inputInterface_hotspot_ssid"), 330, 32, "SSID name");
-        // addInputRow(panel, gbc, 1, 2, "inputInterface_hotspot_ssid_length",
-        // hotspotSettings.get("inputInterface_hotspot_ssid_length"), 46, 1, "9");
-        // addSelectRow(panel, gbc, 1, 0, "inputInterface_hotspot_ssid_policy",
-        // hotspotSettings.get("inputInterface_hotspot_ssid_policy"), 330,
-        // new String[] { "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols"
-        // });
-        // addInputRow(panel, gbc, 2, 0, "inputInterface_hotspot_password",
-        // hotspotSettings.get("inputInterface_hotspot_password"), 330, 32, "Password");
-        // addInputRow(panel, gbc, 2, 2, "inputInterface_hotspot_password_length",
-        // hotspotSettings.get("inputInterface_hotspot_password_length"), 46, 1, "9");
-        // addSelectRow(panel, gbc, 3, 0, "inputInterface_hotspot_password_policy",
-        // hotspotSettings.get("inputInterface_hotspot_password_policy"), 330,
-        // new String[] { "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols"
-        // });
-
-        // return panel;
-        // }
-
-        // private void addInputRow(CustomPanel panel, GridBagConstraints gbc, int row,
-        // int col, String key, Object value,
-        // int inputWidth, int maxChars, String placeholder) {
-        // gbc.insets = new Insets(10, 15, 10, 15);
-
-        // // Label
-        // gbc.gridx = col;
-        // gbc.gridy = row;
-        // gbc.weightx = 0;
-        // gbc.anchor = GridBagConstraints.EAST;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
-        // panel.add(label, gbc);
-
-        // // Input
-        // gbc.gridx = col + 1;
-        // gbc.weightx = 1;
-        // gbc.anchor = GridBagConstraints.WEST;
-        // gbc.fill = GridBagConstraints.NONE;
-        // gbc.insets = new Insets(10, 20, 10, 15);
-
-        // var input = new CustomInput(inputWidth, 54, maxChars, placeholder,
-        // Component.LEFT_ALIGNMENT);
-        // input.setText(value != null ? value.toString() : "");
-        // panel.add(input, gbc);
-        // }
-
-        // private void addSelectRow(CustomPanel panel, GridBagConstraints gbc, int row,
-        // int col, String key, Object value,
-        // int selectWidth, String[] options) {
-        // gbc.insets = new Insets(10, 15, 10, 15);
-
-        // // Label
-        // gbc.gridx = col;
-        // gbc.gridy = row;
-        // gbc.weightx = 0;
-        // gbc.anchor = GridBagConstraints.EAST;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // var label = new CustomLabel(key, LIGHT_COLOR, 16, Component.RIGHT_ALIGNMENT);
-        // panel.add(label, gbc);
-
-        // // Select
-        // gbc.gridx = col + 1;
-        // gbc.weightx = 1;
-        // gbc.anchor = GridBagConstraints.WEST;
-        // gbc.fill = GridBagConstraints.NONE;
-        // gbc.insets = new Insets(10, 20, 10, 15);
-
-        // var select = new CustomSelect(selectWidth, 54, options, value != null ?
-        // value.toString() : options[0],
-        // Component.LEFT_ALIGNMENT);
-        // panel.add(select, gbc);
-        // }
 }

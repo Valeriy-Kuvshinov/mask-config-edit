@@ -44,19 +44,17 @@ public class SystemSetInputs extends CustPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
-        var inputsSectionLabel = new CustLabel("Inputs Section", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT);
-        panel.add(inputsSectionLabel, gbc);
+        panel.add(new CustLabel("Inputs Settings", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT), gbc);
 
-        // USB input
+        // interfaceNames label + input
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
-        var usbLabel = new CustLabel("interfaceNames_input_usb", LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
-        panel.add(usbLabel, gbc);
+        panel.add(new CustLabel("interfaceNames_input_usb", LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT), gbc);
 
         gbc.gridx = 1;
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 6;
         var usbInput = new CustInput(330, 54, 16, "xxxxxxxxxxxxxxxx", Component.LEFT_ALIGNMENT);
         usbInput.setText(systemSettings.get("interfaceNames_input_usb").toString());
         panel.add(usbInput, gbc);
@@ -75,8 +73,7 @@ public class SystemSetInputs extends CustPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
-        var outputsSectionLabel = new CustLabel("Outputs Section", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT);
-        panel.add(outputsSectionLabel, gbc);
+        panel.add(new CustLabel("Outputs Settings", LIGHT_COLOR, 24, Component.LEFT_ALIGNMENT), gbc);
 
         // Output settings
         String[] outputSettings = {

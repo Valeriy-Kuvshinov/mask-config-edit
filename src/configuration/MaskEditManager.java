@@ -51,7 +51,7 @@ public class MaskEditManager extends CustPanel {
         torSettings.put("output_tor_list_countryCodes",
                 new String[] { "at", "ch", "de", "fr", "nl", "no", "ro", "se" });
         torSettings.put("output_tor_list_exit_nodes", new String[] { "" });
-        torSettings.put("output_tor_default_country", 99);
+        torSettings.put("output_tor_default_country", "99");
 
         DEFAULT_SETTINGS.put("Tor", torSettings);
 
@@ -107,8 +107,7 @@ public class MaskEditManager extends CustPanel {
         vpsSettings.put("output_vps_service_countryCode", "fr");
         vpsSettings.put("output_vps_service_country", "France");
         vpsSettings.put("output_vps_service_server", "fr15.188.51.172");
-        // TCP or UDP
-        vpsSettings.put("output_vps_service_preferred_transport", "tcp");
+        vpsSettings.put("output_vps_service_preferred_transport", "tcp"); // TCP or UDP
         vpsSettings.put("output_vps_service_username", "user");
         vpsSettings.put("output_vps_service_password", "password");
 
@@ -126,7 +125,7 @@ public class MaskEditManager extends CustPanel {
         proxyServiceOneSettings.put("output_proxy_service_1", "HighProxy1");
         proxyServiceOneSettings.put("service_expiration_date_proxy_1", "01/01/2025");
         proxyServiceOneSettings.put("output_proxy_list_countryCodes_1", new String[] { "es" });
-        proxyServiceOneSettings.put("output_proxy_list_ips_1", new String[] { "206.232.14.155,195" });
+        proxyServiceOneSettings.put("output_proxy_list_ips_1", new String[] { "206.232.14.155" });
         proxyServiceOneSettings.put("output_proxy_list_ports_1", new String[] { "21272" });
         proxyServiceOneSettings.put("output_proxy_service_1_username", "nirsabb36427");
         proxyServiceOneSettings.put("output_proxy_service_1_password", "r5du8mpvep");
