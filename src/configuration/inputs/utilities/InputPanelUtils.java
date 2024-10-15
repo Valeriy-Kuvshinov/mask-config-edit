@@ -1,13 +1,28 @@
-package src.configuration.utilities;
+package src.configuration.inputs.utilities;
 
 import java.awt.*;
 import java.util.stream.*;
 import java.util.List;
+import javax.swing.*;
 
 import src.utilities.*;
 
 // Specialized class for configuartion forms
 public class InputPanelUtils {
+    // Method to handle common initializeUI functionality
+    public static void initCommonUI(CustPanel mainPanel, CustPanel inputsPanel) {
+        // Create a new panel to center the inputsPanel horizontally
+        var centerPanel = new CustPanel(new GridBagLayout(), new Color(30, 30, 30), null, null, 0, 0, 0);
+        var centerGbc = new GridBagConstraints();
+        centerGbc.gridx = 0;
+        centerGbc.gridy = 0;
+        centerGbc.anchor = GridBagConstraints.CENTER;
+        centerPanel.add(inputsPanel, centerGbc);
+
+        mainPanel.add(centerPanel, BorderLayout.NORTH);
+        mainPanel.add(Box.createVerticalGlue(), BorderLayout.CENTER);
+    }
+
     // Customizable Input inserted into a grid form - relevant for inputs
     public static void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
             int inputWidth, int maxChars, String placeholder, Color labelColor) {

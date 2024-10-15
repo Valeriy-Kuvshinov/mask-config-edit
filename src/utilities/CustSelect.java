@@ -29,10 +29,10 @@ public class CustSelect extends JComboBox<String> {
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = DEFAULT_TEXT_COLOR;
 
-        initializeComponent(width, height, defaultValue, alignmentX);
+        initSelect(width, height, defaultValue, alignmentX);
     }
 
-    private void initializeComponent(int width, int height, String defaultValue, Float alignmentX) {
+    private void initSelect(int width, int height, String defaultValue, Float alignmentX) {
         setOpaque(false);
         setFont(DEFAULT_FONT);
         setBackground(backgroundColor);

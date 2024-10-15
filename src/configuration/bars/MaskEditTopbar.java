@@ -15,10 +15,10 @@ public class MaskEditTopbar extends CustPanel {
     public MaskEditTopbar(String maskName) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 10);
         this.maskName = maskName;
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
+    private void initUI() {
         var gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 0, 0, 0);

@@ -16,10 +16,10 @@ public class MaskEditBottombar extends CustPanel {
     public MaskEditBottombar(Runnable onBackAction) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
+    private void initUI() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 5, 0, 5);

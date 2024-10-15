@@ -20,21 +20,19 @@ public class PinPanel extends CustPanel {
     public PinPanel(Runnable onPinVerifiedCallback) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
         this.onPinVerifiedCallback = onPinVerifiedCallback;
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
+    private void initUI() {
         // Create a main panel to hold all components
         var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
-        // Create a wrapper panel to center the main panel
         var wrapperPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
         // Check if PIN exists and set appropriate message
         var initialMessage = getStoredPin() == null ? "Create your PIN" : "Enter your PIN";
 
-        // Create labels
         var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
         messageLabel = new CustLabel(initialMessage, null, null, Component.CENTER_ALIGNMENT);
 
@@ -50,7 +48,6 @@ public class PinPanel extends CustPanel {
 
         createPinButtons();
 
-        // Add components to main panel
         mainPanel.add(Box.createVerticalGlue());
         mainPanel.add(welcomeLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));

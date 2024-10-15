@@ -18,10 +18,10 @@ public class MaskEditMiddlebar extends CustPanel {
     public MaskEditMiddlebar(MaskEditManager manager) {
         super(new FlowLayout(FlowLayout.CENTER, 50, 10), DARK_COLOR, null, null, 0, 15, 0);
         this.manager = manager;
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
+    private void initUI() {
         for (String label : BUTTON_LABELS) {
             CustComponent button = createButton(label);
             buttons.put(label, button);

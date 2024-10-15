@@ -2,10 +2,9 @@ package src.configuration.inputs;
 
 import java.awt.*;
 import java.util.*;
-import javax.swing.*;
 
 import src.configuration.*;
-import src.configuration.utilities.*;
+import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class TorSetInputs extends CustPanel {
@@ -14,38 +13,30 @@ public class TorSetInputs extends CustPanel {
 
     public TorSetInputs() {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
-        Map<String, Object> torSettings = MaskEditManager.getSettingsForCategory("Tor");
-        var combinedPanel = createInputsPanel(torSettings);
-
-        // Create a new panel to center the combinedPanel horizontally
-        var centerPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        var centerGbc = new GridBagConstraints();
-        centerGbc.gridx = 0;
-        centerGbc.gridy = 0;
-        centerGbc.anchor = GridBagConstraints.CENTER;
-        centerPanel.add(combinedPanel, centerGbc);
-
-        add(centerPanel, BorderLayout.NORTH);
-        add(Box.createVerticalGlue(), BorderLayout.CENTER);
+    private void initUI() {
+        Map<String, Object> settings = MaskEditManager.getSettingsForCategory("Tor");
+        var combinedPanel = createInputsPanel(settings);
+        InputPanelUtils.initCommonUI(this, combinedPanel);
     }
 
-    private CustPanel createInputsPanel(Map<String, Object> torSettings) {
+    private CustPanel createInputsPanel(Map<String, Object> settings) {
         var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
 
-        addInputRow(panel, gbc, 0, "output_tor_list_countryCodes",
-                InputPanelUtils.joinStringArray(torSettings.get("output_tor_list_countryCodes")),
+        InputPanelUtils.addSectionHeader(panel, gbc, 0, "General Settings", LIGHT_COLOR);
+
+        addInputRow(panel, gbc, 1, "output_tor_list_countryCodes",
+                InputPanelUtils.joinStringArray(settings.get("output_tor_list_countryCodes")),
                 420, 32, "at, ch, de, fr...");
-        addInputRow(panel, gbc, 1, "output_tor_list_exit_nodes",
-                InputPanelUtils.joinStringArray(torSettings.get("output_tor_list_exit_nodes")),
+        addInputRow(panel, gbc, 2, "output_tor_list_exit_nodes",
+                InputPanelUtils.joinStringArray(settings.get("output_tor_list_exit_nodes")),
                 420, 20, "0.0.0");
-        addInputRow(panel, gbc, 2, "output_tor_default_country",
-                torSettings.get("output_tor_default_country"),
+        addInputRow(panel, gbc, 3, "output_tor_default_country",
+                settings.get("output_tor_default_country"),
                 120, 4, "00");
 
         return panel;

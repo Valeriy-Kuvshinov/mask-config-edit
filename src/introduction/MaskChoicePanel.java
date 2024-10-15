@@ -18,24 +18,21 @@ public class MaskChoicePanel extends CustPanel {
                 super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
                 this.createMaskHandler = createMaskHandler;
                 this.editMaskHandler = editMaskHandler;
-                initializeUI(onBackClick);
+                initUI(onBackClick);
         }
 
-        private void initializeUI(Runnable onBackClick) {
+        private void initUI(Runnable onBackClick) {
                 // Create a main panel to hold all components
                 var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
-                // Create a wrapper panel to center the main panel
                 var wrapperPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
                 wrapperPanel.add(mainPanel);
 
-                // Create labels
                 var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null,
                                 Component.CENTER_ALIGNMENT);
                 var messageLabel = new CustLabel("Flash drive connected. Choose an option:", null, null,
                                 Component.CENTER_ALIGNMENT);
 
-                // Create back button
                 var backButton = new CustComponent("Back", 100, 60, 20, 10,
                                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
                 backButton.addButtonBehavior(onBackClick);

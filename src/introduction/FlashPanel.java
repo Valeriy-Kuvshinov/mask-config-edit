@@ -15,18 +15,16 @@ public class FlashPanel extends CustPanel {
 
     public FlashPanel(Runnable onBackClick) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 0, 0);
-        initializeUI(onBackClick);
+        initiUI(onBackClick);
     }
 
-    private void initializeUI(Runnable onBackClick) {
+    private void initiUI(Runnable onBackClick) {
         // Create a main panel to hold all components
         var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), DARK_COLOR, null, null, 0, 0, 0);
 
-        // Create a wrapper panel to center the main panel
         var wrapperPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
         wrapperPanel.add(mainPanel);
 
-        // Create labels
         var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
         messageLabel = new CustLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
 
@@ -34,7 +32,6 @@ public class FlashPanel extends CustPanel {
         connectLabel = new CustLabel(connectIcon, Component.CENTER_ALIGNMENT);
         connectLabel.setLabelSize(180, 180);
 
-        // Create back button
         backButton = new CustComponent("Back", 100, 60, 20, 10,
                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         backButton.addButtonBehavior(onBackClick);

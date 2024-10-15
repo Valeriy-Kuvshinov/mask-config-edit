@@ -13,8 +13,7 @@ public class CustLabel extends JLabel {
     // For text
     public CustLabel(String text, Color textColor, Integer fontSize, Float alignmentX) {
         super(text, SwingConstants.LEFT);
-        initializeLabel(textColor, fontSize, alignmentX);
-        repaint();
+        initLabel(textColor, fontSize, alignmentX);
     }
 
     // For images
@@ -23,7 +22,7 @@ public class CustLabel extends JLabel {
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }
 
-    private void initializeLabel(Color textColor, Integer fontSize, Float alignmentX) {
+    private void initLabel(Color textColor, Integer fontSize, Float alignmentX) {
         setFont(new Font(FONT_NAME, Font.BOLD, fontSize != null ? fontSize : DEFAULT_FONT_SIZE));
         setForeground(textColor != null ? textColor : DEFAULT_COLOR);
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);

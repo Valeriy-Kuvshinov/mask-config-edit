@@ -2,10 +2,9 @@ package src.configuration.inputs;
 
 import java.awt.*;
 import java.util.*;
-import javax.swing.*;
 
 import src.configuration.*;
-import src.configuration.utilities.*;
+import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class HotspotSetInputs extends CustPanel {
@@ -14,45 +13,37 @@ public class HotspotSetInputs extends CustPanel {
 
         public HotspotSetInputs() {
                 super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
-                initializeUI();
+                initUI();
         }
 
-        private void initializeUI() {
-                Map<String, Object> hotspotSettings = MaskEditManager.getSettingsForCategory("Hotspot");
-                var combinedPanel = createInputsPanel(hotspotSettings);
-
-                // Create a new panel to center the combinedPanel horizontally
-                var centerPanel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
-                var centerGbc = new GridBagConstraints();
-                centerGbc.gridx = 0;
-                centerGbc.gridy = 0;
-                centerGbc.anchor = GridBagConstraints.CENTER;
-                centerPanel.add(combinedPanel, centerGbc);
-
-                add(centerPanel, BorderLayout.NORTH);
-                add(Box.createVerticalGlue(), BorderLayout.CENTER);
+        private void initUI() {
+                Map<String, Object> settings = MaskEditManager.getSettingsForCategory("Hotspot");
+                var combinedPanel = createInputsPanel(settings);
+                InputPanelUtils.initCommonUI(this, combinedPanel);
         }
 
-        private CustPanel createInputsPanel(Map<String, Object> hotspotSettings) {
+        private CustPanel createInputsPanel(Map<String, Object> settings) {
                 var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
                 var gbc = new GridBagConstraints();
                 gbc.insets = new Insets(10, 15, 10, 15);
 
-                addSelectRow(panel, gbc, 0, "inputInterface_hotspot_hidden",
-                                hotspotSettings.get("inputInterface_hotspot_hidden"), 64, new String[] { "0", "1" });
-                addInputRow(panel, gbc, 1, "inputInterface_hotspot_ssid_length",
-                                hotspotSettings.get("inputInterface_hotspot_ssid_length"), 46, 1, "9");
-                addInputRow(panel, gbc, 2, "inputInterface_hotspot_password_length",
-                                hotspotSettings.get("inputInterface_hotspot_password_length"), 46, 1, "9");
-                addInputRow(panel, gbc, 3, "inputInterface_hotspot_ssid",
-                                hotspotSettings.get("inputInterface_hotspot_ssid"), 330, 32, "SSID name");
-                addInputRow(panel, gbc, 4, "inputInterface_hotspot_password",
-                                hotspotSettings.get("inputInterface_hotspot_password"), 330, 32, "Password");
-                addSelectRow(panel, gbc, 5, "inputInterface_hotspot_ssid_policy",
-                                hotspotSettings.get("inputInterface_hotspot_ssid_policy"), 330,
+                InputPanelUtils.addSectionHeader(panel, gbc, 0, "General Settings", LIGHT_COLOR);
+
+                addSelectRow(panel, gbc, 1, "inputInterface_hotspot_hidden",
+                                settings.get("inputInterface_hotspot_hidden"), 64, new String[] { "0", "1" });
+                addInputRow(panel, gbc, 2, "inputInterface_hotspot_ssid_length",
+                                settings.get("inputInterface_hotspot_ssid_length"), 46, 1, "9");
+                addInputRow(panel, gbc, 3, "inputInterface_hotspot_password_length",
+                                settings.get("inputInterface_hotspot_password_length"), 46, 1, "9");
+                addInputRow(panel, gbc, 4, "inputInterface_hotspot_ssid",
+                                settings.get("inputInterface_hotspot_ssid"), 330, 32, "SSID name");
+                addInputRow(panel, gbc, 5, "inputInterface_hotspot_password",
+                                settings.get("inputInterface_hotspot_password"), 330, 32, "Password");
+                addSelectRow(panel, gbc, 6, "inputInterface_hotspot_ssid_policy",
+                                settings.get("inputInterface_hotspot_ssid_policy"), 330,
                                 new String[] { "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" });
-                addSelectRow(panel, gbc, 6, "inputInterface_hotspot_password_policy",
-                                hotspotSettings.get("inputInterface_hotspot_password_policy"), 330,
+                addSelectRow(panel, gbc, 7, "inputInterface_hotspot_password_policy",
+                                settings.get("inputInterface_hotspot_password_policy"), 330,
                                 new String[] { "alpha", "num", "alphanum", "alphanum-_", "alphanumSymbols" });
 
                 return panel;

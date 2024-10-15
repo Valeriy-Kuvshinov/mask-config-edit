@@ -25,21 +25,21 @@ public class MaskEditManager extends CustPanel {
         // General System settings. 1 - enabled. 0 - disabled
         Map<String, Object> generalSystemSettings = new HashMap<>();
         // Input settings
-        generalSystemSettings.put("Input_computer", 1);
-        generalSystemSettings.put("Input_cellular", 1);
-        generalSystemSettings.put("Input_secureIphone", 1);
-        generalSystemSettings.put("InputInterface_ethernet", 1);
-        generalSystemSettings.put("InputInterface_wifi", 1);
-        generalSystemSettings.put("InputInterface_usb", 1);
+        generalSystemSettings.put("Input_computer", "1");
+        generalSystemSettings.put("Input_cellular", "1");
+        generalSystemSettings.put("Input_secureIphone", "1");
+        generalSystemSettings.put("InputInterface_ethernet", "1");
+        generalSystemSettings.put("InputInterface_wifi", "1");
+        generalSystemSettings.put("InputInterface_usb", "1");
         // Output settings
-        generalSystemSettings.put("OutputInterface_ethernet", 1);
-        generalSystemSettings.put("OutputInterface_wifi", 1);
-        generalSystemSettings.put("OutputInterface_cellularModem", 1);
-        generalSystemSettings.put("Output_tor", 1);
-        generalSystemSettings.put("Output_proxy", 1);
-        generalSystemSettings.put("Output_vpn", 1);
-        generalSystemSettings.put("Output_vps", 1);
-        generalSystemSettings.put("Output_force_tor", 0);
+        generalSystemSettings.put("OutputInterface_ethernet", "1");
+        generalSystemSettings.put("OutputInterface_wifi", "1");
+        generalSystemSettings.put("OutputInterface_cellularModem", "1");
+        generalSystemSettings.put("Output_tor", "1");
+        generalSystemSettings.put("Output_proxy", "1");
+        generalSystemSettings.put("Output_vpn", "1");
+        generalSystemSettings.put("Output_vps", "1");
+        generalSystemSettings.put("Output_force_tor", "0");
         // Enforce the specific device
         generalSystemSettings.put("interfaceNames_input_usb", "227c369a1f027ece");
 
@@ -160,7 +160,7 @@ public class MaskEditManager extends CustPanel {
         // Hotspot settings
         Map<String, Object> hotspotSettings = new HashMap<>();
         // 1 for hidden, 0 for not hidden
-        hotspotSettings.put("inputInterface_hotspot_hidden", 0);
+        hotspotSettings.put("inputInterface_hotspot_hidden", "0");
         // ssid name. if empty a random ssid will be generated according to length
         // and policy
         hotspotSettings.put("inputInterface_hotspot_ssid", "AnonMask-Dev-V11");

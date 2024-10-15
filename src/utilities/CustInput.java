@@ -32,14 +32,14 @@ public class CustInput extends JComponent {
         this.borderColor = DEFAULT_BORDER_COLOR;
         this.textColor = DEFAULT_TEXT_COLOR;
 
-        initializeComponent(width, height, maxChars, alignmentX);
+        initInput(width, height, maxChars, alignmentX);
     }
 
     public interface TextChangeListener {
         void textChanged(String newText);
     }
 
-    private void initializeComponent(int width, int height, int maxChars, Float alignmentX) {
+    private void initInput(int width, int height, int maxChars, Float alignmentX) {
         setLayout(new BorderLayout());
         setOpaque(false);
 
@@ -51,10 +51,9 @@ public class CustInput extends JComponent {
         setMaxCharLimit(maxChars);
         add(textField, BorderLayout.CENTER);
 
-        var preferredSize = new Dimension(width, height);
-        setPreferredSize(preferredSize);
-        setMinimumSize(preferredSize);
-        setMaximumSize(preferredSize);
+        setPreferredSize(new Dimension(width, height));
+        setMinimumSize(new Dimension(width, height));
+        setMaximumSize(new Dimension(width, height));
 
         setupPlaceholder();
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
