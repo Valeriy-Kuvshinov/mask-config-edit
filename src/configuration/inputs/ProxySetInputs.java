@@ -2,6 +2,7 @@ package src.configuration.inputs;
 
 import java.awt.*;
 import java.util.*;
+import org.json.*;
 
 import src.configuration.*;
 import src.configuration.inputs.utilities.*;
@@ -32,7 +33,7 @@ public class ProxySetInputs extends CustPanel {
                 addSectionHeader(panel, gbc, row++, "General Settings");
 
                 addInputRow(panel, gbc, row++, "output_proxy_list_service",
-                                String.join(", ", (String[]) settings.get("output_proxy_list_service")),
+                                InputPanelUtils.jsonArrayToString(settings.get("output_proxy_list_service")),
                                 420, 64, "Proxy Services");
                 addInputRow(panel, gbc, row++, "output_proxy_default_service",
                                 settings.get("output_proxy_default_service"),
@@ -58,36 +59,37 @@ public class ProxySetInputs extends CustPanel {
                 addSectionHeader(panel, gbc, row++, "Proxy " + serviceNumber + " Settings");
 
                 var proxyServiceObj = settings.get(serviceName);
-                if (!(proxyServiceObj instanceof Map)) {
-                        System.err.println("Expected Map for " + serviceName + ", but got " +
+                if (!(proxyServiceObj instanceof JSONObject)) {
+                        System.err.println("Expected JSONObject for " + serviceName + ", but got " +
                                         (proxyServiceObj != null ? proxyServiceObj.getClass().getName() : "null"));
                         return row;
                 }
-                @SuppressWarnings("unchecked")
-                Map<String, Object> proxyService = (Map<String, Object>) proxyServiceObj;
+                JSONObject proxyService = (JSONObject) proxyServiceObj;
                 var suffix = String.valueOf(serviceNumber);
 
                 addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix,
-                                proxyService.get("output_proxy_service_" + suffix),
+                                proxyService.optString("output_proxy_service_" + suffix),
                                 420, 32, "Proxy Service " + suffix);
                 addInputRow(panel, gbc, row++, "service_expiration_date_proxy_" + suffix,
-                                proxyService.get("service_expiration_date_proxy_" + suffix),
+                                proxyService.optString("service_expiration_date_proxy_" + suffix),
                                 210, 10, "MM/DD/YYYY");
                 addInputRow(panel, gbc, row++, "output_proxy_list_countryCodes_" + suffix,
-                                InputPanelUtils.joinStringArray(
-                                                proxyService.get("output_proxy_list_countryCodes_" + suffix)),
+                                InputPanelUtils.jsonArrayToString(
+                                                proxyService.optJSONArray("output_proxy_list_countryCodes_" + suffix)),
                                 90, 2, "Country Codes");
                 addInputRow(panel, gbc, row++, "output_proxy_list_ips_" + suffix,
-                                InputPanelUtils.joinStringArray(proxyService.get("output_proxy_list_ips_" + suffix)),
+                                InputPanelUtils.jsonArrayToString(
+                                                proxyService.optJSONArray("output_proxy_list_ips_" + suffix)),
                                 420, 64, "IPs");
                 addInputRow(panel, gbc, row++, "output_proxy_list_ports_" + suffix,
-                                InputPanelUtils.joinStringArray(proxyService.get("output_proxy_list_ports_" + suffix)),
+                                InputPanelUtils.jsonArrayToString(
+                                                proxyService.optJSONArray("output_proxy_list_ports_" + suffix)),
                                 420, 64, "Ports");
                 addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_username",
-                                proxyService.get("output_proxy_service_" + suffix + "_username"),
+                                proxyService.optString("output_proxy_service_" + suffix + "_username"),
                                 420, 32, "Username");
                 addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_password",
-                                proxyService.get("output_proxy_service_" + suffix + "_password"),
+                                proxyService.optString("output_proxy_service_" + suffix + "_password"),
                                 420, 32, "Password");
 
                 return row;

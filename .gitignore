@@ -5,7 +5,10 @@
 *.properties
 
 # Certain JSON files
-/resources/json/vpn_servers_list.json
+/resources/json/*
+
+# lib files
+/lib/*
 
 # Visual Studio Code
 /.vscode/*

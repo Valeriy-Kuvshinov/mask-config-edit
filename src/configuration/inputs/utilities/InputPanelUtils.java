@@ -1,9 +1,10 @@
 package src.configuration.inputs.utilities;
 
 import java.awt.*;
-import java.util.stream.*;
+import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import org.json.*;
 
 import src.utilities.*;
 
@@ -96,22 +97,24 @@ public class InputPanelUtils {
     }
 
     // Method to join String arrays, Lists, or convert objects to strings
-    public static String joinStringArray(Object obj) {
-        if (obj instanceof String[]) {
-            return String.join(", ", (String[]) obj);
+    public static String jsonArrayToString(Object obj) {
+        if (obj instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) obj;
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                list.add(jsonArray.getString(i));
+            }
+            return String.join(", ", list);
         } else if (obj instanceof List<?>) {
             List<?> list = (List<?>) obj;
-            if (!list.isEmpty() && list.get(0) instanceof String) {
-                @SuppressWarnings("unchecked")
-                List<String> stringList = (List<String>) list;
-                return String.join(", ", stringList);
+            List<String> stringList = new ArrayList<>();
+            for (Object item : list) {
+                stringList.add(item != null ? item.toString() : "");
             }
-            return list.stream()
-                    .map(Object::toString)
-                    .collect(Collectors.joining(", "));
-        } else if (obj != null) {
-            return obj.toString();
+            return String.join(", ", stringList);
+        } else if (obj instanceof String[]) {
+            return String.join(", ", (String[]) obj);
         }
-        return "";
+        return obj != null ? obj.toString() : "";
     }
 }

@@ -2,6 +2,7 @@ package src.configuration.inputs;
 
 import java.awt.*;
 import java.util.*;
+import org.json.*;
 
 import src.configuration.*;
 import src.configuration.inputs.utilities.*;
@@ -32,7 +33,7 @@ public class VpnSetInputs extends CustPanel {
                 addSectionHeader(panel, gbc, row++, "General Settings");
 
                 addInputRow(panel, gbc, row++, "output_vpn_service_list",
-                                String.join(", ", (String[]) settings.get("output_vpn_service_list")),
+                                InputPanelUtils.jsonArrayToString(settings.get("output_vpn_service_list")),
                                 420, 64, "VPN Services");
                 addInputRow(panel, gbc, row++, "output_vpn_default_service",
                                 settings.get("output_vpn_default_service"),
@@ -58,34 +59,33 @@ public class VpnSetInputs extends CustPanel {
                 addSectionHeader(panel, gbc, row++, "VPN " + serviceNumber + " Settings");
 
                 var serviceObj = settings.get(serviceName);
-                if (!(serviceObj instanceof Map)) {
-                        System.err.println("Expected Map for " + serviceName + ", but got " +
+                if (!(serviceObj instanceof JSONObject)) {
+                        System.err.println("Expected JSONObject for " + serviceName + ", but got " +
                                         (serviceObj != null ? serviceObj.getClass().getName() : "null"));
                         return row;
                 }
-                @SuppressWarnings("unchecked")
-                Map<String, Object> vpnService = (Map<String, Object>) serviceObj;
+                JSONObject vpnService = (JSONObject) serviceObj;
                 var suffix = String.valueOf(serviceNumber);
 
                 addInputRow(panel, gbc, row++, "output_vpn_service_" + suffix,
-                                vpnService.get("output_vpn_service_" + suffix),
+                                vpnService.optString("output_vpn_service_" + suffix),
                                 330, 32, "VPN Service " + suffix);
                 addInputRow(panel, gbc, row++, "service_expiration_date_vpn_" + suffix,
-                                vpnService.get("service_expiration_date_vpn_" + suffix),
+                                vpnService.optString("service_expiration_date_vpn_" + suffix),
                                 210, 10, "MM/DD/YYYY");
                 addInputRow(panel, gbc, row++, "output_vpn_service_" + suffix + "_list_countryCodes",
-                                InputPanelUtils.joinStringArray(
-                                                vpnService.get("output_vpn_service_" + suffix + "_list_countryCodes")),
+                                InputPanelUtils.jsonArrayToString(vpnService
+                                                .optJSONArray("output_vpn_service_" + suffix + "_list_countryCodes")),
                                 420, 64, "Country Codes");
                 addInputRow(panel, gbc, row++, "output_vpn_service_" + suffix + "_username",
-                                vpnService.get("output_vpn_service_" + suffix + "_username"),
+                                vpnService.optString("output_vpn_service_" + suffix + "_username"),
                                 420, 32, "Username");
                 addInputRow(panel, gbc, row++, "output_vpn_service_" + suffix + "_password",
-                                vpnService.get("output_vpn_service_" + suffix + "_password"),
+                                vpnService.optString("output_vpn_service_" + suffix + "_password"),
                                 420, 32, "Password");
                 addInputRow(panel, gbc, row++, "output_vpn_service_" + suffix + "_list_servers",
-                                InputPanelUtils.joinStringArray(
-                                                vpnService.get("output_vpn_service_" + suffix + "_list_servers")),
+                                InputPanelUtils.jsonArrayToString(vpnService
+                                                .optJSONArray("output_vpn_service_" + suffix + "_list_servers")),
                                 420, 20898, "Servers");
 
                 return row;

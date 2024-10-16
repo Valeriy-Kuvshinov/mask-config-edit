@@ -127,7 +127,6 @@ public class PinPanel extends CustPanel {
             if (onPinVerifiedCallback != null)
                 onPinVerifiedCallback.run();
         } else if (enteredPin.equals(storedPin)) {
-            System.out.println("Pin Panel: Access granted!");
             if (onPinVerifiedCallback != null)
                 onPinVerifiedCallback.run();
         } else

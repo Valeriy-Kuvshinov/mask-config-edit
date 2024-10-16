@@ -30,10 +30,10 @@ public class TorSetInputs extends CustPanel {
         InputPanelUtils.addSectionHeader(panel, gbc, 0, "General Settings", LIGHT_COLOR);
 
         addInputRow(panel, gbc, 1, "output_tor_list_countryCodes",
-                InputPanelUtils.joinStringArray(settings.get("output_tor_list_countryCodes")),
+                InputPanelUtils.jsonArrayToString(settings.get("output_tor_list_countryCodes")),
                 420, 32, "at, ch, de, fr...");
         addInputRow(panel, gbc, 2, "output_tor_list_exit_nodes",
-                InputPanelUtils.joinStringArray(settings.get("output_tor_list_exit_nodes")),
+                InputPanelUtils.jsonArrayToString(settings.get("output_tor_list_exit_nodes")),
                 420, 20, "0.0.0");
         addInputRow(panel, gbc, 3, "output_tor_default_country",
                 settings.get("output_tor_default_country"),
