@@ -8,17 +8,20 @@ import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class TorSetInputs extends CustPanel {
+    private MaskEditManager manager;
+    private Map<String, Object> currentSettings;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public TorSetInputs() {
+    public TorSetInputs(MaskEditManager manager) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
+        this.manager = manager;
         initUI();
     }
 
     private void initUI() {
-        Map<String, Object> settings = MaskEditManager.getSettingsForCategory("Tor");
-        var combinedPanel = createInputsPanel(settings);
+        currentSettings = manager.getSettingsForCategory("Tor");
+        var combinedPanel = createInputsPanel(currentSettings);
         InputPanelUtils.initCommonUI(this, combinedPanel);
     }
 
@@ -29,21 +32,19 @@ public class TorSetInputs extends CustPanel {
 
         InputPanelUtils.addSectionHeader(panel, gbc, 0, "General Settings", LIGHT_COLOR);
 
-        addInputRow(panel, gbc, 1, "output_tor_list_countryCodes",
+        InputPanelUtils.addInputRow(panel, gbc, 1, "output_tor_list_countryCodes",
                 InputPanelUtils.jsonArrayToString(settings.get("output_tor_list_countryCodes")),
-                420, 32, "at, ch, de, fr...");
-        addInputRow(panel, gbc, 2, "output_tor_list_exit_nodes",
+                420, 32, "at, ch, de, fr...", LIGHT_COLOR,
+                manager, "Tor", currentSettings);
+        InputPanelUtils.addInputRow(panel, gbc, 2, "output_tor_list_exit_nodes",
                 InputPanelUtils.jsonArrayToString(settings.get("output_tor_list_exit_nodes")),
-                420, 20, "0.0.0");
-        addInputRow(panel, gbc, 3, "output_tor_default_country",
+                420, 20, "0.0.0", LIGHT_COLOR,
+                manager, "Tor", currentSettings);
+        InputPanelUtils.addInputRow(panel, gbc, 3, "output_tor_default_country",
                 settings.get("output_tor_default_country"),
-                120, 4, "00");
+                120, 4, "00", LIGHT_COLOR,
+                manager, "Tor", currentSettings);
 
         return panel;
-    }
-
-    private void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
-            int inputWidth, int maxChars, String placeholder) {
-        InputPanelUtils.addInputRow(panel, gbc, row, key, value, inputWidth, maxChars, placeholder, LIGHT_COLOR);
     }
 }

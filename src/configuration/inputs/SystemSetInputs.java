@@ -8,17 +8,20 @@ import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class SystemSetInputs extends CustPanel {
+    private MaskEditManager manager;
+    private Map<String, Object> currentSettings;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public SystemSetInputs() {
+    public SystemSetInputs(MaskEditManager manager) {
         super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
+        this.manager = manager;
         initializeUI();
     }
 
     private void initializeUI() {
-        Map<String, Object> settings = MaskEditManager.getSettingsForCategory("System");
-        var combinedPanel = createInputsPanel(settings);
+        currentSettings = manager.getSettingsForCategory("System");
+        var combinedPanel = createInputsPanel(currentSettings);
         InputPanelUtils.initCommonUI(this, combinedPanel);
     }
 
@@ -33,7 +36,8 @@ public class SystemSetInputs extends CustPanel {
         gbc.gridy++;
         gbc.gridwidth = 6;
         InputPanelUtils.addInputRow(panel, gbc, gbc.gridy, "interfaceNames_input_usb",
-                settings.get("interfaceNames_input_usb"), 330, 16, "xxxxxxxxxxxxxxxx", LIGHT_COLOR);
+                settings.get("interfaceNames_input_usb"), 330, 16, "xxxxxxxxxxxxxxxx",
+                LIGHT_COLOR, manager, "System", currentSettings);
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Input settings
@@ -81,6 +85,8 @@ public class SystemSetInputs extends CustPanel {
             gbc.anchor = GridBagConstraints.EAST;
 
             var select = new CustSelect(64, 54, new String[] { "0", "1" }, value.toString(), Component.LEFT_ALIGNMENT);
+            select.addActionListener(e -> InputPanelUtils.updateSetting(manager, "System",
+                    currentSettings, key, select.getSelectedItem()));
             panel.add(select, gbc);
         }
     }

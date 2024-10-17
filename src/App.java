@@ -2,6 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 import src.introduction.*;
 import src.configuration.*;
@@ -9,8 +10,9 @@ import src.configuration.*;
 public class App extends JFrame {
     private PinPanel pinPanel;
     private FlashPanel flashPanel;
-    private MaskEditManager maskEditingManager;
     private MaskChoicePanel maskChoicePanel;
+    private MaskEditManager maskEditingManager;
+    private MaskPreview maskPreview;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
     private boolean pinVerified = false;
@@ -33,10 +35,10 @@ public class App extends JFrame {
         setLayout(new BorderLayout());
 
         pinPanel = new PinPanel(this::onPinVerified);
-        flashPanel = new FlashPanel(this::navigateBackToPinPanel);
-        maskChoicePanel = new MaskChoicePanel(this::createMask, this::editMask, this::navigateBackToPinPanel);
+        flashPanel = new FlashPanel(this::navigateBackPinPanel);
+        maskChoicePanel = new MaskChoicePanel(this::createMask, this::editMask, this::navigateBackPinPanel);
 
-        add(pinPanel, BorderLayout.CENTER);
+        switchToPanel(pinPanel);
 
         // Start the detection of an USB
         flashDriveDetect = new FlashDriveDetect(this::handleFlashDriveConnection);
@@ -57,82 +59,61 @@ public class App extends JFrame {
         }
     }
 
-    // Continue to mask choice menu / USB plugging screen
     private void onPinVerified() {
         pinVerified = true;
-
-        SwingUtilities.invokeLater(() -> {
-            remove(pinPanel);
-            add(flashDriveConnected ? maskChoicePanel : flashPanel, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        });
+        SwingUtilities.invokeLater(() -> switchToPanel(flashDriveConnected ? maskChoicePanel : flashPanel));
     }
 
-    // Create a new mask with default settings
     private void createMask(String maskName) {
         System.out.println("Creating mask: " + maskName);
-        maskEditingManager = new MaskEditManager(maskName, this::navigateBackToMaskChoice);
-
-        remove(maskChoicePanel);
-        add(maskEditingManager, BorderLayout.CENTER);
-        revalidate();
-        repaint();
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice, this::previewMask, true);
+        switchToPanel(maskEditingManager);
     }
 
-    // Load up a selected mask with its existing settings
     private void editMask(String maskName) {
         System.out.println("Editing mask: " + maskName);
-        maskEditingManager = new MaskEditManager(maskName, this::navigateBackToMaskChoice);
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice, this::previewMask, false);
+        switchToPanel(maskEditingManager);
+    }
 
-        remove(maskChoicePanel);
-        add(maskEditingManager, BorderLayout.CENTER);
+    private void previewMask() {
+        SwingUtilities.invokeLater(() -> {
+            Map<String, Map<String, Object>> previewSettings = maskEditingManager.getLoadedSettings();
+            maskPreview = new MaskPreview(maskEditingManager.getMaskName(), previewSettings, this::navigateBackToEdit);
+            switchToPanel(maskPreview);
+        });
+    }
+
+    private void navigateBackPinPanel() {
+        pinVerified = false;
+        SwingUtilities.invokeLater(() -> switchToPanel(pinPanel));
+    }
+
+    private void navigateBackMaskChoice() {
+        SwingUtilities.invokeLater(() -> switchToPanel(maskChoicePanel));
+    }
+
+    private void navigateBackToEdit() {
+        SwingUtilities.invokeLater(() -> switchToPanel(maskEditingManager));
+    }
+
+    private void onFlashDriveConnected() {
+        if (pinVerified) {
+            SwingUtilities.invokeLater(() -> switchToPanel(maskChoicePanel));
+        }
+    }
+
+    private void onFlashDriveDisconnected() {
+        if (pinVerified) {
+            SwingUtilities.invokeLater(() -> switchToPanel(flashPanel));
+        }
+    }
+
+    private void switchToPanel(JComponent panel) {
+        getContentPane().removeAll();
+        add(panel, BorderLayout.CENTER);
         revalidate();
         repaint();
-    }
-
-    private void navigateBackToPinPanel() {
-        pinVerified = false;
-
-        SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
-            add(pinPanel, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        });
-    }
-
-    private void navigateBackToMaskChoice() {
-        SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
-            add(maskChoicePanel, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        });
-    }
-
-    // Continue / return to mask choice menu
-    private void onFlashDriveConnected() {
-        SwingUtilities.invokeLater(() -> {
-            if (pinVerified) {
-                remove(flashPanel);
-                add(maskChoicePanel, BorderLayout.CENTER);
-                revalidate();
-                repaint();
-            }
-        });
-    }
-
-    // revert back to USB plugging screen
-    private void onFlashDriveDisconnected() {
-        SwingUtilities.invokeLater(() -> {
-            if (pinVerified) {
-                getContentPane().removeAll();
-                add(flashPanel, BorderLayout.CENTER);
-                revalidate();
-                repaint();
-            }
-        });
     }
 
     public void shutdown() {

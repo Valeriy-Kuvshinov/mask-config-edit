@@ -8,17 +8,20 @@ import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class VpsSetInputs extends CustPanel {
+        private MaskEditManager manager;
+        private Map<String, Object> currentSettings;
         private static final Color DARK_COLOR = new Color(30, 30, 30);
         private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-        public VpsSetInputs() {
+        public VpsSetInputs(MaskEditManager manager) {
                 super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
+                this.manager = manager;
                 initUI();
         }
 
         private void initUI() {
-                Map<String, Object> settings = MaskEditManager.getSettingsForCategory("VPS");
-                var combinedPanel = createInputsPanel(settings);
+                currentSettings = manager.getSettingsForCategory("VPS");
+                var combinedPanel = createInputsPanel(currentSettings);
                 InputPanelUtils.initCommonUI(this, combinedPanel);
         }
 
@@ -29,39 +32,38 @@ public class VpsSetInputs extends CustPanel {
 
                 InputPanelUtils.addSectionHeader(panel, gbc, 0, "General Settings", LIGHT_COLOR);
 
-                addInputRow(panel, gbc, 1, "output_vps_service", settings.get("output_vps_service"),
-                                330, 32, "VPS Service");
-                addInputRow(panel, gbc, 2, "service_expiration_date_vps", settings.get("service_expiration_date_vps"),
-                                330, 10, "MM/DD/YYYY");
-                addInputRow(panel, gbc, 3, "output_vps_service_countryCode",
+                InputPanelUtils.addInputRow(panel, gbc, 1, "output_vps_service", settings.get("output_vps_service"),
+                                330, 32, "VPS Service", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 2, "service_expiration_date_vps",
+                                settings.get("service_expiration_date_vps"),
+                                330, 10, "MM/DD/YYYY", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 3, "output_vps_service_countryCode",
                                 settings.get("output_vps_service_countryCode"),
-                                90, 2, "Country Code");
-                addInputRow(panel, gbc, 4, "output_vps_service_country",
+                                90, 2, "Country Code", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 4, "output_vps_service_country",
                                 settings.get("output_vps_service_country"),
-                                330, 32, "Country");
-                addInputRow(panel, gbc, 5, "output_vps_service_server", settings.get("output_vps_service_server"),
-                                330, 32, "Server");
-                addSelectRow(panel, gbc, 6, "output_vps_service_preferred_transport",
+                                330, 32, "Country", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 5, "output_vps_service_server",
+                                settings.get("output_vps_service_server"),
+                                330, 32, "Server", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addSelectRow(panel, gbc, 6, "output_vps_service_preferred_transport",
                                 settings.get("output_vps_service_preferred_transport"),
-                                112, new String[] { "tcp", "udp" });
-                addInputRow(panel, gbc, 7, "output_vps_service_username",
+                                112, new String[] { "tcp", "udp" }, LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 7, "output_vps_service_username",
                                 settings.get("output_vps_service_username"),
-                                330, 32, "Username");
-                addInputRow(panel, gbc, 8, "output_vps_service_password",
+                                330, 32, "Username", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, 8, "output_vps_service_password",
                                 settings.get("output_vps_service_password"),
-                                330, 32, "Password");
+                                330, 32, "Password", LIGHT_COLOR,
+                                manager, "VPS", currentSettings);
 
                 return panel;
-        }
-
-        private void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
-                        int inputWidth, int maxChars, String placeholder) {
-                InputPanelUtils.addInputRow(panel, gbc, row, key, value, inputWidth, maxChars, placeholder,
-                                LIGHT_COLOR);
-        }
-
-        private void addSelectRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
-                        int selectWidth, String[] options) {
-                InputPanelUtils.addSelectRow(panel, gbc, row, key, value, selectWidth, options, LIGHT_COLOR);
         }
 }

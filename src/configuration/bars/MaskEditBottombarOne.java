@@ -4,18 +4,18 @@ import java.awt.*;
 
 import src.utilities.*;
 
-public class MaskEditBottombar extends CustPanel {
+public class MaskEditBottombarOne extends CustPanel {
     private Runnable onBackAction;
-    private CustComponent leftButton;
+    private Runnable onPreviewAction;
     private CustComponent centerText;
-    private CustComponent rightButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color GRAY_COLOR = new Color(50, 50, 50);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-    public MaskEditBottombar(Runnable onBackAction) {
+    public MaskEditBottombarOne(Runnable onBackAction, Runnable onPreviewAction) {
         super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
+        this.onPreviewAction = onPreviewAction;
         initUI();
     }
 
@@ -47,7 +47,7 @@ public class MaskEditBottombar extends CustPanel {
     }
 
     private CustComponent createLeftButton() {
-        leftButton = new CustComponent("Back", 100, 42, 20, 10,
+        var leftButton = new CustComponent("Back", 100, 42, 20, 10,
                 Component.LEFT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         leftButton.addButtonBehavior(onBackAction);
         return leftButton;
@@ -60,9 +60,9 @@ public class MaskEditBottombar extends CustPanel {
     }
 
     private CustComponent createRightButton() {
-        rightButton = new CustComponent("Save", 100, 42, 20, 10,
+        var rightButton = new CustComponent("Preview", null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
-        rightButton.addButtonBehavior(() -> System.out.println("Save button clicked"));
+        rightButton.addButtonBehavior(onPreviewAction);
         return rightButton;
     }
 }

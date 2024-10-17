@@ -6,9 +6,6 @@ import java.awt.*;
 import src.utilities.*;
 
 public class FlashPanel extends CustPanel {
-    private CustLabel messageLabel;
-    private CustLabel connectLabel;
-    private CustComponent backButton;
     private static final Color DARK_COLOR = new Color(30, 30, 30);
     private static final Color GRAY_COLOR = new Color(50, 50, 50);
     private static final Color LIGHT_COLOR = new Color(220, 220, 220);
@@ -26,13 +23,13 @@ public class FlashPanel extends CustPanel {
         wrapperPanel.add(mainPanel);
 
         var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
-        messageLabel = new CustLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
+        var messageLabel = new CustLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
 
         var connectIcon = new ImageIcon("resources/images/connect-flash.png");
-        connectLabel = new CustLabel(connectIcon, Component.CENTER_ALIGNMENT);
+        var connectLabel = new CustLabel(connectIcon, Component.CENTER_ALIGNMENT);
         connectLabel.setLabelSize(180, 180);
 
-        backButton = new CustComponent("Back", 100, 60, 20, 10,
+        var backButton = new CustComponent("Back", 100, 60, 20, 10,
                 Component.CENTER_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
         backButton.addButtonBehavior(onBackClick);
 

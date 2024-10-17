@@ -9,17 +9,20 @@ import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class ProxySetInputs extends CustPanel {
+        private MaskEditManager manager;
+        private Map<String, Object> currentSettings;
         private static final Color DARK_COLOR = new Color(30, 30, 30);
         private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
-        public ProxySetInputs() {
+        public ProxySetInputs(MaskEditManager manager) {
                 super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
+                this.manager = manager;
                 initUI();
         }
 
         private void initUI() {
-                Map<String, Object> settings = MaskEditManager.getSettingsForCategory("Proxy");
-                var combinedPanel = createInputsPanel(settings);
+                currentSettings = manager.getSettingsForCategory("Proxy");
+                var combinedPanel = createInputsPanel(currentSettings);
                 InputPanelUtils.initCommonUI(this, combinedPanel);
         }
 
@@ -30,20 +33,24 @@ public class ProxySetInputs extends CustPanel {
                 var row = 0;
 
                 // General Proxy Settings
-                addSectionHeader(panel, gbc, row++, "General Settings");
+                InputPanelUtils.addSectionHeader(panel, gbc, row++, "General Settings", LIGHT_COLOR);
 
-                addInputRow(panel, gbc, row++, "output_proxy_list_service",
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_list_service",
                                 InputPanelUtils.jsonArrayToString(settings.get("output_proxy_list_service")),
-                                420, 64, "Proxy Services");
-                addInputRow(panel, gbc, row++, "output_proxy_default_service",
+                                420, 64, "Proxy Services", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_default_service",
                                 settings.get("output_proxy_default_service"),
-                                330, 32, "Default Service");
-                addInputRow(panel, gbc, row++, "output_proxy_default_country",
+                                330, 32, "Default Service", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_default_country",
                                 settings.get("output_proxy_default_country"),
-                                90, 2, "Default Country");
-                addInputRow(panel, gbc, row++, "output_proxy_default_server",
+                                90, 2, "Default Country", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_default_server",
                                 settings.get("output_proxy_default_server"),
-                                330, 32, "Default Server");
+                                330, 32, "Default Server", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
 
                 // Individual Proxy Settings
                 String[] services = { "ProxyServiceOne", "ProxyServiceTwo", "ProxyServiceThree" };
@@ -56,7 +63,8 @@ public class ProxySetInputs extends CustPanel {
 
         private int addProxyServiceSettings(CustPanel panel, GridBagConstraints gbc, int row,
                         Map<String, Object> settings, String serviceName, int serviceNumber) {
-                addSectionHeader(panel, gbc, row++, "Proxy " + serviceNumber + " Settings");
+                InputPanelUtils.addSectionHeader(panel, gbc, row++, "Proxy " + serviceNumber + " Settings",
+                                LIGHT_COLOR);
 
                 var proxyServiceObj = settings.get(serviceName);
                 if (!(proxyServiceObj instanceof JSONObject)) {
@@ -67,41 +75,38 @@ public class ProxySetInputs extends CustPanel {
                 JSONObject proxyService = (JSONObject) proxyServiceObj;
                 var suffix = String.valueOf(serviceNumber);
 
-                addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix,
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix,
                                 proxyService.optString("output_proxy_service_" + suffix),
-                                420, 32, "Proxy Service " + suffix);
-                addInputRow(panel, gbc, row++, "service_expiration_date_proxy_" + suffix,
+                                420, 32, "Proxy Service " + suffix, LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "service_expiration_date_proxy_" + suffix,
                                 proxyService.optString("service_expiration_date_proxy_" + suffix),
-                                210, 10, "MM/DD/YYYY");
-                addInputRow(panel, gbc, row++, "output_proxy_list_countryCodes_" + suffix,
-                                InputPanelUtils.jsonArrayToString(
-                                                proxyService.optJSONArray("output_proxy_list_countryCodes_" + suffix)),
-                                90, 2, "Country Codes");
-                addInputRow(panel, gbc, row++, "output_proxy_list_ips_" + suffix,
-                                InputPanelUtils.jsonArrayToString(
-                                                proxyService.optJSONArray("output_proxy_list_ips_" + suffix)),
-                                420, 64, "IPs");
-                addInputRow(panel, gbc, row++, "output_proxy_list_ports_" + suffix,
-                                InputPanelUtils.jsonArrayToString(
-                                                proxyService.optJSONArray("output_proxy_list_ports_" + suffix)),
-                                420, 64, "Ports");
-                addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_username",
+                                210, 10, "MM/DD/YYYY", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_list_countryCodes_" + suffix,
+                                InputPanelUtils.jsonArrayToString(proxyService.optJSONArray(
+                                                "output_proxy_list_countryCodes_" + suffix)),
+                                90, 2, "Country Codes", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_list_ips_" + suffix,
+                                InputPanelUtils.jsonArrayToString(proxyService.optJSONArray(
+                                                "output_proxy_list_ips_" + suffix)),
+                                420, 64, "IPs", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_list_ports_" + suffix,
+                                InputPanelUtils.jsonArrayToString(proxyService.optJSONArray(
+                                                "output_proxy_list_ports_" + suffix)),
+                                420, 64, "Ports", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_username",
                                 proxyService.optString("output_proxy_service_" + suffix + "_username"),
-                                420, 32, "Username");
-                addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_password",
+                                420, 32, "Username", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
+                InputPanelUtils.addInputRow(panel, gbc, row++, "output_proxy_service_" + suffix + "_password",
                                 proxyService.optString("output_proxy_service_" + suffix + "_password"),
-                                420, 32, "Password");
+                                420, 32, "Password", LIGHT_COLOR,
+                                manager, "Proxy", currentSettings);
 
                 return row;
-        }
-
-        private void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
-                        int inputWidth, int maxChars, String placeholder) {
-                InputPanelUtils.addInputRow(panel, gbc, row, key, value, inputWidth, maxChars, placeholder,
-                                LIGHT_COLOR);
-        }
-
-        private void addSectionHeader(CustPanel panel, GridBagConstraints gbc, int row, String headerText) {
-                InputPanelUtils.addSectionHeader(panel, gbc, row, headerText, LIGHT_COLOR);
         }
 }
