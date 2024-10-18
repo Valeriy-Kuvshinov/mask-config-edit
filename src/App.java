@@ -2,7 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
+import java.util.*;
 
 import src.introduction.*;
 import src.configuration.*;
@@ -78,7 +78,8 @@ public class App extends JFrame {
 
     private void previewMask() {
         SwingUtilities.invokeLater(() -> {
-            Map<String, Map<String, Object>> previewSettings = maskEditingManager.getLoadedSettings();
+            LinkedHashMap<String, LinkedHashMap<String, Object>> previewSettings = maskEditingManager
+                    .getLoadedSettings();
             maskPreview = new MaskPreview(maskEditingManager.getMaskName(), previewSettings, this::navigateBackToEdit);
             switchToPanel(maskPreview);
         });

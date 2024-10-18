@@ -11,18 +11,14 @@ public class CustPanel extends JPanel {
     private Color borderColor;
     private int paddingX;
     private int paddingY;
-
-    // Default values
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
-    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustPanel(LayoutManager layout, Color backgroundColor, Color borderColor, Float alignmentX,
             int borderRadius, int paddingX, int paddingY) {
         super(layout instanceof BoxLayout ? null : layout);
         setOpaque(false);
-        this.backgroundColor = backgroundColor != null ? backgroundColor : DEFAULT_BACKGROUND_COLOR;
-        this.borderColor = borderColor != null ? borderColor : DEFAULT_BORDER_COLOR;
+        this.backgroundColor = backgroundColor != null ? backgroundColor : ColorPalette.LIGHT_ONE;
+        this.borderColor = borderColor != null ? borderColor : ColorPalette.DARK_ONE;
         this.borderRadius = borderRadius;
         this.paddingX = paddingX;
         this.paddingY = paddingY;

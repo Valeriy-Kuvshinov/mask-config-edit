@@ -1,7 +1,7 @@
 package src.configuration.inputs;
 
 import java.awt.*;
-import java.util.Map;
+import java.util.*;
 
 import src.configuration.*;
 import src.configuration.inputs.utilities.*;
@@ -9,12 +9,10 @@ import src.utilities.*;
 
 public class SystemSetInputs extends CustPanel {
     private MaskEditManager manager;
-    private Map<String, Object> currentSettings;
-    private static final Color DARK_COLOR = new Color(30, 30, 30);
-    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
+    private LinkedHashMap<String, Object> currentSettings;
 
     public SystemSetInputs(MaskEditManager manager) {
-        super(new BorderLayout(), DARK_COLOR, null, null, 0, 15, 15);
+        super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
         this.manager = manager;
         initializeUI();
     }
@@ -25,19 +23,19 @@ public class SystemSetInputs extends CustPanel {
         InputPanelUtils.initCommonUI(this, combinedPanel);
     }
 
-    private CustPanel createInputsPanel(Map<String, Object> settings) {
-        var panel = new CustPanel(new GridBagLayout(), DARK_COLOR, null, null, 0, 0, 0);
+    private CustPanel createInputsPanel(LinkedHashMap<String, Object> settings) {
+        var panel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
 
-        InputPanelUtils.addSectionHeader(panel, gbc, 0, "Inputs Settings", LIGHT_COLOR);
+        InputPanelUtils.addSectionHeader(panel, gbc, 0, "Inputs Settings", ColorPalette.LIGHT_ONE);
 
         // interfaceNames_input_usb label + input
         gbc.gridy++;
         gbc.gridwidth = 6;
         InputPanelUtils.addInputRow(panel, gbc, gbc.gridy, "interfaceNames_input_usb",
                 settings.get("interfaceNames_input_usb"), 330, 16, "xxxxxxxxxxxxxxxx",
-                LIGHT_COLOR, manager, "System", currentSettings);
+                ColorPalette.LIGHT_ONE, manager, "System", currentSettings);
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Input settings
@@ -47,7 +45,7 @@ public class SystemSetInputs extends CustPanel {
         };
         addSettingsGroup(panel, gbc, settings, inputSettings, gbc.gridy + 1, 2, 3);
 
-        InputPanelUtils.addSectionHeader(panel, gbc, 4, "Output Settings", LIGHT_COLOR);
+        InputPanelUtils.addSectionHeader(panel, gbc, 4, "Output Settings", ColorPalette.LIGHT_ONE);
 
         // Output settings
         String[] outputSettings = {
@@ -59,7 +57,7 @@ public class SystemSetInputs extends CustPanel {
         return panel;
     }
 
-    private void addSettingsGroup(CustPanel panel, GridBagConstraints gbc, Map<String, Object> settings,
+    private void addSettingsGroup(CustPanel panel, GridBagConstraints gbc, LinkedHashMap<String, Object> settings,
             String[] settingKeys, int startRow, int rows, int cols) {
         for (var i = 0; i < settingKeys.length; i++) {
             var row = startRow + (i / cols);
@@ -75,7 +73,7 @@ public class SystemSetInputs extends CustPanel {
             gbc.weightx = 1.0;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.WEST;
-            var label = new CustLabel(key, LIGHT_COLOR, 16, Component.LEFT_ALIGNMENT);
+            var label = new CustLabel(key, ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT);
             panel.add(label, gbc);
 
             // Select

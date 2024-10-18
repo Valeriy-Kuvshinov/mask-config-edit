@@ -8,12 +8,9 @@ public class MaskEditBottombarOne extends CustPanel {
     private Runnable onBackAction;
     private Runnable onPreviewAction;
     private CustComponent centerText;
-    private static final Color DARK_COLOR = new Color(30, 30, 30);
-    private static final Color GRAY_COLOR = new Color(50, 50, 50);
-    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public MaskEditBottombarOne(Runnable onBackAction, Runnable onPreviewAction) {
-        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
+        super(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         this.onPreviewAction = onPreviewAction;
         initUI();
@@ -48,20 +45,20 @@ public class MaskEditBottombarOne extends CustPanel {
 
     private CustComponent createLeftButton() {
         var leftButton = new CustComponent("Back", 100, 42, 20, 10,
-                Component.LEFT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+                Component.LEFT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
         leftButton.addButtonBehavior(onBackAction);
         return leftButton;
     }
 
     private CustComponent createCenterText() {
         centerText = new CustComponent("Enjoy editing!", null, 42, 20, 10,
-                Component.CENTER_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
+                Component.CENTER_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_ONE);
         return centerText;
     }
 
     private CustComponent createRightButton() {
         var rightButton = new CustComponent("Preview", null, 42, 20, 10,
-                Component.RIGHT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+                Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
         rightButton.addButtonBehavior(onPreviewAction);
         return rightButton;
     }

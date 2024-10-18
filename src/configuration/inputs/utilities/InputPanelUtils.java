@@ -29,7 +29,7 @@ public class InputPanelUtils {
     // Inputs created by this method are tied to a form with listeners
     public static void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
             int inputWidth, int maxChars, String placeholder, Color labelColor, MaskEditManager manager,
-            String category, Map<String, Object> currentSettings) {
+            String category, LinkedHashMap<String, Object> currentSettings) {
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Label
@@ -59,7 +59,7 @@ public class InputPanelUtils {
     // Selects created by this method are tied to a form with listeners
     public static void addSelectRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
             int selectWidth, String[] options, Color labelColor, MaskEditManager manager, String category,
-            Map<String, Object> currentSettings) {
+            LinkedHashMap<String, Object> currentSettings) {
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Label
@@ -126,8 +126,8 @@ public class InputPanelUtils {
     }
 
     // Method to update previewSettings displayed to the user while editing mask
-    public static void updateSetting(MaskEditManager manager, String category, Map<String, Object> currentSettings,
-            String key, Object value) {
+    public static void updateSetting(MaskEditManager manager, String category,
+            LinkedHashMap<String, Object> currentSettings, String key, Object value) {
         currentSettings.put(key, value);
         manager.updateSettings(category, currentSettings);
     }

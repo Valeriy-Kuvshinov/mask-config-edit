@@ -14,10 +14,7 @@ public class CustComponent extends JComponent {
     private Color originalBackgroundColor;
     private Color originalTextColor;
     private java.awt.event.MouseAdapter buttonBehavior;
-
-    // Default values
-    protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
-    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
+    private static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 24);
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustComponent(String text, Integer width, Integer height, int paddingX, int paddingY,
@@ -25,7 +22,7 @@ public class CustComponent extends JComponent {
         this.text = text;
 
         this.backgroundColor = backgroundColor;
-        this.borderColor = DEFAULT_BORDER_COLOR;
+        this.borderColor = ColorPalette.DARK_ONE;
         this.textColor = textColor;
 
         // Ensure button colors are not lost during hovering
@@ -110,11 +107,25 @@ public class CustComponent extends JComponent {
     }
 
     public void addButtonBehavior(Runnable clickAction) {
-        removeButtonBehavior(); // Remove existing behavior if any
         buttonBehavior = new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                clickAction.run();
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                setBackgroundColor(originalTextColor.darker());
+                setColor(originalBackgroundColor.brighter());
+            }
+
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                if (contains(evt.getPoint())) {
+                    // Reset to original state before performing the action
+                    setBackgroundColor(originalBackgroundColor);
+                    setColor(originalTextColor);
+                    clickAction.run();
+                } else {
+                    // If released outside, just reset to original state
+                    setBackgroundColor(originalBackgroundColor);
+                    setColor(originalTextColor);
+                }
             }
 
             @Override

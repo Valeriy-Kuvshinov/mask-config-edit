@@ -6,12 +6,9 @@ import src.utilities.*;
 
 public class MaskEditBottombarTwo extends CustPanel {
     private Runnable onBackAction;
-    private static final Color DARK_COLOR = new Color(30, 30, 30);
-    private static final Color GRAY_COLOR = new Color(50, 50, 50);
-    private static final Color LIGHT_COLOR = new Color(220, 220, 220);
 
     public MaskEditBottombarTwo(Runnable onBackAction) {
-        super(new GridBagLayout(), DARK_COLOR, null, null, 0, 15, 15);
+        super(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         initUI();
     }
@@ -45,20 +42,20 @@ public class MaskEditBottombarTwo extends CustPanel {
 
     private CustComponent createLeftButton() {
         var leftButton = new CustComponent("Back", 100, 42, 20, 10,
-                Component.LEFT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+                Component.LEFT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
         leftButton.addButtonBehavior(onBackAction);
         return leftButton;
     }
 
     private CustComponent createCenterText() {
         var centerText = new CustComponent("Review your changes before saving!", null, 42, 20, 10,
-                Component.CENTER_ALIGNMENT, LIGHT_COLOR, DARK_COLOR);
+                Component.CENTER_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_ONE);
         return centerText;
     }
 
     private CustComponent createRightButton() {
         var rightButton = new CustComponent("Save", 100, 42, 20, 10,
-                Component.RIGHT_ALIGNMENT, LIGHT_COLOR, GRAY_COLOR);
+                Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
         rightButton.addButtonBehavior(() -> System.out.println("Start saving process"));
         return rightButton;
     }

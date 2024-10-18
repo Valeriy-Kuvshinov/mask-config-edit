@@ -13,21 +13,15 @@ public class CustSelect extends JComboBox<String> {
     private Color borderColor;
     private Color textColor;
     private boolean isFocused = false;
-
-    // Default values
-    protected static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 32);
-    private static final Color DEFAULT_BACKGROUND_COLOR = new Color(220, 220, 220); // Light gray
-    private static final Color DEFAULT_BORDER_COLOR = new Color(30, 30, 30); // Dark gray
-    private static final Color DEFAULT_TEXT_COLOR = new Color(30, 30, 30); // Dark gray
-    private static final Color FOCUS_BORDER_COLOR = new Color(0, 120, 215); // Blue-ish color for focus
+    private static final Font DEFAULT_FONT = new Font("Roboto", Font.BOLD, 32);
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     public CustSelect(int width, int height, String[] options, String defaultValue, Float alignmentX) {
         super(options);
 
-        this.backgroundColor = DEFAULT_BACKGROUND_COLOR;
-        this.borderColor = DEFAULT_BORDER_COLOR;
-        this.textColor = DEFAULT_TEXT_COLOR;
+        this.backgroundColor = ColorPalette.LIGHT_ONE;
+        this.borderColor = ColorPalette.DARK_ONE;
+        this.textColor = ColorPalette.DARK_ONE;
 
         initSelect(width, height, defaultValue, alignmentX);
     }
@@ -88,7 +82,7 @@ public class CustSelect extends JComboBox<String> {
         g2.fill(roundedRectangle);
 
         // Paint border
-        g2.setColor(isFocused ? FOCUS_BORDER_COLOR : borderColor);
+        g2.setColor(isFocused ? ColorPalette.BLUE_ONE : borderColor);
         g2.setStroke(new BasicStroke(2));
         g2.draw(roundedRectangle);
 
