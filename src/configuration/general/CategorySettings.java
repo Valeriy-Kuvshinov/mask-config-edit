@@ -25,4 +25,15 @@ public class CategorySettings {
     public List<String> getSettingKeys() {
         return new ArrayList<>(keyOrder);
     }
+
+    // Add this method to handle nested settings
+    public void setNestedSetting(String serviceKey, String nestedKey, Object value) {
+        CategorySettings nestedSettings = (CategorySettings) settings.get(serviceKey);
+        if (nestedSettings == null) {
+            nestedSettings = new CategorySettings();
+            settings.put(serviceKey, nestedSettings);
+            keyOrder.add(serviceKey);
+        }
+        nestedSettings.setSetting(nestedKey, value);
+    }
 }

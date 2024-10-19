@@ -39,22 +39,18 @@ public class MaskSettings {
                     var categoryObject = jsonObject.getJSONObject(category);
                     var categorySettings = new CategorySettings();
 
-                    Iterator<String> keys = categoryObject.keys();
-                    while (keys.hasNext()) {
-                        var settingKey = keys.next();
-                        var value = categoryObject.get(settingKey);
+                    for (String key : categoryObject.keySet()) {
+                        var value = categoryObject.get(key);
                         if (value instanceof JSONObject) {
                             // Handle nested objects (VPN and Proxy services)
                             var nestedSettings = new CategorySettings();
                             var nestedObject = (JSONObject) value;
-                            Iterator<String> nestedKeys = nestedObject.keys();
-                            while (nestedKeys.hasNext()) {
-                                String nestedKey = nestedKeys.next();
+                            for (String nestedKey : nestedObject.keySet()) {
                                 nestedSettings.setSetting(nestedKey, nestedObject.get(nestedKey));
                             }
-                            categorySettings.setSetting(settingKey, nestedSettings);
+                            categorySettings.setSetting(key, nestedSettings);
                         } else {
-                            categorySettings.setSetting(settingKey, value);
+                            categorySettings.setSetting(key, value);
                         }
                     }
                     settings.addCategory(category, categorySettings);

@@ -99,7 +99,25 @@ public class MaskEditManager extends CustPanel {
     }
 
     public void updateSetting(String category, String key, Object value) {
-        loadedSettings.getCategory(category).setSetting(key, value);
+        CategorySettings categorySettings = loadedSettings.getCategory(category);
+        if (key.contains("_") && !isTopLevelKey(category, key)) {
+            String[] parts = key.split("_", 2);
+            String serviceKey = parts[0];
+            String nestedKey = parts[1];
+            CategorySettings nestedSettings = (CategorySettings) categorySettings.getSetting(serviceKey);
+            if (nestedSettings == null) {
+                nestedSettings = new CategorySettings();
+                categorySettings.setSetting(serviceKey, nestedSettings);
+            }
+            nestedSettings.setSetting(nestedKey, value);
+        } else {
+            categorySettings.setSetting(key, value);
+        }
+    }
+
+    private boolean isTopLevelKey(String category, String key) {
+        CategorySettings categorySettings = loadedSettings.getCategory(category);
+        return categorySettings.getSetting(key) != null;
     }
 
     public MaskSettings getLoadedSettings() {

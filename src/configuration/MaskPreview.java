@@ -72,35 +72,116 @@ public class MaskPreview extends CustPanel {
                         Component.LEFT_ALIGNMENT), gbc);
                 gbc.gridy++;
 
-                for (String key : categorySettings.getSettingKeys()) {
-                    var value = categorySettings.getSetting(key);
-
-                    if (value instanceof CategorySettings) {
-                        // Handle nested structures (VPN and Proxy services)
-                        previewComponent.add(new CustLabel(key, ColorPalette.LIGHT_ONE, 18,
-                                Component.LEFT_ALIGNMENT), gbc);
-                        gbc.gridy++;
-                        gbc.insets.left += 20; // Indent nested items
-
-                        var nestedSettings = (CategorySettings) value;
-                        for (String nestedKey : nestedSettings.getSettingKeys()) {
-                            var nestedValue = nestedSettings.getSetting(nestedKey);
-                            var stringValue = InputPanelUtils.jsonArrayToString(nestedValue);
-                            previewComponent.add(new CustLabel(nestedKey + ": " + stringValue,
-                                    ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT), gbc);
-                            gbc.gridy++;
-                        }
-                        gbc.insets.left -= 20; // Reset indent
-                    } else {
-                        var stringValue = InputPanelUtils.jsonArrayToString(value);
-                        previewComponent.add(new CustLabel(key + ": " + stringValue,
-                                ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT), gbc);
-                        gbc.gridy++;
-                    }
+                switch (category) {
+                    case "System":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "interfaceNames_input_usb", "Input_computer", "Input_cellular", "Input_secureIphone",
+                                "InputInterface_ethernet", "InputInterface_wifi", "InputInterface_usb",
+                                "OutputInterface_ethernet", "OutputInterface_wifi", "OutputInterface_cellularModem",
+                                "Output_tor", "Output_proxy", "Output_vpn", "Output_vps", "Output_force_tor"
+                        });
+                        break;
+                    case "Tor":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "output_tor_list_countryCodes", "output_tor_list_exit_nodes",
+                                "output_tor_default_country"
+                        });
+                        break;
+                    case "VPN":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "output_vpn_service_list", "output_vpn_default_service",
+                                "output_vpn_default_country", "output_vpn_default_server"
+                        });
+                        addNestedVpnSettings(previewComponent, gbc, categorySettings);
+                        break;
+                    case "VPS":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "output_vps_service", "service_expiration_date_vps", "output_vps_service_countryCode",
+                                "output_vps_service_country", "output_vps_service_server",
+                                "output_vps_service_preferred_transport",
+                                "output_vps_service_username", "output_vps_service_password"
+                        });
+                        break;
+                    case "Proxy":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "output_proxy_list_service", "output_proxy_default_service",
+                                "output_proxy_default_country", "output_proxy_default_server"
+                        });
+                        addNestedProxySettings(previewComponent, gbc, categorySettings);
+                        break;
+                    case "Hotspot":
+                        addOrderedSettings(previewComponent, gbc, categorySettings, new String[] {
+                                "inputInterface_hotspot_hidden", "inputInterface_hotspot_ssid_length",
+                                "inputInterface_hotspot_password_length", "inputInterface_hotspot_ssid_policy",
+                                "inputInterface_hotspot_password_policy", "inputInterface_hotspot_ssid",
+                                "inputInterface_hotspot_password"
+                        });
+                        break;
                 }
                 gbc.gridy++;
             }
         }
         return previewComponent;
+    }
+
+    private void addOrderedSettings(CustPanel panel, GridBagConstraints gbc, CategorySettings settings, String[] keys) {
+        for (String key : keys) {
+            var value = settings.getSetting(key);
+            var stringValue = InputPanelUtils.jsonArrayToString(value);
+            panel.add(new CustLabel(key + ": " + stringValue,
+                    ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT), gbc);
+            gbc.gridy++;
+        }
+    }
+
+    private void addNestedVpnSettings(CustPanel panel, GridBagConstraints gbc, CategorySettings settings) {
+        String[] vpnServices = { "VPNServiceOne", "VPNServiceTwo", "VPNServiceThree" };
+        for (int i = 0; i < vpnServices.length; i++) {
+            String service = vpnServices[i];
+            var nestedSettings = (CategorySettings) settings.getSetting(service);
+            panel.add(new CustLabel(service, ColorPalette.LIGHT_ONE, 18,
+                    Component.LEFT_ALIGNMENT), gbc);
+            gbc.gridy++;
+            gbc.insets.left += 20;
+
+            String serviceNumber = String.valueOf(i + 1);
+            String[] serviceKeys = {
+                    "output_vpn_service_" + serviceNumber,
+                    "service_expiration_date_vpn_" + serviceNumber,
+                    "output_vpn_service_" + serviceNumber + "_list_countryCodes",
+                    "output_vpn_service_" + serviceNumber + "_list_servers",
+                    "output_vpn_service_" + serviceNumber + "_username",
+                    "output_vpn_service_" + serviceNumber + "_password"
+            };
+            addOrderedSettings(panel, gbc, nestedSettings, serviceKeys);
+
+            gbc.insets.left -= 20;
+        }
+    }
+
+    private void addNestedProxySettings(CustPanel panel, GridBagConstraints gbc, CategorySettings settings) {
+        String[] proxyServices = { "ProxyServiceOne", "ProxyServiceTwo", "ProxyServiceThree" };
+        for (int i = 0; i < proxyServices.length; i++) {
+            String service = proxyServices[i];
+            var nestedSettings = (CategorySettings) settings.getSetting(service);
+            panel.add(new CustLabel(service, ColorPalette.LIGHT_ONE, 18,
+                    Component.LEFT_ALIGNMENT), gbc);
+            gbc.gridy++;
+            gbc.insets.left += 20;
+
+            String serviceNumber = String.valueOf(i + 1);
+            String[] serviceKeys = {
+                    "output_proxy_service_" + serviceNumber,
+                    "service_expiration_date_proxy_" + serviceNumber,
+                    "output_proxy_list_countryCodes_" + serviceNumber,
+                    "output_proxy_list_ips_" + serviceNumber,
+                    "output_proxy_list_ports_" + serviceNumber,
+                    "output_proxy_service_" + serviceNumber + "_username",
+                    "output_proxy_service_" + serviceNumber + "_password"
+            };
+            addOrderedSettings(panel, gbc, nestedSettings, serviceKeys);
+
+            gbc.insets.left -= 20;
+        }
     }
 }
