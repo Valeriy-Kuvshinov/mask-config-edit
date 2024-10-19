@@ -6,7 +6,8 @@ import java.util.List;
 import javax.swing.*;
 import org.json.*;
 
-import src.configuration.MaskEditManager;
+import src.configuration.*;
+import src.configuration.general.*;
 import src.utilities.*;
 
 // Specialized class for configuartion forms
@@ -29,7 +30,7 @@ public class InputPanelUtils {
     // Inputs created by this method are tied to a form with listeners
     public static void addInputRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
             int inputWidth, int maxChars, String placeholder, Color labelColor, MaskEditManager manager,
-            String category, LinkedHashMap<String, Object> currentSettings) {
+            String category, CategorySettings currentSettings) {
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Label
@@ -51,7 +52,7 @@ public class InputPanelUtils {
 
         var input = new CustInput(inputWidth, 54, maxChars, placeholder, Component.LEFT_ALIGNMENT);
         input.setText(value != null ? value.toString() : "");
-        input.addTextChangeListener(newText -> updateSetting(manager, category, currentSettings, key, newText));
+        input.addTextChangeListener(newText -> updateSetting(manager, category, key, newText));
         panel.add(input, gbc);
     }
 
@@ -59,7 +60,7 @@ public class InputPanelUtils {
     // Selects created by this method are tied to a form with listeners
     public static void addSelectRow(CustPanel panel, GridBagConstraints gbc, int row, String key, Object value,
             int selectWidth, String[] options, Color labelColor, MaskEditManager manager, String category,
-            LinkedHashMap<String, Object> currentSettings) {
+            CategorySettings currentSettings) {
         gbc.insets = new Insets(10, 15, 10, 15);
 
         // Label
@@ -81,7 +82,7 @@ public class InputPanelUtils {
 
         var select = new CustSelect(selectWidth, 54, options, value != null ? value.toString() : options[0],
                 Component.LEFT_ALIGNMENT);
-        select.addActionListener(e -> updateSetting(manager, category, currentSettings, key, select.getSelectedItem()));
+        select.addActionListener(e -> updateSetting(manager, category, key, select.getSelectedItem()));
         panel.add(select, gbc);
     }
 
@@ -126,9 +127,7 @@ public class InputPanelUtils {
     }
 
     // Method to update previewSettings displayed to the user while editing mask
-    public static void updateSetting(MaskEditManager manager, String category,
-            LinkedHashMap<String, Object> currentSettings, String key, Object value) {
-        currentSettings.put(key, value);
-        manager.updateSettings(category, currentSettings);
+    public static void updateSetting(MaskEditManager manager, String category, String key, Object value) {
+        manager.updateSetting(category, key, value);
     }
 }

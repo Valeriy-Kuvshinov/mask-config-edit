@@ -2,10 +2,10 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 import src.introduction.*;
 import src.configuration.*;
+import src.configuration.general.*;
 
 public class App extends JFrame {
     private PinPanel pinPanel;
@@ -78,8 +78,7 @@ public class App extends JFrame {
 
     private void previewMask() {
         SwingUtilities.invokeLater(() -> {
-            LinkedHashMap<String, LinkedHashMap<String, Object>> previewSettings = maskEditingManager
-                    .getLoadedSettings();
+            MaskSettings previewSettings = maskEditingManager.getLoadedSettings();
             maskPreview = new MaskPreview(maskEditingManager.getMaskName(), previewSettings, this::navigateBackToEdit);
             switchToPanel(maskPreview);
         });

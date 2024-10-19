@@ -1,13 +1,11 @@
 package src.configuration;
 
 import java.util.*;
-import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import org.json.*;
-import java.nio.file.*;
 
 import src.configuration.bars.*;
+import src.configuration.general.*;
 import src.configuration.inputs.*;
 import src.utilities.*;
 
@@ -19,11 +17,8 @@ public class MaskEditManager extends CustPanel {
     private CustPanel bottomSection;
     private CustPanel contentPanel;
     private CustScroll scrollPane;
-    private Map<String, JPanel> switchPanels = new LinkedHashMap<>();
-    private LinkedHashMap<String, LinkedHashMap<String, Object>> loadedSettings = new LinkedHashMap<>();
-    private static final LinkedHashMap<String, LinkedHashMap<String, Object>> DEFAULT_SETTINGS = new LinkedHashMap<>();
-    private static final String DEFAULT_SETTINGS_PATH = "/resources/json/default_settings.json";
-    public static final List<String> CATEGORY_ORDER = List.of("System", "Tor", "VPN", "VPS", "Proxy", "Hotspot");
+    private Map<String, JPanel> switchPanels = new HashMap<>();
+    private MaskSettings loadedSettings;
 
     public MaskEditManager(String maskName, Runnable onBackAction, Runnable onPreviewAction, boolean isCreating) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
@@ -31,13 +26,11 @@ public class MaskEditManager extends CustPanel {
         this.onBackAction = onBackAction;
         this.onPreviewAction = onPreviewAction;
 
-        loadDefaultSettings();
-
         if (isCreating) {
-            loadedSettings = new LinkedHashMap<>(DEFAULT_SETTINGS);
+            loadedSettings = MaskSettings.DEFAULT_SETTINGS.copy();
         } else {
-            // TODO: Load existing settings from file or database
-            loadedSettings = new LinkedHashMap<>(DEFAULT_SETTINGS);
+            // TODO: Load existing settings from file on USB
+            loadedSettings = MaskSettings.DEFAULT_SETTINGS.copy();
         }
 
         initializeSwitchPanels();
@@ -101,51 +94,15 @@ public class MaskEditManager extends CustPanel {
         });
     }
 
-    private void loadDefaultSettings() {
-        try {
-            String content = new String(
-                    Files.readAllBytes(Paths.get(getClass().getResource(DEFAULT_SETTINGS_PATH).toURI())));
-            JSONObject jsonObject = new JSONObject(content);
-
-            for (String category : CATEGORY_ORDER) {
-                if (jsonObject.has(category)) {
-                    JSONObject categoryObject = jsonObject.getJSONObject(category);
-                    LinkedHashMap<String, Object> categoryMap = new LinkedHashMap<>();
-
-                    for (String settingKey : categoryObject.keySet()) {
-                        Object value = categoryObject.get(settingKey);
-                        if (value instanceof JSONObject) {
-                            // Handle nested objects (VPN and Proxy services)
-                            LinkedHashMap<String, Object> nestedMap = new LinkedHashMap<>();
-                            JSONObject nestedObject = (JSONObject) value;
-                            for (String nestedKey : nestedObject.keySet()) {
-                                nestedMap.put(nestedKey, nestedObject.get(nestedKey));
-                            }
-                            categoryMap.put(settingKey, nestedMap);
-                        } else {
-                            categoryMap.put(settingKey, value);
-                        }
-                    }
-                    DEFAULT_SETTINGS.put(category, categoryMap);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error loading default settings: " + e.getMessage(), "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+    public CategorySettings getSettingsForCategory(String category) {
+        return loadedSettings.getCategory(category);
     }
 
-    public LinkedHashMap<String, Object> getSettingsForCategory(String category) {
-        return loadedSettings.computeIfAbsent(category,
-                k -> new LinkedHashMap<>(DEFAULT_SETTINGS.getOrDefault(k, new LinkedHashMap<>())));
+    public void updateSetting(String category, String key, Object value) {
+        loadedSettings.getCategory(category).setSetting(key, value);
     }
 
-    public void updateSettings(String category, LinkedHashMap<String, Object> settings) {
-        loadedSettings.put(category, settings);
-    }
-
-    public LinkedHashMap<String, LinkedHashMap<String, Object>> getLoadedSettings() {
+    public MaskSettings getLoadedSettings() {
         return loadedSettings;
     }
 

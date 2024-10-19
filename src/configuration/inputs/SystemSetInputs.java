@@ -1,15 +1,15 @@
 package src.configuration.inputs;
 
 import java.awt.*;
-import java.util.*;
 
 import src.configuration.*;
+import src.configuration.general.*;
 import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
 public class SystemSetInputs extends CustPanel {
     private MaskEditManager manager;
-    private LinkedHashMap<String, Object> currentSettings;
+    private CategorySettings currentSettings;
 
     public SystemSetInputs(MaskEditManager manager) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
@@ -23,7 +23,7 @@ public class SystemSetInputs extends CustPanel {
         InputPanelUtils.initCommonUI(this, combinedPanel);
     }
 
-    private CustPanel createInputsPanel(LinkedHashMap<String, Object> settings) {
+    private CustPanel createInputsPanel(CategorySettings settings) {
         var panel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         var gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 15, 10, 15);
@@ -34,7 +34,7 @@ public class SystemSetInputs extends CustPanel {
         gbc.gridy++;
         gbc.gridwidth = 6;
         InputPanelUtils.addInputRow(panel, gbc, gbc.gridy, "interfaceNames_input_usb",
-                settings.get("interfaceNames_input_usb"), 330, 16, "xxxxxxxxxxxxxxxx",
+                settings.getSetting("interfaceNames_input_usb"), 330, 16, "xxxxxxxxxxxxxxxx",
                 ColorPalette.LIGHT_ONE, manager, "System", currentSettings);
         gbc.insets = new Insets(10, 15, 10, 15);
 
@@ -57,14 +57,14 @@ public class SystemSetInputs extends CustPanel {
         return panel;
     }
 
-    private void addSettingsGroup(CustPanel panel, GridBagConstraints gbc, LinkedHashMap<String, Object> settings,
+    private void addSettingsGroup(CustPanel panel, GridBagConstraints gbc, CategorySettings settings,
             String[] settingKeys, int startRow, int rows, int cols) {
         for (var i = 0; i < settingKeys.length; i++) {
             var row = startRow + (i / cols);
             var col = i % cols;
 
             var key = settingKeys[i];
-            var value = settings.get(key);
+            var value = settings.getSetting(key);
 
             // Label
             gbc.gridx = col * 2;
@@ -83,8 +83,8 @@ public class SystemSetInputs extends CustPanel {
             gbc.anchor = GridBagConstraints.EAST;
 
             var select = new CustSelect(64, 54, new String[] { "0", "1" }, value.toString(), Component.LEFT_ALIGNMENT);
-            select.addActionListener(e -> InputPanelUtils.updateSetting(manager, "System",
-                    currentSettings, key, select.getSelectedItem()));
+            select.addActionListener(e -> InputPanelUtils.updateSetting(manager,
+                    "System", key, select.getSelectedItem()));
             panel.add(select, gbc);
         }
     }

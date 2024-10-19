@@ -1,11 +1,10 @@
 package src.configuration;
 
-import java.util.*;
-import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 
 import src.configuration.bars.*;
+import src.configuration.general.*;
 import src.configuration.inputs.utilities.*;
 import src.utilities.*;
 
@@ -15,11 +14,9 @@ public class MaskPreview extends CustPanel {
     private CustPanel topSection;
     private CustPanel bottomSection;
     private CustScroll scrollPane;
-    private LinkedHashMap<String, LinkedHashMap<String, Object>> previewSettings;
-    private static final List<String> CATEGORY_ORDER = List.of("System", "Tor", "VPN", "VPS", "Proxy", "Hotspot");
+    private MaskSettings previewSettings;
 
-    public MaskPreview(String maskName, LinkedHashMap<String, LinkedHashMap<String, Object>> previewSettings,
-            Runnable onBackAction) {
+    public MaskPreview(String maskName, MaskSettings previewSettings, Runnable onBackAction) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         this.maskName = maskName;
         this.previewSettings = previewSettings;
@@ -66,35 +63,33 @@ public class MaskPreview extends CustPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.insets = new Insets(5, 15, 5, 15);
 
-        for (String category : CATEGORY_ORDER) {
-            LinkedHashMap<String, Object> categorySettings = previewSettings.get(category);
-            if (categorySettings != null && !categorySettings.isEmpty()) {
+        for (String category : MaskSettings.CATEGORY_ORDER) {
+            var categorySettings = previewSettings.getCategory(category);
+            if (categorySettings != null) {
                 previewComponent.add(new CustLabel(category, ColorPalette.LIGHT_ONE, 20,
                         Component.LEFT_ALIGNMENT), gbc);
                 gbc.gridy++;
 
-                for (Map.Entry<String, Object> entry : categorySettings.entrySet()) {
-                    var key = entry.getKey();
-                    var value = entry.getValue();
+                for (String key : categorySettings.getSettingKeys()) {
+                    var value = categorySettings.getSetting(key);
 
-                    if (value instanceof LinkedHashMap) {
+                    if (value instanceof CategorySettings) {
                         // Handle nested structures (VPN and Proxy services)
                         previewComponent.add(new CustLabel(key, ColorPalette.LIGHT_ONE, 18,
                                 Component.LEFT_ALIGNMENT), gbc);
                         gbc.gridy++;
                         gbc.insets.left += 20; // Indent nested items
 
-                        @SuppressWarnings("unchecked")
-                        LinkedHashMap<String, Object> nestedMap = (LinkedHashMap<String, Object>) value;
-                        for (Map.Entry<String, Object> nestedEntry : nestedMap.entrySet()) {
-                            var nestedValue = InputPanelUtils.jsonArrayToString(nestedEntry.getValue());
-                            previewComponent.add(new CustLabel(nestedEntry.getKey() + ": " + nestedValue,
+                        var nestedSettings = (CategorySettings) value;
+                        for (String nestedKey : nestedSettings.getSettingKeys()) {
+                            var nestedValue = nestedSettings.getSetting(nestedKey);
+                            var stringValue = InputPanelUtils.jsonArrayToString(nestedValue);
+                            previewComponent.add(new CustLabel(nestedKey + ": " + stringValue,
                                     ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT), gbc);
                             gbc.gridy++;
                         }
-
                         gbc.insets.left -= 20; // Reset indent
                     } else {
                         var stringValue = InputPanelUtils.jsonArrayToString(value);

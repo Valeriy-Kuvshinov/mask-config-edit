@@ -4,12 +4,13 @@ import java.awt.*;
 import java.util.*;
 
 import src.configuration.*;
+import src.configuration.general.MaskSettings;
 import src.utilities.*;
 
 public class MaskEditMiddlebar extends CustPanel {
     private MaskEditManager manager;
     private Map<String, CustComponent> buttons = new LinkedHashMap<>();
-    private String selectedLabel = MaskEditManager.CATEGORY_ORDER.get(0); // Default selected option
+    private String selectedLabel = MaskSettings.CATEGORY_ORDER.get(0); // Default selected option
 
     public MaskEditMiddlebar(MaskEditManager manager) {
         super(new FlowLayout(FlowLayout.CENTER, 50, 10), ColorPalette.DARK_ONE, null, null, 0, 15, 0);
@@ -18,7 +19,7 @@ public class MaskEditMiddlebar extends CustPanel {
     }
 
     private void initUI() {
-        for (String label : MaskEditManager.CATEGORY_ORDER) {
+        for (String label : MaskSettings.CATEGORY_ORDER) {
             CustComponent button = createButton(label);
             buttons.put(label, button);
             add(button);
