@@ -13,11 +13,9 @@ public class MaskEditManager extends CustPanel {
     private String maskName;
     private Runnable onBackAction;
     private Runnable onPreviewAction;
-    private CustPanel topSection;
-    private CustPanel bottomSection;
     private CustPanel contentPanel;
     private CustScroll scrollPane;
-    private Map<String, JPanel> switchPanels = new HashMap<>();
+    private Map<String, CustPanel> switchPanels = new HashMap<>();
     private MaskSettings loadedSettings;
 
     public MaskEditManager(String maskName, Runnable onBackAction, Runnable onPreviewAction, boolean isCreating) {
@@ -49,15 +47,18 @@ public class MaskEditManager extends CustPanel {
 
     private void initializeUI() {
         // Create a panel to hold the topbar, middlebar, and separators
-        topSection = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-        topSection.add(new MaskEditTopbar(maskName));
+        var topSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        topSection.add(new MaskEditTopbar(maskName), BorderLayout.NORTH);
 
-        var separatorOne = new CustSeparator(new Color(100, 0, 150), 1);
-        topSection.add(separatorOne);
-        topSection.add(new MaskEditMiddlebar(this));
+        var middleSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
 
-        var separatorTwo = new CustSeparator(new Color(100, 0, 150), 1);
-        topSection.add(separatorTwo);
+        var separatorOne = new CustSeparator(ColorPalette.BLUE_TWO, 1);
+        middleSection.add(separatorOne, BorderLayout.NORTH);
+        middleSection.add(new MaskEditMiddlebar(this), BorderLayout.CENTER);
+
+        var separatorTwo = new CustSeparator(ColorPalette.BLUE_TWO, 1);
+        middleSection.add(separatorTwo, BorderLayout.SOUTH);
+        topSection.add(middleSection, BorderLayout.CENTER);
 
         add(topSection, BorderLayout.NORTH);
 
@@ -72,9 +73,9 @@ public class MaskEditManager extends CustPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Create a bottom section panel
-        bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        var bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
 
-        var separatorThree = new CustSeparator(new Color(100, 0, 150), 1);
+        var separatorThree = new CustSeparator(ColorPalette.BLUE_TWO, 1);
         bottomSection.add(separatorThree, BorderLayout.NORTH);
         bottomSection.add(new MaskEditBottombarOne(onBackAction, onPreviewAction), BorderLayout.CENTER);
 
@@ -98,6 +99,7 @@ public class MaskEditManager extends CustPanel {
         return loadedSettings.getCategory(category);
     }
 
+    // Handle settings nested inside categories and nested services
     public void updateSetting(String category, String key, Object value) {
         CategorySettings categorySettings = loadedSettings.getCategory(category);
         if (key.contains("_") && !isTopLevelKey(category, key)) {

@@ -10,7 +10,7 @@ public class MaskEditBottombarOne extends CustPanel {
     private CustComponent centerText;
 
     public MaskEditBottombarOne(Runnable onBackAction, Runnable onPreviewAction) {
-        super(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
+        super(new GridBagLayout(), ColorPalette.DARK_TWO, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         this.onPreviewAction = onPreviewAction;
         initUI();

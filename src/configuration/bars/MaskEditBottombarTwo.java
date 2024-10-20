@@ -8,7 +8,7 @@ public class MaskEditBottombarTwo extends CustPanel {
     private Runnable onBackAction;
 
     public MaskEditBottombarTwo(Runnable onBackAction) {
-        super(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
+        super(new GridBagLayout(), ColorPalette.DARK_TWO, null, null, 0, 15, 15);
         this.onBackAction = onBackAction;
         initUI();
     }

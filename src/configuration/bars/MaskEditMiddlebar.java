@@ -13,7 +13,7 @@ public class MaskEditMiddlebar extends CustPanel {
     private String selectedLabel = MaskSettings.CATEGORY_ORDER.get(0); // Default selected option
 
     public MaskEditMiddlebar(MaskEditManager manager) {
-        super(new FlowLayout(FlowLayout.CENTER, 50, 10), ColorPalette.DARK_ONE, null, null, 0, 15, 0);
+        super(new FlowLayout(FlowLayout.CENTER, 40, 10), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         this.manager = manager;
         initUI();
     }
