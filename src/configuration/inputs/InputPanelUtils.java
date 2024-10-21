@@ -6,8 +6,8 @@ import java.util.List;
 import javax.swing.*;
 import org.json.*;
 
-import src.configuration.*;
 import src.configuration.general.*;
+import src.configuration.main.*;
 import src.utilities.gui.*;
 
 // Specialized class for configuartion forms

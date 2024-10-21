@@ -2,8 +2,8 @@ package src.configuration.inputs;
 
 import java.awt.*;
 
-import src.configuration.*;
 import src.configuration.general.*;
+import src.configuration.main.*;
 import src.utilities.*;
 import src.utilities.gui.*;
 

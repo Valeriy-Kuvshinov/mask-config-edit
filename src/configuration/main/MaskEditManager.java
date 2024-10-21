@@ -1,4 +1,4 @@
-package src.configuration;
+package src.configuration.main;
 
 import java.util.*;
 import javax.swing.*;
@@ -80,7 +80,7 @@ public class MaskEditManager extends CustPanel implements MaskEditor {
     private CustPanel createBottomSection() {
         var bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         bottomSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.NORTH);
-        bottomSection.add(new MaskEditBottombarOne(onBackAction, onPreviewAction), BorderLayout.CENTER);
+        bottomSection.add(new MaskEditBottombar("edit", onBackAction, onPreviewAction), BorderLayout.CENTER);
         return bottomSection;
     }
 

@@ -5,12 +5,17 @@ import java.awt.*;
 import src.utilities.*;
 import src.utilities.gui.*;
 
-public class MaskEditBottombarTwo extends CustPanel {
+public class MaskEditBottombar extends CustPanel {
     private Runnable onBackAction;
+    private Runnable onRunAction;
+    private CustComponent centerText;
+    private String mode;
 
-    public MaskEditBottombarTwo(Runnable onBackAction) {
+    public MaskEditBottombar(String mode, Runnable onBackAction, Runnable onRunAction) {
         super(new GridBagLayout(), ColorPalette.DARK_TWO, null, null, 0, 15, 15);
+        this.mode = mode;
         this.onBackAction = onBackAction;
+        this.onRunAction = onRunAction;
         initUI();
     }
 
@@ -49,15 +54,23 @@ public class MaskEditBottombarTwo extends CustPanel {
     }
 
     private CustComponent createCenterText() {
-        var centerText = new CustComponent("Review your changes before saving!", null, 42, 20, 10,
+        var centerMessage = (mode.equals("edit")) ? "Enjoy Editing!" : "Confirm changes before saving!";
+        centerText = new CustComponent(centerMessage, null, 42, 20, 10,
                 Component.CENTER_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_ONE);
         return centerText;
     }
 
     private CustComponent createRightButton() {
-        var rightButton = new CustComponent("Save", 100, 42, 20, 10,
+        var buttonText = (mode.equals("edit")) ? "Preview" : "Proceed";
+        var rightButton = new CustComponent(buttonText, null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
-        rightButton.addButtonBehavior(() -> System.out.println("Start saving process"));
+
+        if (onRunAction != null) {
+            rightButton.addButtonBehavior(onRunAction);
+        } else {
+            rightButton.addButtonBehavior(() -> System.out.println(buttonText + "ing..."));
+        }
+
         return rightButton;
     }
 }

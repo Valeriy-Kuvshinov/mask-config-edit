@@ -3,8 +3,8 @@ package src.configuration.bars;
 import java.awt.*;
 import java.util.*;
 
-import src.configuration.*;
 import src.configuration.general.*;
+import src.configuration.main.*;
 import src.utilities.*;
 import src.utilities.gui.*;
 

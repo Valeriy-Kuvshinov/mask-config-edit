@@ -6,7 +6,7 @@ import java.awt.*;
 import src.interfaces.*;
 import src.introduction.*;
 import src.utilities.gui.*;
-import src.configuration.*;
+import src.configuration.main.*;
 
 public class App extends JFrame {
     private CustPanel pinPanel;

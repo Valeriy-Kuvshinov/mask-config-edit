@@ -1,4 +1,4 @@
-package src.configuration;
+package src.configuration.main;
 
 import java.awt.*;
 
@@ -40,13 +40,14 @@ public class MaskPreview extends CustPanel {
         contentPanel.add(content, BorderLayout.CENTER);
         scrollPane = new CustScroll(contentPanel);
         scrollPane.getViewport().setBackground(ColorPalette.DARK_ONE);
+        scrollPane.scrollToTop();
         return scrollPane;
     }
 
     private CustPanel createBottomSection() {
         var bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         bottomSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.NORTH);
-        bottomSection.add(new MaskEditBottombarTwo(onBackAction), BorderLayout.CENTER);
+        bottomSection.add(new MaskEditBottombar("preview", onBackAction, null), BorderLayout.CENTER);
         return bottomSection;
     }
 
@@ -56,6 +57,8 @@ public class MaskPreview extends CustPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         gbc.insets = new Insets(5, 15, 5, 15);
 
         for (var category : MaskSettings.CATEGORY_ORDER) {
@@ -178,10 +181,18 @@ public class MaskPreview extends CustPanel {
         for (var key : keys) {
             var value = settings.getSetting(key);
             var stringValue = InputPanelUtils.jsonArrayToString(value);
-            panel.add(new CustLabel(key + ": " + stringValue,
-                    ColorPalette.LIGHT_ONE, 16, Component.LEFT_ALIGNMENT), gbc);
+
+            var paragraph = new CustParagraph(key + ": ", stringValue, ColorPalette.LIGHT_ONE,
+                    16, Component.LEFT_ALIGNMENT);
+
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.weightx = 1.0;
+            panel.add(paragraph, gbc);
             gbc.gridy++;
+
+            paragraph.invalidate();
         }
+        panel.revalidate();
     }
 
     private void addEmptyLine(CustPanel panel, GridBagConstraints gbc) {
