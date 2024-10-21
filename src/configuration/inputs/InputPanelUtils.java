@@ -1,4 +1,4 @@
-package src.configuration.inputs.utilities;
+package src.configuration.inputs;
 
 import java.awt.*;
 import java.util.*;
@@ -8,7 +8,7 @@ import org.json.*;
 
 import src.configuration.*;
 import src.configuration.general.*;
-import src.utilities.*;
+import src.utilities.gui.*;
 
 // Specialized class for configuartion forms
 public class InputPanelUtils {
@@ -107,7 +107,7 @@ public class InputPanelUtils {
     // Method to join String arrays, Lists, or convert objects to strings
     public static String jsonArrayToString(Object obj) {
         if (obj instanceof JSONArray) {
-            JSONArray jsonArray = (JSONArray) obj;
+            var jsonArray = (JSONArray) obj;
             List<String> list = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 list.add(jsonArray.getString(i));

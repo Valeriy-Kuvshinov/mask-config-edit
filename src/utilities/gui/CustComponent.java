@@ -1,8 +1,10 @@
-package src.utilities;
+package src.utilities.gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+
+import src.utilities.*;
 
 public class CustComponent extends JComponent {
     // Used for creating customized bland or button components
@@ -29,10 +31,10 @@ public class CustComponent extends JComponent {
         this.originalBackgroundColor = backgroundColor;
         this.originalTextColor = textColor;
 
-        initializeComponent(width, height, paddingX, paddingY, alignmentX);
+        initComponent(width, height, paddingX, paddingY, alignmentX);
     }
 
-    private void initializeComponent(Integer width, Integer height, int paddingX, int paddingY, Float alignmentX) {
+    private void initComponent(Integer width, Integer height, int paddingX, int paddingY, Float alignmentX) {
         setOpaque(false);
         setForeground(this.textColor);
         setFont(DEFAULT_FONT);

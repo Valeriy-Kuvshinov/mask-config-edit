@@ -1,8 +1,10 @@
-package src.utilities;
+package src.utilities.gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+
+import src.utilities.*;
 
 public class CustPanel extends JPanel {
     // Used as a customized panel for holding various GUI stuff

@@ -1,10 +1,12 @@
-package src.utilities;
+package src.utilities.gui;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+
+import src.utilities.*;
 
 public class CustSelect extends JComboBox<String> {
     // Used as a customized select for forms in the app

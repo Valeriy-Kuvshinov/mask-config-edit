@@ -4,8 +4,8 @@ import java.awt.*;
 
 import src.configuration.*;
 import src.configuration.general.*;
-import src.configuration.inputs.utilities.*;
 import src.utilities.*;
+import src.utilities.gui.*;
 
 public class SystemSetInputs extends CustPanel {
     private MaskEditManager manager;
@@ -14,10 +14,10 @@ public class SystemSetInputs extends CustPanel {
     public SystemSetInputs(MaskEditManager manager) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 15, 15);
         this.manager = manager;
-        initializeUI();
+        initUI();
     }
 
-    private void initializeUI() {
+    private void initUI() {
         currentSettings = manager.getSettingsForCategory("System");
         var combinedPanel = createInputsPanel(currentSettings);
         InputPanelUtils.initCommonUI(this, combinedPanel);

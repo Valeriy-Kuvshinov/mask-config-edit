@@ -4,8 +4,8 @@ import java.awt.*;
 
 import src.configuration.*;
 import src.configuration.general.*;
-import src.configuration.inputs.utilities.*;
 import src.utilities.*;
+import src.utilities.gui.*;
 
 public class VpsSetInputs extends CustPanel {
         private MaskEditManager manager;

@@ -11,5 +11,5 @@ public class ColorPalette {
 
     public static final Color BLUE_ONE = new Color(0, 120, 215); // Sky Blue
     public static final Color BLUE_TWO = new Color(100, 0, 150); // Purple
-
+    public static final Color BLUE_THREE = new Color(0, 0, 53); // Dark Blue
 }

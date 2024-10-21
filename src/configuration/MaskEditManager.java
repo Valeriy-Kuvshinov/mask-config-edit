@@ -4,12 +4,14 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+import src.interfaces.*;
 import src.configuration.bars.*;
 import src.configuration.general.*;
 import src.configuration.inputs.*;
 import src.utilities.*;
+import src.utilities.gui.*;
 
-public class MaskEditManager extends CustPanel {
+public class MaskEditManager extends CustPanel implements MaskEditor {
     private String maskName;
     private Runnable onBackAction;
     private Runnable onPreviewAction;
@@ -31,11 +33,11 @@ public class MaskEditManager extends CustPanel {
             loadedSettings = MaskSettings.DEFAULT_SETTINGS.copy();
         }
 
-        initializeSwitchPanels();
-        initializeUI();
+        initSwitchPanels();
+        initUI();
     }
 
-    private void initializeSwitchPanels() {
+    private void initSwitchPanels() {
         // Connect switchpanels to the edit manager for inputs 2 way binding
         switchPanels.put("System", new SystemSetInputs(this));
         switchPanels.put("Tor", new TorSetInputs(this));
@@ -45,41 +47,41 @@ public class MaskEditManager extends CustPanel {
         switchPanels.put("Hotspot", new HotspotSetInputs(this));
     }
 
-    private void initializeUI() {
-        // Create a panel to hold the topbar, middlebar, and separators
+    private void initUI() {
+        add(createTopSection(), BorderLayout.NORTH);
+        add(createScrollPane(), BorderLayout.CENTER);
+        add(createBottomSection(), BorderLayout.SOUTH);
+    }
+
+    private CustPanel createTopSection() {
         var topSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         topSection.add(new MaskEditTopbar(maskName), BorderLayout.NORTH);
+        topSection.add(createMiddleSection(), BorderLayout.CENTER);
+        return topSection;
+    }
 
+    private CustPanel createMiddleSection() {
         var middleSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-
-        var separatorOne = new CustSeparator(ColorPalette.BLUE_TWO, 1);
-        middleSection.add(separatorOne, BorderLayout.NORTH);
+        middleSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.NORTH);
         middleSection.add(new MaskEditMiddlebar(this), BorderLayout.CENTER);
+        middleSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.SOUTH);
+        return middleSection;
+    }
 
-        var separatorTwo = new CustSeparator(ColorPalette.BLUE_TWO, 1);
-        middleSection.add(separatorTwo, BorderLayout.SOUTH);
-        topSection.add(middleSection, BorderLayout.CENTER);
-
-        add(topSection, BorderLayout.NORTH);
-
-        // Create a content panel to hold switchable panels
+    private CustScroll createScrollPane() {
         contentPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER); // Default of contentPanel
 
-        // Inserted contentPanel into a scrollable panel
         scrollPane = new CustScroll(contentPanel);
         scrollPane.getViewport().setBackground(ColorPalette.DARK_ONE);
+        return scrollPane;
+    }
 
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Create a bottom section panel
+    private CustPanel createBottomSection() {
         var bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-
-        var separatorThree = new CustSeparator(ColorPalette.BLUE_TWO, 1);
-        bottomSection.add(separatorThree, BorderLayout.NORTH);
+        bottomSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.NORTH);
         bottomSection.add(new MaskEditBottombarOne(onBackAction, onPreviewAction), BorderLayout.CENTER);
-
-        add(bottomSection, BorderLayout.SOUTH);
+        return bottomSection;
     }
 
     // Swtich between panels, and render the new selected panel
@@ -99,37 +101,22 @@ public class MaskEditManager extends CustPanel {
         return loadedSettings.getCategory(category);
     }
 
-    // Handle settings nested inside categories and nested services
+    // Handle settings nested inside categories
     public void updateSetting(String category, String key, Object value) {
-        CategorySettings categorySettings = loadedSettings.getCategory(category);
-        if (key.contains("_") && !isTopLevelKey(category, key)) {
-            String[] parts = key.split("_", 2);
-            String serviceKey = parts[0];
-            String nestedKey = parts[1];
-            CategorySettings nestedSettings = (CategorySettings) categorySettings.getSetting(serviceKey);
-            if (nestedSettings == null) {
-                nestedSettings = new CategorySettings();
-                categorySettings.setSetting(serviceKey, nestedSettings);
-            }
-            nestedSettings.setSetting(nestedKey, value);
-        } else {
-            categorySettings.setSetting(key, value);
-        }
-    }
-
-    private boolean isTopLevelKey(String category, String key) {
-        CategorySettings categorySettings = loadedSettings.getCategory(category);
-        return categorySettings.getSetting(key) != null;
-    }
-
-    public MaskSettings getLoadedSettings() {
-        return loadedSettings;
+        var categorySettings = loadedSettings.getCategory(category);
+        categorySettings.setSetting(key, value);
     }
 
     public void setOnPreviewAction(Runnable onPreviewAction) {
         this.onPreviewAction = onPreviewAction;
     }
 
+    @Override
+    public MaskSettings getLoadedSettings() {
+        return loadedSettings;
+    }
+
+    @Override
     public String getMaskName() {
         return this.maskName;
     }

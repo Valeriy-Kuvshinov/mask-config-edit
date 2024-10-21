@@ -1,4 +1,4 @@
-package src.utilities;
+package src.utilities.gui;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -6,6 +6,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+
+import src.utilities.*;
 
 public class CustInput extends JComponent {
     // Used as a customized input for forms in the app

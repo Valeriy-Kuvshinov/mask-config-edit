@@ -34,24 +34,13 @@ public class MaskSettings {
                     MaskSettings.class.getResource(DEFAULT_SETTINGS_PATH).toURI())));
             var jsonObject = new JSONObject(content);
 
-            for (String category : CATEGORY_ORDER) {
+            for (var category : CATEGORY_ORDER) {
                 if (jsonObject.has(category)) {
                     var categoryObject = jsonObject.getJSONObject(category);
                     var categorySettings = new CategorySettings();
 
-                    for (String key : categoryObject.keySet()) {
-                        var value = categoryObject.get(key);
-                        if (value instanceof JSONObject) {
-                            // Handle nested objects (VPN and Proxy services)
-                            var nestedSettings = new CategorySettings();
-                            var nestedObject = (JSONObject) value;
-                            for (String nestedKey : nestedObject.keySet()) {
-                                nestedSettings.setSetting(nestedKey, nestedObject.get(nestedKey));
-                            }
-                            categorySettings.setSetting(key, nestedSettings);
-                        } else {
-                            categorySettings.setSetting(key, value);
-                        }
+                    for (var key : categoryObject.keySet()) {
+                        categorySettings.setSetting(key, categoryObject.get(key));
                     }
                     settings.addCategory(category, categorySettings);
                 }
@@ -67,21 +56,21 @@ public class MaskSettings {
     // Create a deep copy of default_settings to edit freely when creating new mask
     public MaskSettings copy() {
         var newSettings = new MaskSettings();
-        for (String category : this.getCategoryNames()) {
+        for (var category : this.getCategoryNames()) {
             var originalCategorySettings = this.getCategory(category);
             var newCategorySettings = new CategorySettings();
-            for (String key : originalCategorySettings.getSettingKeys()) {
-                Object value = originalCategorySettings.getSetting(key);
-                if (value instanceof CategorySettings) {
-                    var nestedOriginal = (CategorySettings) value;
-                    var nestedNew = new CategorySettings();
-                    for (String nestedKey : nestedOriginal.getSettingKeys()) {
-                        nestedNew.setSetting(nestedKey, nestedOriginal.getSetting(nestedKey));
+            for (var key : originalCategorySettings.getSettingKeys()) {
+                var value = originalCategorySettings.getSetting(key);
+                // Create a deep copy of arrays
+                if (value instanceof JSONArray) {
+                    var originalArray = (JSONArray) value;
+                    var newArray = new JSONArray();
+                    for (var i = 0; i < originalArray.length(); i++) {
+                        newArray.put(originalArray.get(i));
                     }
-                    newCategorySettings.setSetting(key, nestedNew);
-                } else {
-                    newCategorySettings.setSetting(key, value);
+                    value = newArray;
                 }
+                newCategorySettings.setSetting(key, value);
             }
             newSettings.addCategory(category, newCategorySettings);
         }

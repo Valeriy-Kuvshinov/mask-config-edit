@@ -1,7 +1,9 @@
-package src.utilities;
+package src.utilities.gui;
 
 import javax.swing.*;
 import java.awt.*;
+
+import src.utilities.*;
 
 public class CustLabel extends JLabel {
     // Customizable label

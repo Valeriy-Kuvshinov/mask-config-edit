@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 
 import src.utilities.*;
+import src.utilities.gui.*;
 
 public class PinPanel extends CustPanel {
     private CustComponent[] pinDigits;
@@ -21,20 +22,38 @@ public class PinPanel extends CustPanel {
     }
 
     private void initUI() {
-        // Create a main panel to hold all components
-        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), ColorPalette.DARK_ONE, null, null,
-                0, 0, 0);
+        var wrapperPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE,
+                null, null, 0, 0, 0);
+        wrapperPanel.add(createMainPanel());
 
-        var wrapperPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-        wrapperPanel.add(mainPanel);
+        add(wrapperPanel, BorderLayout.CENTER);
+    }
 
-        // Check if PIN exists and set appropriate message
+    private CustPanel createMainPanel() {
+        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), ColorPalette.DARK_ONE,
+                null, null, 0, 0, 0);
+
+        mainPanel.add(Box.createVerticalGlue());
+        mainPanel.add(new CustLabel("Welcome to User Configuration!", null,
+                null, Component.CENTER_ALIGNMENT));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(createMessageLabel());
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        mainPanel.add(createPinDisplayPanel());
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        mainPanel.add(createButtonsPanel());
+        mainPanel.add(Box.createVerticalGlue());
+
+        return mainPanel;
+    }
+
+    private CustLabel createMessageLabel() {
         var initialMessage = getStoredPin() == null ? "Create your PIN" : "Enter your PIN";
-
-        var welcomeLabel = new CustLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
         messageLabel = new CustLabel(initialMessage, null, null, Component.CENTER_ALIGNMENT);
+        return messageLabel;
+    }
 
-        // Create PIN Display
+    private CustPanel createPinDisplayPanel() {
         var pinDisplayPanel = new CustPanel(new FlowLayout(FlowLayout.CENTER, 10, 0), ColorPalette.DARK_ONE, null,
                 Component.CENTER_ALIGNMENT, 0, 0, 0);
         pinDigits = new CustComponent[6];
@@ -43,20 +62,13 @@ public class PinPanel extends CustPanel {
                     null, ColorPalette.LIGHT_ONE, ColorPalette.DARK_ONE);
             pinDisplayPanel.add(pinDigits[i]);
         }
+        return pinDisplayPanel;
+    }
 
+    private CustPanel createButtonsPanel() {
+        buttonsPanel = new CustPanel(new GridLayout(4, 3, 10, 10), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         createPinButtons();
-
-        mainPanel.add(Box.createVerticalGlue());
-        mainPanel.add(welcomeLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(messageLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        mainPanel.add(pinDisplayPanel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        mainPanel.add(buttonsPanel);
-        mainPanel.add(Box.createVerticalGlue());
-
-        add(wrapperPanel, BorderLayout.CENTER);
+        return buttonsPanel;
     }
 
     // Create PIN Buttons

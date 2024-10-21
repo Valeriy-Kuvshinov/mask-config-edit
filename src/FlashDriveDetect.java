@@ -75,7 +75,7 @@ public class FlashDriveDetect {
         var currentDrives = getRemovableDrives();
 
         // Check for new drives
-        for (Path drive : currentDrives) {
+        for (var drive : currentDrives) {
             if (!connectedDrives.contains(drive)) {
                 System.out.println("New flash drive detected: " + drive);
                 connectedDrives.add(drive);
@@ -101,7 +101,7 @@ public class FlashDriveDetect {
         Set<Path> removableDrives = new HashSet<>();
         var fs = FileSystems.getDefault();
 
-        for (Path root : fs.getRootDirectories()) {
+        for (var root : fs.getRootDirectories()) {
             if (isRemovableDrive(root)) {
                 removableDrives.add(root);
             }

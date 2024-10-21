@@ -3,6 +3,7 @@ package src.configuration.bars;
 import java.awt.*;
 
 import src.utilities.*;
+import src.utilities.gui.*;
 
 public class MaskEditBottombarOne extends CustPanel {
     private Runnable onBackAction;
@@ -17,7 +18,7 @@ public class MaskEditBottombarOne extends CustPanel {
     }
 
     private void initUI() {
-        GridBagConstraints gbc = new GridBagConstraints();
+        var gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 5, 0, 5);
 

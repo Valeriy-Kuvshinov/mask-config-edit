@@ -3,16 +3,17 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 
+import src.interfaces.*;
 import src.introduction.*;
+import src.utilities.gui.*;
 import src.configuration.*;
-import src.configuration.general.*;
 
 public class App extends JFrame {
-    private PinPanel pinPanel;
-    private FlashPanel flashPanel;
-    private MaskChoicePanel maskChoicePanel;
-    private MaskEditManager maskEditingManager;
-    private MaskPreview maskPreview;
+    private CustPanel pinPanel;
+    private CustPanel flashPanel;
+    private CustPanel maskChoicePanel;
+    private CustPanel maskEditingManager;
+    private CustPanel maskPreview;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
     private boolean pinVerified = false;
@@ -78,8 +79,9 @@ public class App extends JFrame {
 
     private void previewMask() {
         SwingUtilities.invokeLater(() -> {
-            MaskSettings previewSettings = maskEditingManager.getLoadedSettings();
-            maskPreview = new MaskPreview(maskEditingManager.getMaskName(), previewSettings, this::navigateBackToEdit);
+            var editor = (MaskEditor) maskEditingManager;
+            var previewSettings = editor.getLoadedSettings();
+            maskPreview = new MaskPreview(editor.getMaskName(), previewSettings, this::navigateBackToEdit);
             switchToPanel(maskPreview);
         });
     }

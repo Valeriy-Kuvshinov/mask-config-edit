@@ -4,8 +4,9 @@ import java.awt.*;
 import java.util.*;
 
 import src.configuration.*;
-import src.configuration.general.MaskSettings;
+import src.configuration.general.*;
 import src.utilities.*;
+import src.utilities.gui.*;
 
 public class MaskEditMiddlebar extends CustPanel {
     private MaskEditManager manager;
@@ -13,7 +14,7 @@ public class MaskEditMiddlebar extends CustPanel {
     private String selectedLabel = MaskSettings.CATEGORY_ORDER.get(0); // Default selected option
 
     public MaskEditMiddlebar(MaskEditManager manager) {
-        super(new FlowLayout(FlowLayout.CENTER, 40, 10), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        super(new FlowLayout(FlowLayout.CENTER, 40, 10), ColorPalette.BLUE_THREE, null, null, 0, 0, 0);
         this.manager = manager;
         initUI();
     }
