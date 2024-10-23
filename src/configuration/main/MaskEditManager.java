@@ -1,7 +1,6 @@
 package src.configuration.main;
 
 import java.util.*;
-import javax.swing.*;
 import java.awt.*;
 
 import src.interfaces.*;
@@ -15,7 +14,7 @@ public class MaskEditManager extends CustPanel implements MaskEditor {
     private String maskName;
     private Runnable onBackAction;
     private Runnable onPreviewAction;
-    private CustPanel contentPanel;
+    private CustPanel mainPanel;
     private CustScroll scrollPane;
     private Map<String, CustPanel> switchPanels = new HashMap<>();
     private MaskSettings loadedSettings;
@@ -69,11 +68,10 @@ public class MaskEditManager extends CustPanel implements MaskEditor {
     }
 
     private CustScroll createScrollPane() {
-        contentPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-        contentPanel.add(switchPanels.get("System"), BorderLayout.CENTER); // Default of contentPanel
+        mainPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        mainPanel.add(switchPanels.get("System"), BorderLayout.CENTER); // Default switchable panel
 
-        scrollPane = new CustScroll(contentPanel);
-        scrollPane.getViewport().setBackground(ColorPalette.DARK_ONE);
+        scrollPane = new CustScroll(mainPanel);
         return scrollPane;
     }
 
@@ -86,15 +84,12 @@ public class MaskEditManager extends CustPanel implements MaskEditor {
 
     // Swtich between panels, and render the new selected panel
     public void showPanel(String panelName) {
-        contentPanel.removeAll();
+        mainPanel.removeAll();
         var selectedPanel = switchPanels.get(panelName);
         if (selectedPanel != null) {
-            contentPanel.add(selectedPanel, BorderLayout.CENTER);
+            mainPanel.add(selectedPanel, BorderLayout.CENTER);
         }
         scrollPane.scrollToTop();
-        SwingUtilities.invokeLater(() -> {
-            scrollPane.updateScrollBars();
-        });
     }
 
     public CategorySettings getSettingsForCategory(String category) {
@@ -105,10 +100,6 @@ public class MaskEditManager extends CustPanel implements MaskEditor {
     public void updateSetting(String category, String key, Object value) {
         var categorySettings = loadedSettings.getCategory(category);
         categorySettings.setSetting(key, value);
-    }
-
-    public void setOnPreviewAction(Runnable onPreviewAction) {
-        this.onPreviewAction = onPreviewAction;
     }
 
     @Override

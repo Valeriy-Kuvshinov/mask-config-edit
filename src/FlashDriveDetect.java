@@ -1,16 +1,17 @@
 package src;
 
-import java.io.IOException;
-import java.nio.file.*;
+import java.io.*;
+import javax.swing.filechooser.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 public class FlashDriveDetect {
     private ExecutorService executor;
     private volatile boolean isRunning = true;
     private Consumer<Boolean> flashDriveListener;
-    private Set<Path> connectedDrives = new HashSet<>();
+    private Set<String> connectedDrives = new HashSet<>();
+    private FileSystemView fsv = FileSystemView.getFileSystemView();
 
     public FlashDriveDetect(Consumer<Boolean> listener) {
         this.flashDriveListener = listener;
@@ -22,91 +23,75 @@ public class FlashDriveDetect {
     }
 
     private void detectFlashDrive() {
-        try {
-            var watchService = FileSystems.getDefault().newWatchService();
-            var rootPath = Paths.get("/");
-            rootPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE);
-
-            while (isRunning) {
-                var key = watchService.poll(1, TimeUnit.SECONDS);
-
-                if (key != null) {
-                    for (WatchEvent<?> event : key.pollEvents()) {
-                        var kind = event.kind();
-                        var eventPath = (Path) event.context();
-                        var fullPath = rootPath.resolve(eventPath);
-
-                        if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                            if (isRemovableDrive(fullPath)) {
-                                System.out.println("Flash drive connected: " + fullPath);
-                                connectedDrives.add(fullPath);
-                                notifyListener(true);
-                            }
-                        } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                            if (connectedDrives.remove(fullPath)) {
-                                System.out.println("Flash drive disconnected: " + fullPath);
-                                notifyListener(false);
-                            }
-                        }
-                    }
-                    key.reset();
-                }
-                checkForMissedEvents(); // Periodically check for any missed events
+        System.out.println("USB detection thread started.");
+        while (isRunning) {
+            checkForDriveChanges();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             }
-        } catch (IOException | InterruptedException e) {
+        }
+    }
+
+    private void checkForDriveChanges() {
+        try {
+            Set<String> currentDrives = getRemovableDrives();
+
+            // Check for new drives
+            for (var drive : currentDrives) {
+                if (!connectedDrives.contains(drive)) {
+                    System.out.println("Flash drive connected: " + drive);
+                    connectedDrives.add(drive);
+                    notifyListener(true);
+                }
+            }
+            // Check for removed drives
+            Iterator<String> iterator = connectedDrives.iterator();
+            while (iterator.hasNext()) {
+                String drive = iterator.next();
+                if (!currentDrives.contains(drive)) {
+                    System.out.println("Flash drive disconnected: " + drive);
+                    iterator.remove();
+                    notifyListener(false);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error checking for drive changes:");
             e.printStackTrace();
         }
     }
 
-    private boolean isRemovableDrive(Path path) {
-        if (Files.isDirectory(path)) {
-            try {
-                var store = Files.getFileStore(path);
-                return store.type().toLowerCase().contains("removable") ||
-                        store.name().toLowerCase().contains("usb");
-            } catch (IOException e) {
-                // Ignore errors, assume it's not removable
-            }
-        }
-        return false;
-    }
+    private Set<String> getRemovableDrives() {
+        Set<String> removableDrives = new HashSet<>();
+        File[] roots = File.listRoots();
 
-    private void checkForMissedEvents() {
-        var currentDrives = getRemovableDrives();
-
-        // Check for new drives
-        for (var drive : currentDrives) {
-            if (!connectedDrives.contains(drive)) {
-                System.out.println("New flash drive detected: " + drive);
-                connectedDrives.add(drive);
-                notifyListener(true);
-            }
-        }
-
-        // Check for removed drives
-        var iterator = connectedDrives.iterator();
-
-        while (iterator.hasNext()) {
-            var drive = iterator.next();
-
-            if (!currentDrives.contains(drive)) {
-                System.out.println("Flash drive removed: " + drive);
-                iterator.remove();
-                notifyListener(false);
-            }
-        }
-    }
-
-    private Set<Path> getRemovableDrives() {
-        Set<Path> removableDrives = new HashSet<>();
-        var fs = FileSystems.getDefault();
-
-        for (var root : fs.getRootDirectories()) {
+        for (var root : roots) {
             if (isRemovableDrive(root)) {
-                removableDrives.add(root);
+                removableDrives.add(root.getAbsolutePath());
             }
         }
         return removableDrives;
+    }
+
+    private boolean isRemovableDrive(File drive) {
+        var drivePath = drive.getAbsolutePath();
+        var description = fsv.getSystemTypeDescription(drive);
+        var isRemovable = fsv.isDrive(drive) && !fsv.isFileSystemRoot(drive);
+        var isNotNetworkDrive = !fsv.isComputerNode(drive);
+
+        // Criteria to verify if a drive is in fact, a USB drive
+        var isUSBDrive = (description != null
+                && (description.toLowerCase().contains("usb") || description.toLowerCase().contains("removable"))) ||
+                (isRemovable && isNotNetworkDrive && drive.getTotalSpace() > 0);
+
+        if (isUSBDrive) {
+            System.out.println("Detected USB drive: " + drivePath);
+            System.out.println("  Description: " + description);
+        }
+
+        return isUSBDrive;
     }
 
     private void notifyListener(boolean isConnected) {

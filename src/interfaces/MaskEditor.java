@@ -12,6 +12,4 @@ public interface MaskEditor {
     CategorySettings getSettingsForCategory(String category);
 
     void updateSetting(String category, String key, Object value);
-
-    void setOnPreviewAction(Runnable onPreviewAction);
 }

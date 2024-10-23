@@ -1,8 +1,6 @@
 package src.configuration.bars;
 
 import java.awt.*;
-import java.time.*;
-import java.time.format.*;
 
 import src.utilities.*;
 import src.utilities.gui.*;
@@ -54,10 +52,7 @@ public class MaskEditTopbar extends CustPanel {
     }
 
     private CustComponent createRightSection() {
-        var currentDate = LocalDate.now();
-        var formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        var formattedDate = currentDate.format(formatter);
-        return new CustComponent(formattedDate, null, 42, 20, 10,
+        return new CustComponent(DateTime.formattedDate, null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
     }
 }

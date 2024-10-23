@@ -54,14 +54,22 @@ public class MaskEditBottombar extends CustPanel {
     }
 
     private CustComponent createCenterText() {
-        var centerMessage = (mode.equals("edit")) ? "Enjoy Editing!" : "Confirm changes before saving!";
+        var centerMessage = switch (mode) {
+            case "edit" -> "Further info may be shown here...";
+            case "preview" -> "Preview of expected configuration...";
+            default -> "Confirm changes before saving!";
+        };
         centerText = new CustComponent(centerMessage, null, 42, 20, 10,
                 Component.CENTER_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_ONE);
         return centerText;
     }
 
     private CustComponent createRightButton() {
-        var buttonText = (mode.equals("edit")) ? "Preview" : "Proceed";
+        var buttonText = switch (mode) {
+            case "edit" -> "Preview";
+            case "preview" -> "Proceed";
+            default -> "Confirm";
+        };
         var rightButton = new CustComponent(buttonText, null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);
 
@@ -70,7 +78,6 @@ public class MaskEditBottombar extends CustPanel {
         } else {
             rightButton.addButtonBehavior(() -> System.out.println(buttonText + "ing..."));
         }
-
         return rightButton;
     }
 }

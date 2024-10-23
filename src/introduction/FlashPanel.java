@@ -7,34 +7,44 @@ import src.utilities.*;
 import src.utilities.gui.*;
 
 public class FlashPanel extends CustPanel {
+    private CustScroll scrollPane;
+
     public FlashPanel(Runnable onBackClick) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         initUI(onBackClick);
     }
 
     private void initUI(Runnable onBackClick) {
-        var wrapperPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE,
-                null, null, 0, 0, 0);
-        wrapperPanel.add(createMainPanel(onBackClick));
+        add(createScrollPane(createMainPanel(onBackClick)), BorderLayout.CENTER);
+    }
 
-        add(wrapperPanel, BorderLayout.CENTER);
+    private CustScroll createScrollPane(CustPanel content) {
+        var wrapperPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        wrapperPanel.add(content, BorderLayout.CENTER);
+
+        scrollPane = new CustScroll(wrapperPanel);
+        return scrollPane;
     }
 
     private CustPanel createMainPanel(Runnable onBackClick) {
-        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), ColorPalette.DARK_ONE,
-                null, null, 0, 0, 0);
+        var mainPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 15, 10, 20);
+        var gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = -1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 15, 5, 15);
 
-        mainPanel.add(Box.createVerticalGlue());
-        mainPanel.add(new CustLabel("Welcome to User Configuration!", null,
-                null, Component.CENTER_ALIGNMENT));
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(new CustLabel("Please connect a flash drive...", null,
-                null, Component.CENTER_ALIGNMENT));
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
-        mainPanel.add(createConnectLabel());
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 60)));
-        mainPanel.add(createBackButton(onBackClick));
-        mainPanel.add(Box.createVerticalGlue());
+        var helper = new GridBagHelper(mainPanel, gbc);
+
+        helper.addLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
+        helper.addVerticalSpace(20);
+        helper.addLabel("Please connect a flash drive...", null, null, Component.CENTER_ALIGNMENT);
+        helper.addVerticalSpace(40);
+        helper.addComponent(createConnectLabel());
+        helper.addVerticalSpace(40);
+        helper.addComponent(createBackButton(onBackClick));
 
         return mainPanel;
     }

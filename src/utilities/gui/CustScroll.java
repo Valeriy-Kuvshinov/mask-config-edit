@@ -13,15 +13,16 @@ public class CustScroll extends JScrollPane {
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setBorder(null);
+        getViewport().setBackground(null);
 
         wheelListener = new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (scrollEnabled) {
-                    JScrollBar verticalScrollBar = getVerticalScrollBar();
-                    int notches = e.getWheelRotation();
-                    int scrollAmount = notches * verticalScrollBar.getUnitIncrement() * 8;
-                    int newValue = verticalScrollBar.getValue() + scrollAmount;
+                    var verticalScrollBar = getVerticalScrollBar();
+                    var notches = e.getWheelRotation();
+                    var scrollAmount = notches * verticalScrollBar.getUnitIncrement() * 8;
+                    var newValue = verticalScrollBar.getValue() + scrollAmount;
 
                     // Ensure the new value is within the scrollbar's min and max
                     newValue = Math.max(verticalScrollBar.getMinimum(),
@@ -36,17 +37,18 @@ public class CustScroll extends JScrollPane {
         // Add the wheel listener to the viewport and the scroll pane
         getViewport().addMouseWheelListener(wheelListener);
         addMouseWheelListener(wheelListener);
+        scrollToTop();
     }
 
     public void updateScrollBars() {
         revalidate();
         repaint();
         SwingUtilities.invokeLater(() -> {
-            Component view = getViewport().getView();
+            var view = getViewport().getView();
             if (view != null) {
-                int preferredHeight = view.getPreferredSize().height;
-                int viewportHeight = getViewport().getHeight();
-                boolean needsVerticalScrollBar = preferredHeight > viewportHeight;
+                var preferredHeight = view.getPreferredSize().height;
+                var viewportHeight = getViewport().getHeight();
+                var needsVerticalScrollBar = preferredHeight > viewportHeight;
                 setVerticalScrollBarPolicy(needsVerticalScrollBar ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
                         : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
                 setScrollEnabled(needsVerticalScrollBar);
@@ -72,6 +74,7 @@ public class CustScroll extends JScrollPane {
     public void scrollToTop() {
         SwingUtilities.invokeLater(() -> {
             getVerticalScrollBar().setValue(0);
+            updateScrollBars();
         });
     }
 }

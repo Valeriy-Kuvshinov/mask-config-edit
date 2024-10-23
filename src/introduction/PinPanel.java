@@ -1,6 +1,5 @@
 package src.introduction;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -14,6 +13,7 @@ public class PinPanel extends CustPanel {
     private CustLabel messageLabel;
     private Runnable onPinVerifiedCallback;
     private StringBuilder currentPin = new StringBuilder();
+    private CustScroll scrollPane;
 
     public PinPanel(Runnable onPinVerifiedCallback) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
@@ -22,27 +22,36 @@ public class PinPanel extends CustPanel {
     }
 
     private void initUI() {
-        var wrapperPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE,
-                null, null, 0, 0, 0);
-        wrapperPanel.add(createMainPanel());
+        add(createScrollPane(createMainPanel()), BorderLayout.CENTER);
+    }
 
-        add(wrapperPanel, BorderLayout.CENTER);
+    private CustScroll createScrollPane(CustPanel content) {
+        var wrapperPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        wrapperPanel.add(content, BorderLayout.CENTER);
+
+        scrollPane = new CustScroll(wrapperPanel);
+        return scrollPane;
     }
 
     private CustPanel createMainPanel() {
-        var mainPanel = new CustPanel(new BoxLayout(null, BoxLayout.Y_AXIS), ColorPalette.DARK_ONE,
-                null, null, 0, 0, 0);
+        var mainPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 15, 10, 20);
+        var gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = -1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 15, 5, 15);
 
-        mainPanel.add(Box.createVerticalGlue());
-        mainPanel.add(new CustLabel("Welcome to User Configuration!", null,
-                null, Component.CENTER_ALIGNMENT));
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(createMessageLabel());
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        mainPanel.add(createPinDisplayPanel());
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        mainPanel.add(createButtonsPanel());
-        mainPanel.add(Box.createVerticalGlue());
+        var helper = new GridBagHelper(mainPanel, gbc);
+
+        helper.addLabel("Welcome to User Configuration!", null, null, Component.CENTER_ALIGNMENT);
+        helper.addVerticalSpace(20);
+        helper.addComponent(createMessageLabel());
+        helper.addVerticalSpace(20);
+        helper.addComponent(createPinDisplayPanel());
+        helper.addVerticalSpace(20);
+        helper.addComponent(createButtonsPanel());
 
         return mainPanel;
     }

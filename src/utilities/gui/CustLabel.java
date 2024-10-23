@@ -8,7 +8,6 @@ import src.utilities.*;
 public class CustLabel extends JLabel {
     // Customizable label
     private static final String FONT_NAME = "Roboto";
-    private static final int DEFAULT_FONT_SIZE = 24;
     private static final float DEFAULT_ALIGNMENT = Component.LEFT_ALIGNMENT;
 
     // For text
@@ -24,7 +23,7 @@ public class CustLabel extends JLabel {
     }
 
     private void initLabel(Color textColor, Integer fontSize, Float alignmentX) {
-        setFont(new Font(FONT_NAME, Font.BOLD, fontSize != null ? fontSize : DEFAULT_FONT_SIZE));
+        setFont(new Font(FONT_NAME, Font.BOLD, fontSize != null ? fontSize : 24));
         setForeground(textColor != null ? textColor : ColorPalette.LIGHT_ONE);
         setAlignmentX(alignmentX != null ? alignmentX : DEFAULT_ALIGNMENT);
     }

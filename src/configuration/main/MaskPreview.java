@@ -11,20 +11,21 @@ import src.utilities.gui.*;
 public class MaskPreview extends CustPanel {
     private String maskName;
     private Runnable onBackAction;
-    private CustScroll scrollPane;
+    private Runnable onConfirmAction;
     private MaskSettings previewSettings;
 
-    public MaskPreview(String maskName, MaskSettings previewSettings, Runnable onBackAction) {
+    public MaskPreview(String maskName, MaskSettings previewSettings, Runnable onBackAction, Runnable onConfirmAction) {
         super(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         this.maskName = maskName;
         this.previewSettings = previewSettings;
         this.onBackAction = onBackAction;
+        this.onConfirmAction = onConfirmAction;
         initUI();
     }
 
     private void initUI() {
         add(createTopSection(), BorderLayout.NORTH);
-        add(createScrollPane(createPreviewComponent()), BorderLayout.CENTER);
+        add(createScrollPane(createMainPanel()), BorderLayout.CENTER);
         add(createBottomSection(), BorderLayout.SOUTH);
     }
 
@@ -36,23 +37,22 @@ public class MaskPreview extends CustPanel {
     }
 
     private CustScroll createScrollPane(CustPanel content) {
-        var contentPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
-        contentPanel.add(content, BorderLayout.CENTER);
-        scrollPane = new CustScroll(contentPanel);
-        scrollPane.getViewport().setBackground(ColorPalette.DARK_ONE);
-        scrollPane.scrollToTop();
+        var wrapperPanel = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
+        wrapperPanel.add(content, BorderLayout.CENTER);
+
+        var scrollPane = new CustScroll(wrapperPanel);
         return scrollPane;
     }
 
     private CustPanel createBottomSection() {
         var bottomSection = new CustPanel(new BorderLayout(), ColorPalette.DARK_ONE, null, null, 0, 0, 0);
         bottomSection.add(new CustSeparator(ColorPalette.BLUE_TWO, 1), BorderLayout.NORTH);
-        bottomSection.add(new MaskEditBottombar("preview", onBackAction, null), BorderLayout.CENTER);
+        bottomSection.add(new MaskEditBottombar("preview", onBackAction, onConfirmAction), BorderLayout.CENTER);
         return bottomSection;
     }
 
-    private CustPanel createPreviewComponent() {
-        var previewComponent = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 15, 10, 20);
+    private CustPanel createMainPanel() {
+        var previewPanel = new CustPanel(new GridBagLayout(), ColorPalette.DARK_ONE, null, null, 15, 10, 20);
         var gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -64,11 +64,11 @@ public class MaskPreview extends CustPanel {
         for (var category : MaskSettings.CATEGORY_ORDER) {
             var categorySettings = previewSettings.getCategory(category);
             if (categorySettings != null) {
-                addCategorySettings(previewComponent, gbc, category, categorySettings);
-                addEmptyLine(previewComponent, gbc);
+                addCategorySettings(previewPanel, gbc, category, categorySettings);
+                addEmptyLine(previewPanel, gbc);
             }
         }
-        return previewComponent;
+        return previewPanel;
     }
 
     private void addCategorySettings(CustPanel panel, GridBagConstraints gbc, String category,

@@ -14,6 +14,7 @@ public class App extends JFrame {
     private CustPanel maskChoicePanel;
     private CustPanel maskEditingManager;
     private CustPanel maskPreview;
+    private CustPanel maskConfirmation;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
     private boolean pinVerified = false;
@@ -66,14 +67,14 @@ public class App extends JFrame {
     }
 
     private void createMask(String maskName) {
-        System.out.println("Creating mask: " + maskName);
-        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice, this::previewMask, true);
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice,
+                this::previewMask, true);
         switchToPanel(maskEditingManager);
     }
 
     private void editMask(String maskName) {
-        System.out.println("Editing mask: " + maskName);
-        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice, this::previewMask, false);
+        maskEditingManager = new MaskEditManager(maskName, this::navigateBackMaskChoice,
+                this::previewMask, false);
         switchToPanel(maskEditingManager);
     }
 
@@ -81,8 +82,17 @@ public class App extends JFrame {
         SwingUtilities.invokeLater(() -> {
             var editor = (MaskEditor) maskEditingManager;
             var previewSettings = editor.getLoadedSettings();
-            maskPreview = new MaskPreview(editor.getMaskName(), previewSettings, this::navigateBackToEdit);
+            maskPreview = new MaskPreview(editor.getMaskName(), previewSettings,
+                    this::navigateBackToEdit, this::confirmMask);
             switchToPanel(maskPreview);
+        });
+    }
+
+    private void confirmMask() {
+        SwingUtilities.invokeLater(() -> {
+            var editor = (MaskEditor) maskEditingManager;
+            maskConfirmation = new MaskConfirmation(editor.getMaskName(), this::navigateBackToPreview);
+            switchToPanel(maskConfirmation);
         });
     }
 
@@ -97,6 +107,10 @@ public class App extends JFrame {
 
     private void navigateBackToEdit() {
         SwingUtilities.invokeLater(() -> switchToPanel(maskEditingManager));
+    }
+
+    private void navigateBackToPreview() {
+        SwingUtilities.invokeLater(() -> switchToPanel(maskPreview));
     }
 
     private void onFlashDriveConnected() {
