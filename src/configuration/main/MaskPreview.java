@@ -129,8 +129,8 @@ public class MaskPreview extends CustPanel {
             addSectionHeader(panel, gbc, "# VPN Service " + i, 18);
             addOrderedSettings(panel, gbc, settings, new String[] {
                     "output_vpn_service_" + i, "service_expiration_date_vpn_" + i,
-                    "output_vpn_service_" + i + "_list_countryCodes", "output_vpn_service_" + i + "_list_servers",
-                    "output_vpn_service_" + i + "_username", "output_vpn_service_" + i + "_password"
+                    "output_vpn_service_" + i + "_list_countryCodes", "output_vpn_service_" + i + "_username",
+                    "output_vpn_service_" + i + "_password", "output_vpn_service_" + i + "_list_servers"
             });
         }
     }
@@ -172,11 +172,6 @@ public class MaskPreview extends CustPanel {
         });
     }
 
-    private void addSectionHeader(CustPanel panel, GridBagConstraints gbc, String text, int fontSize) {
-        panel.add(new CustLabel(text, ColorPalette.LIGHT_ONE, fontSize, Component.LEFT_ALIGNMENT), gbc);
-        gbc.gridy++;
-    }
-
     private void addOrderedSettings(CustPanel panel, GridBagConstraints gbc, CategorySettings settings, String[] keys) {
         for (var key : keys) {
             var value = settings.getSetting(key);
@@ -193,6 +188,11 @@ public class MaskPreview extends CustPanel {
             paragraph.invalidate();
         }
         panel.revalidate();
+    }
+
+    private void addSectionHeader(CustPanel panel, GridBagConstraints gbc, String text, int fontSize) {
+        panel.add(new CustLabel(text, ColorPalette.LIGHT_ONE, fontSize, Component.LEFT_ALIGNMENT), gbc);
+        gbc.gridy++;
     }
 
     private void addEmptyLine(CustPanel panel, GridBagConstraints gbc) {

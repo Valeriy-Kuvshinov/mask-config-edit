@@ -68,7 +68,7 @@ public class MaskEditBottombar extends CustPanel {
         var buttonText = switch (mode) {
             case "edit" -> "Preview";
             case "preview" -> "Proceed";
-            default -> "Confirm";
+            default -> "Export";
         };
         var rightButton = new CustComponent(buttonText, null, 42, 20, 10,
                 Component.RIGHT_ALIGNMENT, ColorPalette.LIGHT_ONE, ColorPalette.DARK_TWO);

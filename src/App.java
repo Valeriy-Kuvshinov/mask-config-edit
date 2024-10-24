@@ -15,6 +15,7 @@ public class App extends JFrame {
     private CustPanel maskEditingManager;
     private CustPanel maskPreview;
     private CustPanel maskConfirmation;
+    private CustPanel maskFinale;
     private FlashDriveDetect flashDriveDetect;
     private boolean flashDriveConnected = false;
     private boolean pinVerified = false;
@@ -51,12 +52,12 @@ public class App extends JFrame {
         if (isConnected && !flashDriveConnected) {
             flashDriveConnected = true;
             if (pinVerified) {
-                SwingUtilities.invokeLater(this::onFlashDriveConnected);
+                SwingUtilities.invokeLater(() -> switchToPanel(maskChoicePanel));
             }
         } else if (!isConnected && flashDriveConnected) {
             flashDriveConnected = false;
             if (pinVerified) {
-                SwingUtilities.invokeLater(this::onFlashDriveDisconnected);
+                SwingUtilities.invokeLater(() -> switchToPanel(flashPanel));
             }
         }
     }
@@ -91,8 +92,21 @@ public class App extends JFrame {
     private void confirmMask() {
         SwingUtilities.invokeLater(() -> {
             var editor = (MaskEditor) maskEditingManager;
-            maskConfirmation = new MaskConfirmation(editor.getMaskName(), this::navigateBackToPreview);
+            var usbDrivePath = flashDriveDetect.getCurrentUsbDrivePath();
+            var previewSettings = editor.getLoadedSettings();
+            maskConfirmation = new MaskConfirmation(editor.getMaskName(), previewSettings, usbDrivePath,
+                    this::navigateBackToPreview, this::handleExportResult);
             switchToPanel(maskConfirmation);
+        });
+    }
+
+    private void handleExportResult(boolean success, String errorMessage) {
+        SwingUtilities.invokeLater(() -> {
+            var editor = (MaskEditor) maskEditingManager;
+            var usbDrivePath = flashDriveDetect.getCurrentUsbDrivePath();
+            maskFinale = new MaskFinale(editor.getMaskName(), usbDrivePath, success, errorMessage,
+                    this::navigateBackMaskChoice);
+            switchToPanel(maskFinale);
         });
     }
 
@@ -111,18 +125,6 @@ public class App extends JFrame {
 
     private void navigateBackToPreview() {
         SwingUtilities.invokeLater(() -> switchToPanel(maskPreview));
-    }
-
-    private void onFlashDriveConnected() {
-        if (pinVerified) {
-            SwingUtilities.invokeLater(() -> switchToPanel(maskChoicePanel));
-        }
-    }
-
-    private void onFlashDriveDisconnected() {
-        if (pinVerified) {
-            SwingUtilities.invokeLater(() -> switchToPanel(flashPanel));
-        }
     }
 
     private void switchToPanel(JComponent panel) {

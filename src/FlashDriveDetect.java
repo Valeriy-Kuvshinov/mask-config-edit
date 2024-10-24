@@ -12,6 +12,7 @@ public class FlashDriveDetect {
     private Consumer<Boolean> flashDriveListener;
     private Set<String> connectedDrives = new HashSet<>();
     private FileSystemView fsv = FileSystemView.getFileSystemView();
+    private String currentUsbDrivePath = "";
 
     public FlashDriveDetect(Consumer<Boolean> listener) {
         this.flashDriveListener = listener;
@@ -27,7 +28,7 @@ public class FlashDriveDetect {
         while (isRunning) {
             checkForDriveChanges();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -44,6 +45,7 @@ public class FlashDriveDetect {
                 if (!connectedDrives.contains(drive)) {
                     System.out.println("Flash drive connected: " + drive);
                     connectedDrives.add(drive);
+                    currentUsbDrivePath = drive;
                     notifyListener(true);
                 }
             }
@@ -54,6 +56,7 @@ public class FlashDriveDetect {
                 if (!currentDrives.contains(drive)) {
                     System.out.println("Flash drive disconnected: " + drive);
                     iterator.remove();
+                    currentUsbDrivePath = "";
                     notifyListener(false);
                 }
             }
@@ -76,7 +79,6 @@ public class FlashDriveDetect {
     }
 
     private boolean isRemovableDrive(File drive) {
-        var drivePath = drive.getAbsolutePath();
         var description = fsv.getSystemTypeDescription(drive);
         var isRemovable = fsv.isDrive(drive) && !fsv.isFileSystemRoot(drive);
         var isNotNetworkDrive = !fsv.isComputerNode(drive);
@@ -86,12 +88,11 @@ public class FlashDriveDetect {
                 && (description.toLowerCase().contains("usb") || description.toLowerCase().contains("removable"))) ||
                 (isRemovable && isNotNetworkDrive && drive.getTotalSpace() > 0);
 
-        if (isUSBDrive) {
-            System.out.println("Detected USB drive: " + drivePath);
-            System.out.println("  Description: " + description);
-        }
-
         return isUSBDrive;
+    }
+
+    public String getCurrentUsbDrivePath() {
+        return currentUsbDrivePath;
     }
 
     private void notifyListener(boolean isConnected) {
